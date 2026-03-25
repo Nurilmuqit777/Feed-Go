@@ -7,16 +7,6 @@
 @section('header-content')
 <div class="max-w-6xl mx-auto px-6 py-6 items-center">
 
-    <div class="flex items-center gap-2 text-sm text-white/80 mb-6">
-        <a href="{{ route('beranda') }}" class="hover:underline">Beranda</a>
-        <x-svg.right-icon class="w-4 h-4 opacity-70" />
-        <a href="{{ route('produk') }}" class="hover:underline">Produk</a>
-        <x-svg.right-icon class="w-4 h-4 opacity-70" />
-        <span class="text-white font-medium">
-            {{ $product->category->category }}
-        </span>
-    </div>
-
     <div class="grid md:grid-cols-2 gap-10 items-center">
 
         <div x-data="{
@@ -33,7 +23,7 @@
                         : ''"
                 class="w-20 h-20 rounded-lg bg-white object-contain p-2 cursor-pointer"
             >
-        
+
             @if($product->product_image2)
             <img
                 src="{{ asset('storage/'.$product->product_image2) }}"
@@ -44,7 +34,7 @@
                 class="w-20 h-20 rounded-lg bg-white object-contain p-2 cursor-pointer"
             >
             @endif
-        
+
             @if($product->product_image3)
             <img
                 src="{{ asset('storage/'.$product->product_image3) }}"
@@ -55,7 +45,7 @@
                 class="w-20 h-20 rounded-lg bg-white object-contain p-2 cursor-pointer"
             >
             @endif
-        
+
             @if($product->product_image4)
             <img
                 src="{{ asset('storage/'.$product->product_image4) }}"
@@ -73,7 +63,7 @@
                     <div class="absolute bottom-3 left-3 text-xs font-semibold text-[#6B7280] px-3 py-1 rounded-full">
                         Berat: {{ $product->product_weight }}{{ $product->product_unit }}
                     </div>
-                
+
                     <div class="absolute bottom-3 right-3 text-xs text-[#388E3C] font-semibold px-3 py-1 rounded-full">
                         &#9679; {{ $product->product_status === 'available' ? 'Tersedia' : 'Tidak tersedia' }} {{ $product->product_stock }}
                     </div>
@@ -82,7 +72,7 @@
 
         <div class="space-y-4">
             <h1 class="text-2xl md:text-3xl font-semibold text-white">
-                {{ $product->product_name }} - <span class="text-[#EAAA00]"> {{ $product->category->category }} </span>
+                {{ $product->product_name }} - <span class="text-[#EAAA00]"> {{ Str::title($product->category->category) }} </span>
             </h1>
 
             <div class="flex items-center gap-3">
@@ -123,5 +113,12 @@
     </div>
 </div>
 @endsection
-
+<section class="flex">
+    <div>
+        deskripsi
+    </div>
+    <div>
+        ulasan
+    </div>
+</section>
 @endsection

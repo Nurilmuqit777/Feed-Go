@@ -1,10 +1,10 @@
-<div class="space-y-6">
+<div class="space-y-3">
 
-    <div class="flex flex-col md:flex-row justify-between items-center gap-4 px-5 py-8">
-        <h1 class="text-3xl font-semibold text-[#2D5016]">Artikel Terbaru</h1>
-        
-        <div class="relative" x-data="{ open: false }">
-            <button 
+    <div class="relative flex items-center justify-center px-5 py-8">
+        <h1 class="text-3xl font-semibold text-[#2D5016] text-center">Artikel Terbaru</h1>
+
+        <div class="absolute right-5" x-data="{ open: false }">
+            <button
                 @click="open = !open"
                 class="flex items-center gap-2 px-6 py-2.5 border border-gray-300 rounded-full bg-white hover:bg-gray-50 transition text-sm font-medium text-[#2D5016]">
                 <span>
@@ -19,7 +19,7 @@
                 </svg>
             </button>
 
-            <div 
+            <div
                 x-show="open"
                 @click.away="open = false"
                 x-transition:enter="transition ease-out duration-200"
@@ -30,10 +30,10 @@
                 x-transition:leave-end="opacity-0 scale-95"
                 class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
                 style="display: none;">
-                
+
                 <div class="py-2">
 
-                    <button 
+                    <button
                         wire:click="clearFilter"
                         @click="open = false"
                         class="w-full text-left px-4 py-2.5 text-sm hover:bg-gray-100 transition
@@ -44,13 +44,13 @@
                     <div class="border-t border-gray-100 my-2"></div>
 
                     @foreach($categories as $category)
-                    
-                    <button 
+
+                    <button
                         wire:click="selectCategory({{ $category->id }})"
                         @click="open = false"
                         class="w-full text-left px-4 py-2.5 text-sm hover:bg-gray-100 transition flex items-center gap-2
                                {{ $selectedCategory == $category->id ? 'bg-green-50 font-semibold' : 'text-gray-700' }}">
-                        
+
                         <span class="{{ $selectedCategory == $category->id ? 'text-[#2D5016]' : '' }}">
                             {{ $category->category }}
                         </span>
@@ -67,7 +67,7 @@
         </div>
     </div>
 
-    <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10 p-10">
+    <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6 px-5 pb-6">
         @forelse($articles as $article)
         @php
             $badgeColor = match(strtoupper($article->category->category)) {
@@ -84,19 +84,19 @@
                     {{ $article->category->category }}
                 </span>
             </div>
-        
+
             <div class="p-5">
-                <h3 class="font-semibold text-gray-800 mb-2 line-clamp-2 hover:text-[#2D5016] transition">
+                <h3 class="font-semibold text-[#2D5016] text-left mb-2 line-clamp-3 hover:text-[#2D5016] transition">
                     {{ $article->title }}
                 </h3>
-            
-                <p class="text-sm text-gray-600 mb-4 line-clamp-3">
+
+                <p class="text-sm text-[#6B7280] text-left mb-4 line-clamp-3">
                     {{ $article->short_description }}
                 </p>
-            
+
                 <div class="flex items-center justify-between text-sm text-gray-500">
-                    <span> <x-svg.calendar-icon class="w-4 h-4 inline mr-1" /> {{ $article->created_at->format('d M Y') }}</span>
-                    <span class="text-[#F4B000] font-medium">Baca Artikel →</span>
+                    <span class="text-[#2D5016]"> <x-svg.calendar-icon class="w-4 h-4 inline mr-1 text-[#2D5016]" /> {{ $article->created_at->format('d M Y') }}</span>
+                    <span class="text-[#2D5016] font-medium">Baca Artikel →</span>
                 </div>
             </div>
         </a>
@@ -116,7 +116,7 @@
         </div>
         @endforelse
     </div>
-    <div class="m-6">
+    <div class="mt-4 mb-18">
         {{ $articles->links() }}
     </div>
 </div>

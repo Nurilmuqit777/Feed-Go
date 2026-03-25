@@ -13,7 +13,7 @@ class BlogController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {   
+    {
         $featuredArticles = Blog::with(['category','user'])->where('status', 'published')->where('is_featured', true)->latest()->take(4)->get();
         if ($featuredArticles->count() < 4) {
             $remaining = 4 - $featuredArticles->count();
@@ -23,7 +23,7 @@ class BlogController extends Controller
                 ->latest()
                 ->take($remaining)
                 ->get();
-            
+
             $featuredArticles = $featuredArticles->merge($additionalArticles);
         }
 
@@ -38,10 +38,10 @@ class BlogController extends Controller
                 ->orderBy('views', 'desc')
                 ->take($remaining)
                 ->get();
-            
+
             $trendingArticles = $trendingArticles->merge($additionalTrending);
         }
-        
+
         return view('layouts.blogs', compact('popularArticles', 'trendingArticles', 'featuredArticles'));
     }
 
@@ -90,12 +90,39 @@ class BlogController extends Controller
             ->where('status', 'published')
             ->firstOrFail();
 
+                $keywords = explode(' ', $blog->title);
+
+        $relatedArticles = Blog::with(['category', 'user'])
+            ->where('status', 'published')
+            ->where('id', '!=', $blog->id)
+            ->where(function($q) use ($keywords) {
+                foreach ($keywords as $keyword) {
+                     if (strlen($keyword) > 3) {
+                    $q->orWhere('title', 'like', '%' . $keyword . '%');
+                }
+                }
+            })
+            ->latest()
+            ->take(3)
+            ->get();
+
+        if ($relatedArticles->count() < 3) {
+        $additional = Blog::where('status', 'published')
+            ->where('category_id', $blog->category_id)
+            ->where('id', '!=', $blog->id)
+            ->latest()
+            ->take(3 - $relatedArticles->count())
+            ->get();
+
+        $relatedArticles = $relatedArticles->merge($additional);
+        }
+
         $sessionKey = 'article_viewed_' . $blog->id;
         if (!session()->has($sessionKey)) {
         $blog->incrementViews();
         session()->put($sessionKey, true);
         }
-        return view('layouts.blog-detail', compact('blog'));
+        return view('layouts.blog-detail', compact('blog','relatedArticlesArticles'));
     }
 
     /**

@@ -57,7 +57,7 @@
     </div>
 
     <div class="flex items-center justify-center gap-4 mt-10 mb-10">
-        
+
         <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center">
             <img src="{{ asset('images/FeedGo.webp') }}" alt="FeedGo" class="w-8 h-8 object-contain"/>
         </div>
@@ -71,8 +71,8 @@
             </p>
         </div>
     </div>
-    
-    
+
+
 </div>
 @endsection
 <div class="max-w-6xl mx-auto px-6 py-6 items-center text-center justify-center">
@@ -82,81 +82,43 @@
     </h1>
 
     <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10 p-10">
-
-        <div class="bg-white rounded-xl overflow-hidden border shadow-sm row-span-2">
+        @forelse($relatedArticles as $article)
+        @php
+        $badgeColor = match(strtoupper($article->category->category)) {
+            'INFORMASI' => 'bg-[#2563EB]',
+            'TIPS' => 'bg-[#EAAA00]',
+            'EDUKASI' => 'bg-[#2E7D32]',
+            default => 'bg-gray-500'
+        };
+        @endphp
+        <a href="{{ route('article.show', $article->slug) }}" class="bg-white rounded-xl overflow-hidden border shadow-sm row-span-2 hover:shadow-lg transition transform hover:-translate-y-1 duration-300">
             <div class="relative h-72">
-                <img src="/images/artikel1.jpg" class="w-full h-full object-cover">
-                <span class="absolute top-3 left-3 bg-[#F4B000] text-white text-xs px-3 py-1 rounded-full">
-                    TIPS
+                <img src="{{ asset('storage/' . $article->thumbnail) }}" class="w-full h-full object-cover">
+                <span class="absolute top-3 left-3 {{ $badgeColor }} text-white text-xs px-3 py-1 rounded-full">
+                    {{ strtoupper($article->category->category) }}
                 </span>
             </div>
-        
-            <div class="p-5">
-                <h3 class="font-semibold text-gray-800 mb-2">
-                    Pakan Berbasis Riset: Kesalahan Pemberian Pakan Udang
-                </h3>
-            
-                <p class="text-sm text-gray-600 mb-4">
-                    Kesalahan umum dalam pemberian pakan udang yang sering
-                    menurunkan pertumbuhan dan efisiensi pakan.
-                </p>
-            
-                <div class="flex items-center justify-between text-sm text-gray-500">
-                    <span>01 Jun 2025</span>
-                    <a href="#" class="text-[#F4B000] font-medium">Baca Artikel →</a>
-                </div>
-            </div>
-        </div>
 
-        <div class="bg-white rounded-xl overflow-hidden border shadow-sm row-span-2">
-            <div class="relative h-72">
-                <img src="/images/artikel1.jpg" class="w-full h-full object-cover">
-                <span class="absolute top-3 left-3 bg-[#F4B000] text-white text-xs px-3 py-1 rounded-full">
-                    TIPS
-                </span>
-            </div>
-        
             <div class="p-5">
                 <h3 class="font-semibold text-gray-800 mb-2">
-                    Pakan Berbasis Riset: Kesalahan Pemberian Pakan Udang
+                    {{ $article->title }}
                 </h3>
-            
-                <p class="text-sm text-gray-600 mb-4">
-                    Kesalahan umum dalam pemberian pakan udang yang sering
-                    menurunkan pertumbuhan dan efisiensi pakan.
-                </p>
-            
-                <div class="flex items-center justify-between text-sm text-gray-500">
-                    <span>01 Jun 2025</span>
-                    <a href="#" class="text-[#F4B000] font-medium">Baca Artikel →</a>
-                </div>
-            </div>
-        </div>
 
-        <div class="bg-white rounded-xl overflow-hidden border shadow-sm row-span-2">
-            <div class="relative h-72">
-                <img src="/images/artikel1.jpg" class="w-full h-full object-cover">
-                <span class="absolute top-3 left-3 bg-[#F4B000] text-white text-xs px-3 py-1 rounded-full">
-                    TIPS
-                </span>
-            </div>
-        
-            <div class="p-5">
-                <h3 class="font-semibold text-gray-800 mb-2">
-                    Pakan Berbasis Riset: Kesalahan Pemberian Pakan Udang
-                </h3>
-            
                 <p class="text-sm text-gray-600 mb-4">
-                    Kesalahan umum dalam pemberian pakan udang yang sering
-                    menurunkan pertumbuhan dan efisiensi pakan.
+                    {{ $article->short_description }}
                 </p>
-            
+
                 <div class="flex items-center justify-between text-sm text-gray-500">
-                    <span>01 Jun 2025</span>
-                    <a href="#" class="text-[#F4B000] font-medium">Baca Artikel →</a>
+                    <span>{{ $article->created_at->format('d M Y') }}</span>
+                    <span  class="text-[#F4B000] font-medium">Baca Artikel →</span>
                 </div>
             </div>
+        </a>
+        @empty
+        <div class="col-span-full text-center py-10 text-gray-400">
+            Tidak ada artikel terkait.
         </div>
+        @endforelse
 
     </div>
 
