@@ -14,6 +14,8 @@ use Laravel\Fortify\Contracts\LoginResponse;
 use App\Http\Responses\LoginResponse as CustomLoginResponse;
 use Laravel\Fortify\Contracts\RegisterResponse;
 use App\Http\Responses\RegisterResponse as CustomRegisterResponse;
+use Laravel\Fortify\Contracts\TwoFactorLoginResponse;
+use App\Http\Responses\TwoFactorLoginResponse as CustomTwoFactorLoginResponse;
 
 
 class FortifyServiceProvider extends ServiceProvider
@@ -25,6 +27,7 @@ class FortifyServiceProvider extends ServiceProvider
     {
     $this->app->singleton(RegisterResponse::class, CustomRegisterResponse::class);
     $this->app->singleton(LoginResponse::class, CustomLoginResponse::class);
+    $this->app->singleton(TwoFactorLoginResponse::class, CustomTwoFactorLoginResponse::class);
     }
 
     /**

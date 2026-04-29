@@ -20,6 +20,7 @@ Route::get('/artikel/{slug}', [BlogController::class, 'show'])->name('article.sh
 Route::get('/tentang-kami', [AboutUsController::class, 'index'])->name('tentangkami');
 Route::get('/kebijakan-privasi',[HomepageController::class, 'privacyPolicy'])->name('privacy.policy');
 Route::get('/syarat-dan-ketentuan',[HomepageController::class, 'termsConditions'])->name('terms.conditions');
+Route::get('/articles/search', [BlogController::class, 'search'])->name('articles.search');
 
 Route::middleware(['auth', 'role:admin,superadmin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');

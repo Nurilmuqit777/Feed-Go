@@ -1,4 +1,4 @@
-@section('title', 'reset Password')
+@section('title', 'Reset Password')
 
 <x-layouts.auth>
     <div class="flex flex-col gap-6">

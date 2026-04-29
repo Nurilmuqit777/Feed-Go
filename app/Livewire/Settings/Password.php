@@ -39,4 +39,13 @@ class Password extends Component
 
         $this->dispatch('password-updated');
     }
+
+    public function render()
+    {
+        if (auth()->user()->role === 'admin') {
+        return view('livewire.settings.password');
+    }
+
+        return view('livewire.settings.password-user')->layout('app');
+    }
 }

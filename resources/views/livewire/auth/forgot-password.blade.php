@@ -9,19 +9,19 @@
 
         <section class="w-1/2 flex flex-col justify-start pl-20 text-white space-y-3 pt-32">
             <p class="text-4xl font-bold mb-0">
-                Lupa kata sandi?</span>
+                Lupa kata sandi?
             </p>
 
             <p class="text-xl mb-0">
                 Jangan khawatir, kami akan mengirimkan tautan pemulihan jika email terdaftar.
-            </p>      
+            </p>
         </section>
 
         <section class="w-1/2 flex items-start justify-end pr-30 pt-32">
-            <div class="w-[350px] space-y-6">             
+            <div class="w-[350px] space-y-6">
                 <form method="POST" action="{{ route('password.email') }}" class="flex flex-col gap-6">
                     @csrf
-                    
+
                     {{-- Email Address --}}
                     <div class="flex items-center gap-3 rounded-xl">
                         <flux:icon.envelope class="text-white w-5 h-5" />
@@ -34,9 +34,9 @@
                             placeholder="Masukkan email anda"
                         />
                     </div>
-        
+
                     <flux:button variant="primary" type="submit" class="w-full text-white bg-yellow-400 hover:bg-yellow-500" data-test="email-password-reset-link-button">
-                        Dapatkan tautan 
+                        Dapatkan tautan
                     </flux:button>
                 </form>
                 <div class="space-x-1 rtl:space-x-reverse text-sm text-zinc-400">

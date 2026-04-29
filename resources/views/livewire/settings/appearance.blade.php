@@ -1,3 +1,5 @@
+@section('title', 'Appearance')
+
 <section class="w-full">
     @include('partials.settings-heading')
 

@@ -122,7 +122,7 @@ class BlogController extends Controller
         $blog->incrementViews();
         session()->put($sessionKey, true);
         }
-        return view('layouts.blog-detail', compact('blog','relatedArticlesArticles'));
+        return view('layouts.blog-detail', compact('blog','relatedArticles'));
     }
 
     /**

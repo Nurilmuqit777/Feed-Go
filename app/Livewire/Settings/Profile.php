@@ -71,4 +71,13 @@ class Profile extends Component
 
         Session::flash('status', 'verification-link-sent');
     }
+
+    public function render()
+    {
+        if (auth()->user()->role === 'admin') {
+        return view('livewire.settings.profile');
+    }
+
+        return view('livewire.settings.profile-user')->layout('app');
+    }
 }

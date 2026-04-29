@@ -29,7 +29,7 @@
             ? 'text-[#EAAA00]'
             : 'hover:text-yellow-300' }}">Artikel</a>
       </nav>
-      
+
       {{-- auth --}}
       <div class="flex items-center gap-4 p-5">
         @auth
@@ -62,9 +62,10 @@
         <a href="{{ route('login') }}" class="bg-[#E9A900] text-green-800 px-4 py-2 rounded-full text-sm font-semibold hover:bg-yellow-300">
           Masuk</a>
         @endauth
-      </div>        
+      </div>
     </div>
 
+    {{ $slot ?? '' }}
     @yield('header-content')
   </div>
 </header>

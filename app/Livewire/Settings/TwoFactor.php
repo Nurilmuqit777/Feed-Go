@@ -159,24 +159,33 @@ class TwoFactor extends Component
     {
         if ($this->twoFactorEnabled) {
             return [
-                'title' => __('Two-Factor Authentication Enabled'),
-                'description' => __('Two-factor authentication is now enabled. Scan the QR code or enter the setup key in your authenticator app.'),
-                'buttonText' => __('Close'),
+                'title' => __('Verifikasi dua langkah diaktifkan'),
+                'description' => __('Verifikasi dua langkah telah diaktifkan. Pindai kode QR atau masukkan kode pengaturan di aplikasi autentikator anda.'),
+                'buttonText' => __('tutup'),
             ];
         }
 
         if ($this->showVerificationStep) {
             return [
-                'title' => __('Verify Authentication Code'),
-                'description' => __('Enter the 6-digit code from your authenticator app.'),
-                'buttonText' => __('Continue'),
+                'title' => __('Verifikasi kode dua langkah'),
+                'description' => __('Masukkan kode 6 digit yang ada di aplikasi autentikator anda.'),
+                'buttonText' => __('lanjut'),
             ];
         }
 
         return [
-            'title' => __('Enable Two-Factor Authentication'),
-            'description' => __('To finish enabling two-factor authentication, scan the QR code or enter the setup key in your authenticator app.'),
-            'buttonText' => __('Continue'),
+            'title' => __('Aktifkan Verifikasi Dua Langkah'),
+            'description' => __('Untuk menyelesaikan verifikasi dua langkah, pindai kode QR atau masukkan kode pengaturan di aplikasi autentikator anda.'),
+            'buttonText' => __('Lanjut'),
         ];
+    }
+
+    public function render()
+    {
+        if (auth()->user()->role === 'admin') {
+        return view('livewire.settings.two-factor');
+    }
+
+        return view('livewire.settings.two-factor-user')->layout('app');
     }
 }

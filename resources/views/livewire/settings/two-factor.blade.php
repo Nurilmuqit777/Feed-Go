@@ -1,3 +1,5 @@
+@section('title', 'Two-Factor Verification')
+
 <section class="w-full">
     @include('partials.settings-heading')
 

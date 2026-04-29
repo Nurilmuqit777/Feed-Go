@@ -48,16 +48,7 @@
                 Cari artikel atau topik pakan ternak yang Anda butuhkan
             </p>
 
-            <div class="flex gap-3 max-w-md mx-auto lg:mx-0">
-                <input
-                    type="text"
-                    placeholder="Cari artikel....."
-                    class="flex-1 bg-[#6C9D50] bg-opacity-90 text-white placeholder-white px-4 py-2 rounded-lg text-sm focus:outline-none"
-                />
-                <button class="bg-[#EAAA00] text-white px-5 py-2 rounded-lg text-sm font-medium">
-                    Cari
-                </button>
-            </div>
+            <livewire:user.article-search />
         </div>
 
         <div class="grid grid-cols-2 gap-4">
@@ -98,7 +89,7 @@
     </div>
 </section>
 
-<section class="bg-linear-to-tl from-[#6C9D50] to-[#1B601E] items-center text-center pb-15">
+<section class="relative bg-linear-to-tl from-[#6C9D50] to-[#1B601E] items-center text-center pb-15 z-10">
     <h1 class="text-white text-3xl font-medium p-5">
         Artikel Populer untuk Perternak
     </h1>
@@ -106,7 +97,7 @@
     <div class="max-w-6xl mx-auto bg-[#F5F5F5] rounded-3xl relative z-20 p-10 text-center grid lg:grid-cols-3 grid-cols-1 gap-8 items-sretch">
 
         <div class="lg:col-span-2 grid md:grid-cols-2 auto-rows-min gap-6">
-            @foreach($popularArticles as $index => $article)
+            @forelse($popularArticles as $index => $article)
             @php
                 $badgeColor = match(strtoupper($article->category->category)) {
                     'INFORMASI' => 'bg-[#2563EB]',
@@ -145,7 +136,13 @@
                     </div>
                 </div>
             </a>
-            @endforeach
+            @empty
+            <div class="col-span-full flex items-center justify-center py-12">
+                <p class="text-lg text-gray-500">
+                    Belum ada artikel populer
+                </p>
+            </div>
+            @endforelse
         </div>
 
         <div class="flex flex-col h-full">
