@@ -47,4 +47,13 @@ class RecoveryCodes extends Component
             }
         }
     }
+
+    public function render()
+    {
+        if (auth()->user()->role === 'admin') {
+        return view('livewire.settings.two-factor.recovery-codes');
+        }
+
+        return view('livewire.settings.two-factor.recovery-codes-user');
+    }
 }

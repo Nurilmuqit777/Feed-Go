@@ -16,43 +16,60 @@
 
                 <hr class="mb-4">
 
-                <div class="space-y-5">
+                <form wire:submit="updateProfileInformation" class="space-y-5">
 
                     <div class="grid grid-cols-3 items-center">
                         <span class="text-sm text-gray-500">Nama</span>
-                        <input type="text" value="{{ auth()->user()->name }}" class="col-span-2 w-full border rounded px-3 py-2 text-sm focus:ring-2 focus:ring-green-600 outline-none">
+
+                        <input
+                            type="text"
+                            wire:model="name"
+                            class="col-span-2 w-full border rounded px-3 py-2 text-sm focus:ring-2 focus:ring-green-600 outline-none"
+                        >
                     </div>
+
+                    @error('name')
+                        <p class="text-red-500 text-xs ml-[33%]">
+                            {{ $message }}
+                        </p>
+                    @enderror
 
                     <div class="grid grid-cols-3 items-center">
                         <span class="text-sm text-gray-500">Email</span>
-                        <input type="email" value="{{ auth()->user()->email }}" class="col-span-2 w-full border rounded px-3 py-2 text-sm focus:ring-2 focus:ring-green-600 outline-none">
+
+                        <input
+                            type="email"
+                            wire:model="email"
+                            class="col-span-2 w-full border rounded px-3 py-2 text-sm focus:ring-2 focus:ring-green-600 outline-none"
+                        >
                     </div>
+
+                    @error('email')
+                        <p class="text-red-500 text-xs ml-[33%]">
+                            {{ $message }}
+                        </p>
+                    @enderror
 
                     <div class="grid grid-cols-3">
                         <div></div>
-                        <div class="col-span-2">
-                            <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded">
-                            Simpan
+
+                        <div class="col-span-2 flex items-center gap-4">
+                            <button
+                                type="submit"
+                                class="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded"
+                            >
+                                Simpan
                             </button>
+
+                            <x-action-message on="profile-updated" class="text-green-600 text-sm">
+                                Data berhasil diperbarui.
+                            </x-action-message>
                         </div>
                     </div>
 
-                </div>
+                </form>
 
-                <div>
-                    <h3 class="text-sm font-semibold text-gray-800 mb-2">
-                        Hapus akun
-                    </h3>
-                    <p class="text-xs text-gray-500 mb-4">
-                        Menghapus akun akan menghilangkan seluruh data akun Anda secara permanen.
-                    </p>
-
-                    <div class="flex justify-center">
-                        <button class="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2 rounded">
-                        Hapus Akun
-                    </button>
-                    </div>
-                </div>
+                <livewire:settings.delete-user-form />
 
             </div>
         </div>

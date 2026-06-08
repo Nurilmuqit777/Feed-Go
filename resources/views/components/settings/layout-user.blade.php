@@ -42,7 +42,7 @@
             </a>
             @endif
 
-            <a href="#" class="flex items-center gap-2 text-gray-500 hover:text-green-700">
+            <a href="{{route('user.orders')}}" class="flex items-center gap-2 text-gray-500 hover:text-green-700">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 44 44" fill="none">
                     <path d="M31.1667 7.3335H12.8334C10.8084 7.3335 9.16675 8.97512 9.16675 11.0002V34.8335C9.16675 36.8585 10.8084 38.5002 12.8334 38.5002H31.1667C33.1918 38.5002 34.8334 36.8585 34.8334 34.8335V11.0002C34.8334 8.97512 33.1918 7.3335 31.1667 7.3335Z" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"/>
                     <path d="M16.5 16.5H27.5M16.5 23.8333H27.5M16.5 31.1667H23.8333" stroke="#818181" stroke-width="2" stroke-linecap="round"/>

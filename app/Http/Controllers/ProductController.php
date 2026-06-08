@@ -12,8 +12,18 @@ class ProductController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {   
+    {
         return view('layouts.product');
+    }
+
+    public function indexCart()
+    {
+        return view('layouts.cart');
+    }
+
+    public function indexCheckout()
+    {
+        return view('layouts.checkout');
     }
 
     /**

@@ -23,4 +23,13 @@ class DeleteUserForm extends Component
 
         $this->redirect('/', navigate: true);
     }
+
+    public function render()
+    {
+        if (auth()->user()->role === 'admin') {
+        return view('livewire.settings.delete-user-form');
+        }
+
+        return view('livewire.settings.delete-user-form-user');
+    }
 }

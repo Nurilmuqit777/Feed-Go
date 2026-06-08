@@ -11,6 +11,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\OrderController;
 
 Route::get('/', [HomepageController::class, 'index'])->name('beranda');
 Route::get('/artikel', [BlogController::class, 'index'])->name('artikel');
@@ -33,6 +34,12 @@ Route::middleware(['auth', 'role:admin,superadmin'])->group(function () {
     Route::get('/admin/article', [AdminController::class, 'article'])->name('admin.article');
     Route::get('settings/appearance', Appearance::class)->name('appearance.edit');
     Route::get('/admin/sales-data', [AdminController::class, 'getSalesData'])->name('admin.sales-data');
+});
+
+Route::middleware(['auth', 'role:user'])->group(function(){
+    Route::get('/user/cart',[ProductController::class,'indexCart'])->name('user.cart');
+    Route::get('/user/checkout',[ProductController::class,'indexCheckout'])->name('user.checkout');
+    Route::get('/user/orders', [OrderController::class, 'index'])->name('user.orders');
 });
 
 Route::middleware(['auth'])->group(function () {

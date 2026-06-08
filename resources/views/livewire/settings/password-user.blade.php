@@ -17,33 +17,36 @@
 
                 <hr class="mb-4">
 
-                <div class="space-y-5">
+                <form method="POST" wire:submit="updatePassword" class="space-y-5">
 
                     <div class="grid grid-cols-3 items-center">
                         <span class="text-sm text-gray-500">Password Saat Ini</span>
-                        <input type="password" class="col-span-2 w-full border rounded px-3 py-2 text-sm focus:ring-2 focus:ring-green-600 outline-none">
+                        <input wire:model="current_password" type="password" autocomplete="current-password" class="col-span-2 w-full border rounded px-3 py-2 text-sm focus:ring-2 focus:ring-green-600 outline-none required">
                     </div>
 
                     <div class="grid grid-cols-3 items-center">
                         <span class="text-sm text-gray-500">Password Baru</span>
-                        <input type="password" class="col-span-2 w-full border rounded px-3 py-2 text-sm focus:ring-2 focus:ring-green-600 outline-none">
+                        <input wire:model="password" type="password" autocomplete="new-password" class="col-span-2 w-full border rounded px-3 py-2 text-sm focus:ring-2 focus:ring-green-600 outline-none required">
                     </div>
 
                     <div class="grid grid-cols-3 items-center">
                         <span class="text-sm text-gray-500">Konfirmasi Password</span>
-                        <input type="password" class="col-span-2 w-full border rounded px-3 py-2 text-sm focus:ring-2 focus:ring-green-600 outline-none">
+                        <input wire:model="password_confirmation" type="password" autocomplete="new-password" class="col-span-2 w-full border rounded px-3 py-2 text-sm focus:ring-2 focus:ring-green-600 outline-none required">
                     </div>
 
                     <div class="grid grid-cols-3">
                         <div></div>
-                        <div class="col-span-2">
-                            <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded">
+                        <div class="col-span-2 flex">
+                            <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded">
                             Simpan
                             </button>
+                            <x-action-message class="text-green-600 text-sm" on="password-updated">
+                                Password berhasil diperbarui.
+                            </x-action-message>
                         </div>
                     </div>
 
-                </div>
+                </form>
 
 
             </div>

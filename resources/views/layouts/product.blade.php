@@ -29,7 +29,7 @@
 @endsection
 
 {{-- produk --}}
-<section id="products-section" class="max-w-5xl mx-auto bg-[#F5F5F5] rounded-3xl -mt-20 relative z-20 p-10 text-center">
+<section id="products-section" class="max-w-6xl mx-auto bg-[#F5F5F5] rounded-3xl -mt-20 relative z-20 p-10 text-center">
   <livewire:user.products.product-list />
 </section>
 
