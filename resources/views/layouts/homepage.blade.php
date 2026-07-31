@@ -7,21 +7,16 @@
 @section('header-content')
 {{-- search bar --}}
 <div class="flex justify-center mb-6">
-    <div class="bg-[#C8E6C9] rounded-full flex items-center px-4 py-2 w-full max-w-md shadow-lg">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-700 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M21 21l-4.35-4.35M16.65 10.65a6 6 0 11-12 0 6 6 0 0112 0z" />
-    </svg>
-    <input
-        type="text"
-        placeholder="Cari produk......"
-        class="bg-transparent outline-none text-sm w-full text-green-900 placeholder-green-700"
-    />
+
+    <div class="relative w-full max-w-md">
+        <livewire:user.product-search />
     </div>
+
 </div>
+
 {{-- main content --}}
 <div class="grid md:grid-cols-2 gap-5 items-center font-[Inter]">
-  
+
   <div class="text-white px-4 md:px-20">
     <h1 class="text-3xl md:text-4xl font-bold leading-snug mb-4">
       Inovasi <span class="text-yellow-400">Pakan Ternak</span> Berbasis Riset
@@ -31,7 +26,7 @@
       Pakan efisien, ramah lingkungan, dan terjangkau—dikembangkan melalui riset
       Universitas Hasanuddin bersama sektor industri.
     </p>
-    <a href="#" class="inline-flex items-center gap-2 bg-[#EAAA00] text-white px-6 py-3 rounded-full font-semibold mb-6">
+    <a href="{{ route('produk') }}" class="inline-flex items-center gap-2 bg-[#EAAA00] text-white px-6 py-3 rounded-full font-semibold mb-6 hover:bg-[#D68A2D] transition duration-300 shadow-md hover:shadow-lg hover:scale-105">
       <svg class="" xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34" fill="none">
       <path d="M10 26.6667C8.16667 26.6667 6.68333 28.1667 6.68333 30C6.68333 31.8333 8.16667 33.3333 10 33.3333C11.8333 33.3333 13.3333 31.8333 13.3333 30C13.3333 28.1667 11.8333 26.6667 10 26.6667ZM0 0V3.33333H3.33333L9.33333 15.9833L7.08333 20.0667C6.81667 20.5333 6.66667 21.0833 6.66667 21.6667C6.66667 23.5 8.16667 25 10 25H30V21.6667H10.7C10.4667 21.6667 10.2833 21.4833 10.2833 21.25L10.3333 21.05L11.8333 18.3333H24.25C25.5 18.3333 26.6 17.65 27.1667 16.6167L33.1333 5.8C33.2667 5.56667 33.3333 5.28333 33.3333 5C33.3333 4.08333 32.5833 3.33333 31.6667 3.33333H7.01667L5.45 0H0ZM26.6667 26.6667C24.8333 26.6667 23.35 28.1667 23.35 30C23.35 31.8333 24.8333 33.3333 26.6667 33.3333C28.5 33.3333 30 31.8333 30 30C30 28.1667 28.5 26.6667 26.6667 26.6667Z" fill="white"/>
       </svg>
@@ -58,7 +53,7 @@
 
   <div class="absolute inset-0 flex items-center justify-center">
     <div
-      class="w-[1000px] h-[500px] rounded-full 
+      class="w-[1000px] h-[500px] rounded-full
              bg-radial from-[#1D6220] from-30% to-[#F5F5F5]
              blur-3xl opacity-80">
     </div>
@@ -81,7 +76,7 @@
 
     <div class="absolute top-0 left-1/2 -translate-x-1/2">
       <div
-        class="w-[240px] h-[240px] rounded-full 
+        class="w-[240px] h-[240px] rounded-full
                bg-gradient-to-b from-[#388E3C] to-[#EAAA00]
                flex items-center justify-center
                text-white font-semibold shadow-xl">
@@ -91,7 +86,7 @@
 
     <div class="absolute left-0 top-1/2 -translate-y-1/2">
       <div
-        class="w-[240px] h-[240px] rounded-full 
+        class="w-[240px] h-[240px] rounded-full
                bg-gradient-to-r from-[#388E3C] to-[#EAAA00]
                flex items-center justify-center
                text-white font-semibold shadow-xl">
@@ -101,7 +96,7 @@
 
     <div class="absolute right-0 top-1/2 -translate-y-1/2">
       <div
-        class="w-[240px] h-[240px] rounded-full 
+        class="w-[240px] h-[240px] rounded-full
                bg-gradient-to-l from-[#388E3C] to-[#EAAA00]
                flex items-center justify-center
                text-white font-semibold shadow-xl">
@@ -111,7 +106,7 @@
 
     <div class="absolute bottom-0 left-[18%]">
       <div
-        class="w-[240px] h-[240px] rounded-full 
+        class="w-[240px] h-[240px] rounded-full
                bg-gradient-to-tr from-[#388E3C] to-[#EAAA00]
                flex items-center justify-center
                text-white font-semibold shadow-xl">
@@ -121,7 +116,7 @@
 
     <div class="absolute bottom-0 right-[18%]">
       <div
-        class="w-[240px] h-[240px] rounded-full 
+        class="w-[240px] h-[240px] rounded-full
                bg-gradient-to-tl from-[#388E3C] to-[#EAAA00]
                flex items-center justify-center
                text-white font-semibold shadow-xl text-center px-2">
@@ -130,7 +125,7 @@
     </div>
 
   </div>
-  
+
 </section>
 
 {{-- Product --}}
@@ -146,7 +141,7 @@
       Produk
     </h2>
 
-    <span class="inline-block bg-[#92BD79] text-white 
+    <span class="inline-block bg-[#92BD79] text-white
                  px-6 py-2 rounded-full font-semibold text-sm">
       Pakan Udang
     </span>
@@ -156,7 +151,7 @@
 
     <div class="flex flex-col items-center">
       <div class="relative pt-[180px]">
-        
+
         <img
           src="{{ asset('images/Produk1.png') }}"
           alt="Pakan Udang FeedGo"
@@ -177,7 +172,7 @@
 
     <div class="flex flex-col items-center">
       <div class="relative pt-[180px]">
-        
+
         <img
           src="{{ asset('images/Produk2.png') }}"
           alt="Pakan Udang FeedGo"
@@ -200,20 +195,20 @@
 
   <div class="flex justify-center gap-6 mt-20 mb-10">
 
-    <span class="px-8 py-3 rounded-full text-white font-semibold 
-                 bg-[#E3B600] shadow-md hover:shadow-lg 
+    <span class="px-8 py-3 rounded-full text-white font-semibold
+                 bg-[#E3B600] shadow-md hover:shadow-lg
                  hover:scale-105 transition-all duration-300 cursor-pointer">
       Nutrisi
     </span>
 
-    <span class="px-8 py-3 rounded-full text-white font-semibold 
-                 bg-[#D68A2D] shadow-md hover:shadow-lg 
+    <span class="px-8 py-3 rounded-full text-white font-semibold
+                 bg-[#D68A2D] shadow-md hover:shadow-lg
                  hover:scale-105 transition-all duration-300 cursor-pointer">
       Efisiensi
     </span>
 
-    <span class="px-8 py-3 rounded-full text-white font-semibold 
-                 bg-[#5AB1C5] shadow-md hover:shadow-lg 
+    <span class="px-8 py-3 rounded-full text-white font-semibold
+                 bg-[#5AB1C5] shadow-md hover:shadow-lg
                  hover:scale-105 transition-all duration-300 cursor-pointer">
       Pertumbuhan
     </span>
@@ -241,34 +236,34 @@
             <h2 class="text-2xl md:text-3xl font-bold text-[#388E3C] text-center mb-4">
                 Update Riset & Inovasi FeedGo
             </h2>
-            
+
             <p class="text-center text-[#0B460E] text-lg mb-10">
                 Dapatkan informasi terbaru seputar pengembangan pakan ternak berbasis riset dan teknologi.
             </p>
 
             <form class="max-w-2xl mx-auto">
               <div
-                  class="flex items-center border-2 border-gray-200 rounded-full 
+                  class="flex items-center border-2 border-gray-200 rounded-full
                          focus-within:border-green-500 transition"
               >
 
-                  <input 
-                      type="email" 
+                  <input
+                      type="email"
                       placeholder="Email"
-                      class="flex-1 pl-4 py-3 bg-transparent 
+                      class="flex-1 pl-4 py-3 bg-transparent
                              focus:outline-none text-gray-700
                              placeholder:text-gray-400"
                       required
                   />
 
-                  <button 
+                  <button
                       type="submit"
-                      class="bg-[#1B601E] hover:bg-green-600 text-white font-semibold 
-                             px-6 py-3 rounded-full transition duration-300 
+                      class="bg-[#1B601E] hover:bg-green-600 text-white font-semibold
+                             px-6 py-3 rounded-full transition duration-300
                              shadow-md whitespace-nowrap">
                       Ikuti FeedGo
                   </button>
-                
+
               </div>
             </form>
         </div>

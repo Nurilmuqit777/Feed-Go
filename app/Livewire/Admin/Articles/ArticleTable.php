@@ -7,10 +7,16 @@ use Livewire\WithPagination;
 use App\Models\Blog;
 
 class ArticleTable extends Component
-{   
+{
     use WithPagination;
 
+    public $search = '';
+
     protected $paginationTheme = 'tailwind';
+
+    protected $queryString = [
+        'search' => ['except' => ''],
+    ];
 
     protected $listeners = [
         'article-added' => '$refresh',
@@ -31,14 +37,26 @@ class ArticleTable extends Component
     $this->dispatch('article-updated');
     }
 
-    public function render()
+    public function updatingSearch()
     {
-        $articles = Blog::with(['category', 'user'])
+        $this->resetPage();
+    }
+
+    public function getArticlesProperty()
+    {
+        return Blog::with(['category', 'user'])
+            ->where(function ($q) {
+                $q->where('title', 'like', '%' . $this->search . '%')
+                  ->orWhere('content', 'like', '%' . $this->search . '%');
+            })
             ->latest()
             ->paginate(5);
+    }
 
+    public function render()
+    {
         return view('livewire.admin.articles.article-table', [
-            'articles' => $articles
+            'articles' => $this->articles,
         ]);
     }
 }

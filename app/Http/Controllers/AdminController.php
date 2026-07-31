@@ -18,7 +18,7 @@ class AdminController extends Controller
     }
 
     public function product()
-    {   
+    {
         $products = Product::all();
         return view('admin.product', compact('products'));
     }
@@ -28,9 +28,9 @@ class AdminController extends Controller
         return view('admin.order');
     }
 
-    public function message()
+    public function profile()
     {
-        return view('admin.message');
+        return view('admin.profile');
     }
 
     public function delivery()
@@ -49,7 +49,7 @@ class AdminController extends Controller
     }
 
     public function article()
-    {   
+    {
         $articles= Blog::all();
         return view('admin.article', compact('articles'));
     }
@@ -57,28 +57,28 @@ class AdminController extends Controller
     public function getSalesData(Request $request)
     {
         $period = $request->get('period', 'monthly');
-        
+
         if ($period === 'monthly') {
             return response()->json([
                 'labels' => ['JAN', 'FEB', 'MAR', 'APR', 'MEI', 'JUN'],
                 'data' => [25000, 28000, 30000, 32000, 35000, 95000]
             ]);
         }
-        
+
         if ($period === 'weekly') {
             return response()->json([
                 'labels' => ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'],
                 'data' => [15000, 18000, 22000, 25000]
             ]);
         }
-        
+
         if ($period === 'yearly') {
             return response()->json([
                 'labels' => ['2020', '2021', '2022', '2023', '2024', '2025'],
                 'data' => [200000, 250000, 300000, 350000, 400000, 450000]
             ]);
         }
-        
+
         return response()->json([
             'labels' => [],
             'data' => []

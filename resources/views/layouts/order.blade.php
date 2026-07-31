@@ -41,8 +41,8 @@
                 Dikirim
             </button>
             <button
-                @click="tab = 'delivered'"
-                :class="tab === 'delivered' ? 'border-b-2 border-[#2D5016] text-[#2E7D32]' : 'text-gray-500'"
+                @click="tab = 'completed'"
+                :class="tab === 'completed' ? 'border-b-2 border-[#2D5016] text-[#2E7D32]' : 'text-gray-500'"
                 class="text-sm md:text-lg font-medium pb-2 whitespace-nowrap transition-colors duration-300"
             >
                 Selesai
@@ -59,6 +59,28 @@
         <div x-show="tab === 'all'">
             <livewire:user.order.all-order />
         </div>
+
+        <div x-show="tab === 'pending'">
+            <livewire:user.order.waiting-payment />
+        </div>
+
+        <div x-show="tab === 'processing'">
+            <livewire:user.order.processing-order />
+        </div>
+
+        <div x-show="tab === 'shipped'">
+            <livewire:user.order.shipped-order />
+        </div>
+
+        <div x-show="tab === 'completed'">
+            <livewire:user.order.completed-order />
+        </div>
+
+        <div x-show="tab === 'returned'">
+            <livewire:user.order.returned-order />
+        </div>
+
+
 
     </div>
 </section>

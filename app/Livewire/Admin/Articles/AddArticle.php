@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 
 class AddArticle extends Component
-{   
+{
     use WithFileUploads;
 
     public $open = false;
@@ -19,7 +19,6 @@ class AddArticle extends Component
     public $title;
     public $content;
     public $short_description;
-    public $reading_time;
     public $thumbnail;
     public $status;
     public $category_id;
@@ -43,7 +42,6 @@ class AddArticle extends Component
     protected $rules = [
         'title' => 'required|string|max:255',
         'short_description' => 'required|string|max:500',
-        'reading_time' => 'required|integer|min:1',
         'content' => 'required|string',
         'thumbnail' => 'required|image|max:512',
         'status' => 'required|in:draft,published',
@@ -68,7 +66,7 @@ class AddArticle extends Component
     }
 
     public function save()
-    {   
+    {
         $this->validate();
 
         if ($this->is_featured) {
@@ -87,7 +85,6 @@ class AddArticle extends Component
             'user_id' => Auth::id(),
             'title' => $this->title,
             'short_description' => $this->short_description,
-            'reading_time' => $this->reading_time,
             'content' => $this->content,
             'thumbnail' => $thumbnailPath,
             'status' => $this->status,
@@ -101,7 +98,6 @@ class AddArticle extends Component
         $this->reset([
             'title',
             'short_description',
-            'reading_time',
             'content',
             'thumbnail',
             'status',
@@ -109,7 +105,7 @@ class AddArticle extends Component
             'category_id',
         ]);
         $this->open = false;
-    } 
+    }
 
     public function removeImage()
     {
@@ -128,7 +124,6 @@ class AddArticle extends Component
         $this->reset([
             'title',
             'short_description',
-            'reading_time',
             'content',
             'thumbnail',
             'status',
@@ -141,7 +136,7 @@ class AddArticle extends Component
     {
     $this->refreshCategories();
     }
-    
+
     public function render()
     {
         return view('livewire.admin.articles.add-article');

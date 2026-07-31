@@ -1,6 +1,60 @@
 <div>
+    <div class="shrink-0 rounded-t-xl bg-white dark:bg-neutral-700 shadow-sm
+               p-4 flex flex-col gap-4
+               md:flex-row md:items-center md:justify-between">
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:gap-4">
+            <div class="flex items-center gap-4">
+                <input
+                    type="checkbox"
+                    class="w-5 h-5 rounded border-gray-300 text-green-600 focus:ring-green-500"
+                />
+                <div class="flex items-center gap-2 font-medium">
+                    <span class="text-sm text-black dark:text-white">Daftar Artikel</span>
+                    <span class="text-xs text-gray-400">{{ $articles->count() }} artikel</span>
+                </div>
+            </div>
+            <div class="relative w-full md:w-60">
+                <svg
+                    class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
+                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 18a7.5 7.5 0 006.15-3.35z"/>
+                </svg>
+                <input
+                    type="text"
+                    placeholder="Cari Artikel"
+                    wire:model.live.debounce.500ms="search"
+                    class="w-full pl-10 pr-4 py-2 text-sm rounded-full
+                           bg-gray-100 dark:bg-neutral-600
+                           focus:bg-white dark:focus:bg-neutral-500
+                           border border-transparent focus:border-green-500 focus:outline-none"
+                />
+            </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-3 justify-end">
+            <button
+                onclick="window.dispatchEvent(new CustomEvent('open-add-article-category'))"
+                class="flex items-center gap-2 text-sm bg-green-600 hover:bg-green-700
+                       text-white px-4 py-2 rounded-xl font-medium transition"
+            >
+                <span class="text-xl leading-none">+</span>
+                <span class="hidden sm:inline">Tambahkan Kategori</span>
+            </button>
+            <button
+                onclick="window.dispatchEvent(new CustomEvent('open-add-article'))"
+                class="flex items-center gap-2 text-sm bg-green-600 hover:bg-green-700
+                       text-white px-4 py-2 rounded-xl font-medium transition"
+            >
+                <span class="text-xl leading-none">+</span>
+                <span class="hidden sm:inline">Tambahkan Artikel</span>
+            </button>
+        </div>
+    </div>
+
     <div class="overflow-x-auto bg-white dark:bg-neutral-800 rounded-xl shadow-sm">
-    
+
         <table class="w-full text-sm border-separate border-spacing-y-2">
             <thead class="text-gray-400">
                 <tr>
@@ -16,13 +70,13 @@
             </thead>
             <tbody class="text-center">
                 @forelse ($articles as $article)
-                    
+
                     <tr wire:key="article-{{ $article->id }}" class="bg-white dark:bg-neutral-700 rounded-xl shadow-sm">
-    
+
                         <td class="px-4 py-4">
                             <input type="checkbox" class="rounded border-gray-300">
                         </td>
-    
+
                         <td class="px-4 py-4 flex justify-center">
                             <img
                                 loading="lazy"
@@ -30,27 +84,27 @@
                                 class="w-10 h-14 object-cover rounded-md"
                             >
                         </td>
-    
+
                         <td class="px-4 py-4 font-semibold">
                             {{ $article->title }}
                         </td>
-    
+
                         <td class="px-4 py-4">
                             {{ $article->category->category ?? '-' }}
                         </td>
-    
+
                         <td class="px-4 py-4">
                             {{ $article->status }}
                         </td>
-    
+
                         <td class="px-4 py-4">
                             {{ $article->user->name ?? 'Admin' }}
                         </td>
-    
+
                         <td class="px-4 py-4">
                             {{ $article->created_at->format('d F Y') }}
                         </td>
-    
+
                         <td class="px-4 py-4">
                             <div class="flex justify-center gap-2">
                                 <div x-data="{ open: false }" class="relative">
@@ -59,9 +113,9 @@
                                         class="px-3 py-1 flex items-center gap-2 dark:hover:bg-neutral-600 hover:bg-neutral-200 rounded-lg text-sm"
                                     >
                                     <x-svg.detail-icon />
-                                        Detail
+                                        Aksi
                                     </button>
-                                
+
                                     <div
                                         x-show="open"
                                         @click.outside="open = false"
@@ -79,7 +133,7 @@
                                         >
                                             Publikasikan
                                         </button>
-                                    
+
                                         <button
                                             wire:click="updateStatus({{ $article->id }}, 'draft')"
                                             @if($article->status === 'draft') disabled @endif
@@ -87,7 +141,7 @@
                                         >
                                             Jadikan Draft
                                         </button>
-                                    
+
                                         <button
                                             @click="open = false"
                                             wire:click="$dispatch('open-delete-article', { id: {{ $article->id }} })"
@@ -95,7 +149,7 @@
                                         >
                                              Hapus
                                         </button>
-    
+
                                     </div>
                                 </div>
                                 <button
@@ -119,7 +173,7 @@
                     </tr>
                 @endforelse
             </tbody>
-        </table>        
+        </table>
     </div>
     <div class="m-6">
         {{ $articles->links() }}

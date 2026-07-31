@@ -1,11 +1,11 @@
 <footer class="px-6 md:px-16 py-16 mt-16">
-  
+
   <div class="grid grid-cols-1 md:grid-cols-4 gap-12 ">
- 
+
     <div class="justify-center">
       <img  class="h-15 inline-block ml-15" src="{{ asset('images/FeedGo.webp') }}" alt="">
       <p class="text-sm text-gray-700 text-justify leading-relaxed tracking-tight hyphens-auto max-w-sm mb-6">
-        Menjadi hub pakan inovatif berbasis riset dan teknologi yang terhubung dengan industri, guna mendorong 
+        Menjadi hub pakan inovatif berbasis riset dan teknologi yang terhubung dengan industri, guna mendorong
         kemajuan peternakan dan perikanan nasional yang berkelanjutan.
       </p>
 
@@ -14,10 +14,10 @@
     <div class="ml-10">
       <h4 class="font-semibold mb-4 text-black">Navigasi</h4>
       <ul class="space-y-3 text-sm text-gray-700">
-        <li><a href="#" class="hover:underline">Beranda</a></li>
-        <li><a href="#" class="hover:underline">Produk</a></li>
-        <li><a href="#" class="hover:underline">Tentang kami</a></li>
-        <li><a href="#" class="hover:underline">Blog</a></li>
+        <li><a href="{{ route('beranda') }}" class="hover:underline">Beranda</a></li>
+        <li><a href="{{ route('produk') }}" class="hover:underline">Produk</a></li>
+        <li><a href="{{ route('tentangkami') }}" class="hover:underline">Tentang kami</a></li>
+        <li><a href="{{ route('artikel') }}" class="hover:underline">Blog</a></li>
       </ul>
     </div>
 
@@ -26,18 +26,18 @@
       <ul class="space-y-3 text-sm text-gray-700">
         <li><a href="#" class="hover:underline">Produk Unggulan</a></li>
         <li><a href="#" class="hover:underline">Ulasan</a></li>
-        <li><a href="#" class="hover:underline">Artikel</a></li>
-        <li><a href="#" class="hover:underline">Kontak & Lokasi</a></li>
+        <li><a href="{{ route('artikel') }}" class="hover:underline">Artikel</a></li>
+        <li><a href="{{ route('contact') }}" class="hover:underline">Kontak & Lokasi</a></li>
       </ul>
     </div>
 
     <div class="ml-10">
       <h4 class="font-semibold mb-4 text-black">Akun</h4>
       <ul class="space-y-3 text-sm text-gray-700">
-        <li><a href="#" class="hover:underline">Masuk</a></li>
-        <li><a href="#" class="hover:underline">Daftar</a></li>
-        <li><a href="#" class="hover:underline">Keranjang</a></li>
-        <li><a href="#" class="hover:underline">Pesanan Saya</a></li>
+        <li><a href="{{ route('login') }}" class="hover:underline">Masuk</a></li>
+        <li><a href="{{ route('register') }}" class="hover:underline">Daftar</a></li>
+        <li><a href="{{ route('user.cart') }}" class="hover:underline">Keranjang</a></li>
+        <li><a href="{{ route('user.orders') }}" class="hover:underline">Pesanan Saya</a></li>
       </ul>
     </div>
   </div>
@@ -58,20 +58,6 @@
       </a>
     </div>
 
-    <div class="w-full md:w-auto">
-      <div class="flex w-full md:w-[420px] items-center rounded-full border border-[#D9D9D9] overflow-hidden">
-        <input
-          type="text"
-          placeholder="Tulis Pesanmu..."
-          class="bg-transparent text-sm outline-none flex-1 py-2 px-7 text-gray-700"
-        >
-        <button class="bg-[#6C9D50] text-black text-sm font-medium px-6 py-2 rounded-full flex gap-2">
-          Kirim <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-black">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
-        </svg>
-        </button>
-      </div>
-    </div>
   </div>
 
   <div class="border-t border-gray-300 my-10"></div>

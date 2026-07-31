@@ -22,12 +22,13 @@ Route::get('/tentang-kami', [AboutUsController::class, 'index'])->name('tentangk
 Route::get('/kebijakan-privasi',[HomepageController::class, 'privacyPolicy'])->name('privacy.policy');
 Route::get('/syarat-dan-ketentuan',[HomepageController::class, 'termsConditions'])->name('terms.conditions');
 Route::get('/articles/search', [BlogController::class, 'search'])->name('articles.search');
+Route::get('/kontak-kami', [HomepageController::class, 'contact'])->name('contact');
 
 Route::middleware(['auth', 'role:admin,superadmin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/product', [AdminController::class, 'product'])->name('admin.product');
     Route::get('/admin/order', [AdminController::class, 'order'])->name('admin.order');
-    Route::get('/admin/message', [AdminController::class, 'message'])->name('admin.message');
+    Route::get('/admin/user-profile', [AdminController::class, 'profile'])->name('admin.userprofile');
     Route::get('/admin/delivery', [AdminController::class, 'delivery'])->name('admin.delivery');
     Route::get('/admin/payment', [AdminController::class, 'payment'])->name('admin.payment');
     Route::get('/admin/report', [AdminController::class, 'report'])->name('admin.report');

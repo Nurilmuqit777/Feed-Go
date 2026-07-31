@@ -3,9 +3,9 @@
 namespace App\Livewire\User;
 
 use Livewire\Component;
-use App\Models\Blog;
+use App\Models\Product;
 
-class ArticleSearch extends Component
+class ProductSearch extends Component
 {
     public $search = '';
     public $showResults = false;
@@ -26,12 +26,10 @@ class ArticleSearch extends Component
         $results = collect();
 
         if (strlen($this->search) >= 2) {
-            $results = Blog::with(['category', 'user'])
-                ->where('status', 'published')
+            $results = Product::with('category')
                 ->where(function($query) {
-                    $query->where('title', 'like', '%' . $this->search . '%')
-                          ->orWhere('short_description', 'like', '%' . $this->search . '%')
-                          ->orWhere('content', 'like', '%' . $this->search . '%')
+                    $query->where('product_name', 'like', '%' . $this->search . '%')
+                          ->orWhere('product_description', 'like', '%' . $this->search . '%')
                           ->orWhereHas('category', function($q) {
                               $q->where('category', 'like', '%' . $this->search . '%');
                           });
@@ -41,7 +39,7 @@ class ArticleSearch extends Component
                 ->get();
         }
 
-        return view('livewire.user.article-search', [
+        return view('livewire.user.product-search', [
             'results' => $results
         ]);
     }

@@ -7,7 +7,7 @@ use App\Models\Product;
 use Livewire\WithPagination;
 
 class Products extends Component
-{   
+{
     use WithPagination;
 
     public $search = '';
@@ -21,15 +21,15 @@ class Products extends Component
         'sortBy' => ['except' => 'product_name'],
         'sortDirection' => ['except' => 'asc'],
     ];
-    
+
     protected $listeners = [
         'product-added' => '$refresh',
         'product-updated' => '$refresh',
         'product-deleted' => '$refresh',
     ];
-    
+
     public function updatingSearch()
-    {   
+    {
         $this->resetPage();
     }
 
@@ -54,9 +54,9 @@ class Products extends Component
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate(5);
     }
-    
+
     public function render()
-    {   
+    {
         return view('livewire.admin.products.products');
     }
 }

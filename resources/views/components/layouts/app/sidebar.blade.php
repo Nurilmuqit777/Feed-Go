@@ -9,14 +9,14 @@
         </style>
         <div class="flex h-full w-full">
 
-            @if (auth()->user()->role === 'admin')       
+        @if (auth()->user()->role === 'admin' || auth()->user()->role === 'superadmin')
             <flux:sidebar stashable class="lg:relative lg:translate-x-0 sticky top-0 h-screen w-64 shrink-0 border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
                 <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
-    
+
                 <a href="{{ route('admin.dashboard') }}" class=" flex items-center justify-center" wire:navigate>
                     <img src="{{ asset('images/FeedGo.webp') }}" alt="" class="h-18">
                 </a>
-    
+
                 <flux:navlist variant="outline">
                     <flux:navlist.group class="grid">
                         <flux:navlist.item
@@ -27,11 +27,11 @@
                             <x-slot:icon>
                                 <x-svg.dashboard-icon class="w-5 h-5" />
                             </x-slot:icon>
-                        
+
                             {{ __('Dashboard') }}
-    
+
                         </flux:navlist.item>
-    
+
                         <flux:navlist.item
                             class="flux-box {{ request()->routeIs('admin.product') ? 'is-current' : '' }}"
                             href="{{ route('admin.product') }}"
@@ -40,10 +40,10 @@
                             <x-slot:icon>
                                 <x-svg.product-icon class="w-5 h-5" />
                             </x-slot:icon>
-                        
+
                             {{ __('Produk') }}
                         </flux:navlist.item>
-    
+
                         <flux:navlist.item
                             class="flux-box {{ request()->routeIs('admin.order') ? 'is-current' : '' }}"
                             href="{{ route('admin.order') }}"
@@ -52,22 +52,10 @@
                             <x-slot:icon>
                                 <x-svg.order-icon class="w-5 h-5" />
                             </x-slot:icon>
-                        
+
                             {{ __('Pesanan') }}
                         </flux:navlist.item>
-                                            
-                        <flux:navlist.item
-                            class="flux-box {{ request()->routeIs('admin.message') ? 'is-current' : '' }}"
-                            href="{{ route('admin.message') }}"
-                            wire:navigate
-                        >
-                            <x-slot:icon>
-                                <x-svg.message-icon class="w-5 h-5" />
-                            </x-slot:icon>
-                        
-                            {{ __('Kotak Masuk') }}
-                        </flux:navlist.item>
-    
+
                         <flux:navlist.item
                             class="flux-box {{ request()->routeIs('admin.delivery') ? 'is-current' : '' }}"
                             href="{{ route('admin.delivery') }}"
@@ -76,10 +64,10 @@
                             <x-slot:icon>
                                 <x-svg.delivery-icon class="w-5 h-5" />
                             </x-slot:icon>
-                        
+
                             {{ __('Pengiriman') }}
                         </flux:navlist.item>
-    
+
                         <flux:navlist.item
                             class="flux-box {{ request()->routeIs('admin.payment') ? 'is-current' : '' }}"
                             href="{{ route('admin.payment') }}"
@@ -88,10 +76,22 @@
                             <x-slot:icon>
                                 <x-svg.payment-icon class="w-5 h-5" />
                             </x-slot:icon>
-                        
+
                             {{ __('Pembayaran') }}
                         </flux:navlist.item>
-    
+
+                        <flux:navlist.item
+                            class="flux-box {{ request()->routeIs('admin.userprofile') ? 'is-current' : '' }}"
+                            href="{{ route('admin.userprofile') }}"
+                            wire:navigate
+                        >
+                            <x-slot:icon>
+                                <x-svg.user-icon class="w-5 h-5" />
+                            </x-slot:icon>
+
+                            {{ __('Pengguna') }}
+                        </flux:navlist.item>
+
                         <flux:navlist.item
                             class="flux-box {{ request()->routeIs('admin.report') ? 'is-current' : '' }}"
                             href="{{ route('admin.report') }}"
@@ -100,10 +100,10 @@
                             <x-slot:icon>
                                 <x-svg.report-icon class="w-5 h-5" />
                             </x-slot:icon>
-                        
+
                             {{ __('Laporan') }}
                         </flux:navlist.item>
-    
+
                         <flux:navlist.item
                             class="flux-box {{ request()->routeIs('admin.article') ? 'is-current' : '' }}"
                             href="{{ route('admin.article') }}"
@@ -112,14 +112,14 @@
                             <x-slot:icon>
                                 <x-svg.article-icon class="w-5 h-5" />
                             </x-slot:icon>
-                        
+
                             {{ __('Artikel') }}
                         </flux:navlist.item>
                     </flux:navlist.group>
                 </flux:navlist>
-    
+
                 <flux:spacer />
-    
+
                 <!-- Desktop User Menu -->
                 <flux:dropdown class="hidden lg:block" position="bottom" align="start">
                     <flux:profile
@@ -127,7 +127,7 @@
                         :initials="auth()->user()->initials()"
                         icon:trailing="chevrons-up-down"
                     />
-    
+
                     <flux:menu class="w-[220px]">
                         <flux:menu.radio.group>
                             <div class="p-0 text-sm font-normal">
@@ -139,7 +139,7 @@
                                             {{ auth()->user()->initials() }}
                                         </span>
                                     </span>
-    
+
                                     <div class="grid flex-1 text-start text-sm leading-tight">
                                         <span class="truncate font-semibold">{{ auth()->user()->name }}</span>
                                         <span class="truncate text-xs">{{ auth()->user()->email }}</span>
@@ -147,15 +147,15 @@
                                 </div>
                             </div>
                         </flux:menu.radio.group>
-    
+
                         <flux:menu.separator />
-    
+
                         <flux:menu.radio.group>
                             <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
                         </flux:menu.radio.group>
-    
+
                         <flux:menu.separator />
-    
+
                         <form method="POST" action="{{ route('logout') }}" class="w-full">
                             @csrf
                             <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
@@ -165,21 +165,21 @@
                     </flux:menu>
                 </flux:dropdown>
             </flux:sidebar>
-            
+
             <div class="flex flex-1 flex-col h-full w-full">
 
                 <!-- Mobile User Menu -->
                 <flux:header class="lg:hidden">
                     <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
-        
+
                     <flux:spacer />
-        
+
                     <flux:dropdown position="top" align="end">
                         <flux:profile
                             :initials="auth()->user()->initials()"
                             icon-trailing="chevron-down"
                         />
-        
+
                         <flux:menu>
                             <flux:menu.radio.group>
                                 <div class="p-0 text-sm font-normal">
@@ -191,7 +191,7 @@
                                                 {{ auth()->user()->initials() }}
                                             </span>
                                         </span>
-        
+
                                         <div class="grid flex-1 text-start text-sm leading-tight">
                                             <span class="truncate font-semibold">{{ auth()->user()->name }}</span>
                                             <span class="truncate text-xs">{{ auth()->user()->email }}</span>
@@ -199,15 +199,15 @@
                                     </div>
                                 </div>
                             </flux:menu.radio.group>
-        
+
                             <flux:menu.separator />
-        
+
                             <flux:menu.radio.group>
                                 <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
                             </flux:menu.radio.group>
-        
+
                             <flux:menu.separator />
-        
+
                             <form method="POST" action="{{ route('logout') }}" class="w-full">
                                 @csrf
                                 <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
@@ -218,10 +218,10 @@
                     </flux:dropdown>
                 </flux:header>
                 @endif
-        
+
                 {{ $slot }}
             </div>
-    
+
         </div>
         @fluxScripts
         @livewireScripts

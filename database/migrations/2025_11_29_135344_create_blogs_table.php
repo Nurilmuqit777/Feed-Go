@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->string('title');
             $table->text('short_description');
-            $table->unsignedInteger('reading_time');
             $table->text('content');
             $table->string('thumbnail');
             $table->enum('status', ['draft', 'published'])->default('draft');

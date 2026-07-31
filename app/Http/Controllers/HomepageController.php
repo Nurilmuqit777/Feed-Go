@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
-use App\Models\Form;
 
 class HomepageController extends Controller
 {
@@ -13,7 +12,7 @@ class HomepageController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {   
+    {
         $products =Product::inRandomOrder()->take(2)->get();
         return view('layouts.homepage', compact('products'));
     }
@@ -26,6 +25,11 @@ class HomepageController extends Controller
     public function termsConditions()
     {
         return view('layouts.terms-conditions');
+    }
+
+    public function contact()
+    {
+        return view('layouts.contactus');
     }
 
     /**
@@ -41,23 +45,7 @@ class HomepageController extends Controller
      */
     public function store(Request $request)
     {
-        try{
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|email|max:255',
-                'message' => 'required|string',
-            ]);
-            Form::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'message' => $request->message,
-            ]);
 
-            return back()->with('success', 'Form submitted successfully.');
-        } catch (\Exception $e) {
-            return back()->with('error', 'An error occurred while submitting the form.')
-            ->withInput();
-        }
     }
 
     /**
@@ -89,9 +77,6 @@ class HomepageController extends Controller
      */
     public function destroy(string $id)
     {
-        $form = Form::findOrFail($id);
-        $form->delete();
 
-        return back()->with('success', 'Form deleted successfully.');
     }
 }

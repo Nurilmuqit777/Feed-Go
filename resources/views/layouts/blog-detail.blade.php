@@ -30,14 +30,7 @@
             </div>
 
             <div class="flex items-center gap-2 text-sm text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35" fill="none">
-                    <path d="M17.5 35C7.83475 35 0 27.1652 0 17.5C0 7.83475 7.83475 0 17.5 0C27.1652 0 35 7.83475 35 17.5C35 27.1652 27.1652 35 17.5 35ZM17.5 31.5C21.213 31.5 24.774 30.025 27.3995 27.3995C30.025 24.774 31.5 21.213 31.5 17.5C31.5 13.787 30.025 10.226 27.3995 7.60051C24.774 4.975 21.213 3.5 17.5 3.5C13.787 3.5 10.226 4.975 7.60051 7.60051C4.975 10.226 3.5 13.787 3.5 17.5C3.5 21.213 4.975 24.774 7.60051 27.3995C10.226 30.025 13.787 31.5 17.5 31.5ZM19.25 17.5H26.25V21H15.75V8.75H19.25V17.5Z" fill="white"/>
-                </svg>
-                <span class="text-lg font-base">{{ $blog->reading_time }} menit baca</span>
-            </div>
-
-            <div class="flex items-center gap-2 text-sm text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38" fill="none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 38 38" fill="none">
                     <path d="M8.74438 14.3799L17.4888 0L26.2353 14.3841L8.74438 14.3799ZM29.1763 37.7549C26.9563 37.7549 25.08 36.9892 23.5471 35.4578C22.0143 33.9263 21.2479 32.05 21.2479 29.8286C21.2479 27.6073 22.0143 25.7309 23.5471 24.1995C25.08 22.6681 26.9563 21.9017 29.1763 21.9003C31.3962 21.8988 33.2725 22.6653 34.8054 24.1995C36.3382 25.7338 37.1046 27.6101 37.1046 29.8286C37.1046 32.0471 36.3382 33.9235 34.8054 35.4578C33.2725 36.992 31.3962 37.7584 29.1763 37.757M0 36.6945V22.9628H13.7275V36.6945H0ZM29.1763 35.632C30.7998 35.632 32.1732 35.071 33.2966 33.949C34.42 32.827 34.981 31.4535 34.9796 29.8286C34.9782 28.2037 34.4172 26.8303 33.2966 25.7083C32.176 24.5863 30.8026 24.0253 29.1763 24.0253C27.5499 24.0253 26.1765 24.5863 25.0559 25.7083C23.9353 26.8303 23.3743 28.2037 23.3729 29.8286C23.3715 31.4535 23.9325 32.827 25.0559 33.949C26.1793 35.071 27.5528 35.632 29.1763 35.632ZM2.125 34.5695H11.6025V25.0878H2.125V34.5695ZM12.4461 12.257H22.5314L17.4888 4.1735L12.4461 12.257Z" fill="white"/>
                 </svg>
                 <span class="text-lg font-base">{{ $blog->category->category }}</span>
@@ -47,7 +40,7 @@
 
     <img src="{{ asset('storage/' . $blog->thumbnail) }}" alt="{{ $blog->title }}" class="w-6xl mx-auto mt-8 rounded-lg shadow-lg max-h-96 object-cover"/>
 
-    <div class="trix-content max-w-6xl mx-auto text-white text-lg mt-10 mb-20 prose prose-invert prose-a:text-blue-400 hover:prose-a:text-blue-600">
+    <div class="text-justify trix-content max-w-6xl mx-auto text-white text-lg mt-10 mb-20 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:ml-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_li]:mb-1">
         {!! $blog->content !!}
     </div>
 
@@ -71,7 +64,6 @@
             </p>
         </div>
     </div>
-
 
 </div>
 @endsection

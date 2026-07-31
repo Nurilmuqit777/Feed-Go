@@ -24,6 +24,16 @@ class Cart extends Model
 
     public function getTotalPriceAttribute()
     {
-        return $this->quantity * $this->product->price;
+        return $this->quantity * $this->product->product_price;
+    }
+
+    public function getTotalDiscountPriceAttribute()
+    {
+        return $this->quantity *($this->product->product_discount_price ?? $this->product->product_price);
+    }
+
+    public function getDiscountAmountAttribute()
+    {
+        return $this->quantity * ($this->product->product_price - ($this->product->product_discount_price ?? $this->product->product_price));
     }
 }

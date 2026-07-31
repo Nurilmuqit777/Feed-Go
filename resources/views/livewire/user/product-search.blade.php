@@ -2,27 +2,34 @@
     <div class="flex gap-3 max-w-md mx-auto lg:mx-0 z-20">
 
         <div class="relative flex-1">
-            <input
-                type="text"
-                wire:model.live.debounce.300ms="search"
-                @focus="focused = true"
-                @keydown.escape="$wire.clearSearch(); focused = false"
-                placeholder="Cari artikel....."
-                class="w-full bg-[#6C9D50] bg-opacity-90 text-white placeholder-white px-4 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#2D5016] transition-all"
-            />
 
-            <div wire:loading wire:target="search" class="absolute right-3 top-1/2 transform -translate-y-1/2">
-                <svg class="w-4 h-4 animate-spin text-white" viewBox="0 0 24 24" fill="none">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            <div class="bg-[#C8E6C9] rounded-full flex items-center px-4 py-2 w-full max-w-md shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-700 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M21 21l-4.35-4.35M16.65 10.65a6 6 0 11-12 0 6 6 0 0112 0z" />
                 </svg>
+                <input
+                    type="text"
+                    wire:model.live.debounce.300ms="search"
+                    @focus="focused = true"
+                    @keydown.escape="$wire.clearSearch(); focused = false"
+                    placeholder="Cari produk......"
+                    class="bg-transparent outline-none text-sm w-full text-green-900 placeholder-green-700"
+                />
+
+                <div wire:loading wire:target="search" class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <svg class="w-4 h-4 animate-spin text-[#5EB661]" viewBox="0 0 24 24" fill="none">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </div>
             </div>
 
             @if($search)
             <button
                 wire:click="clearSearch"
                 @click="focused = false"
-                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-200 transition"
+                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#5EB661] hover:text-gray-700 transition"
                 wire:loading.remove>
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -44,54 +51,41 @@
 
                 @if($results->count() > 0)
                     <div class="py-2">
-
                         <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
                             {{ $results->count() }} Hasil ditemukan
                         </div>
-
-                        @foreach($results as $article)
+                        @foreach($results as $products)
                         @php
-                            $badgeColor = match(strtoupper($article->category->category)) {
-                                'INFORMASI' => '#2563EB',
-                                'TIPS' => '#EAAA00',
-                                'EDUKASI' => '#2E7D32',
+                            $badgeColor = match(strtoupper($products->category->category)) {
+                                'PAKAN UDANG' => '#2563EB',
+                                'PAKAN KAMBING' => '#EAAA00',
                                 default => '#6B7280'
                             };
                         @endphp
-
                         <a
-                            href="{{ route('article.show', $article->slug) }}"
+                            href="{{ route('product.show', $products->product_slug) }}"
                             class="flex gap-3 px-4 py-3 hover:bg-gray-50 transition group">
-
                             <div class="flex-shrink-0">
                                 <img
-                                    src="{{ asset('storage/' . $article->thumbnail) }}"
-                                    alt="{{ $article->title }}"
+                                    src="{{ asset('storage/' . $products->product_image1) }}"
+                                    alt="{{ $products->title }}"
                                     class="w-16 h-16 object-cover rounded-lg"
                                 />
                             </div>
-
                             <div class="flex-1 min-w-0">
-
                                 <span class="inline-block text-white text-xs px-2 py-0.5 rounded-full mb-1"
                                       style="background-color: {{ $badgeColor }}">
-                                    {{ $article->category->category }}
+                                    {{ $products->category->category }}
                                 </span>
-
                                 <h4 class="text-sm font-semibold text-gray-900 group-hover:text-[#2D5016] line-clamp-1 transition">
                                     {!! str_replace(
                                         $search,
                                         '<mark class="bg-yellow-200 text-gray-900">' . $search . '</mark>',
-                                        $article->title
+                                        $products->product_name
                                     ) !!}
                                 </h4>
-
-                                <p class="text-xs text-gray-600 line-clamp-2 mt-1">
-                                    {{ $article->short_description }}
-                                </p>
-
-                                <div class="flex items-center gap-2 mt-1 text-xs text-gray-500">
-                                    <span>{{ $article->created_at->format('d M Y') }}</span>
+                                <div class="text-xs text-gray-600 line-clamp-2 mt-1 trix-content">
+                                    {!! $products->product_description !!}
                                 </div>
                             </div>
                         </a>
@@ -99,8 +93,8 @@
                         @if(!$loop->last)
                         <div class="border-t border-gray-100 mx-4"></div>
                         @endif
-                        @endforeach
 
+                        @endforeach
                     </div>
 
                 @else
@@ -112,8 +106,10 @@
                         <p class="text-xs text-gray-500">Coba kata kunci lain</p>
                     </div>
                 @endif
+
             </div>
             @endif
+
         </div>
 
     </div>

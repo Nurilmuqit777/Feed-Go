@@ -4,19 +4,19 @@
                p-4 flex flex-col gap-4
                md:flex-row md:items-center md:justify-between">
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:gap-4">
-        
+
             <div class="flex items-center gap-4">
                 <input
                     type="checkbox"
                     class="w-5 h-5 rounded border-gray-300 text-green-600 focus:ring-green-500"
                 />
-            
+
                 <div class="flex items-center gap-2 font-medium">
                     <span class="text-sm text-black dark:text-white">Daftar Produk</span>
                     <span class="text-xs text-gray-400">{{ $this->products->total() }} produk</span>
                 </div>
             </div>
-        
+
             <div class="relative w-full md:w-60">
                 <svg
                     class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
@@ -26,7 +26,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 18a7.5 7.5 0 006.15-3.35z"/>
                 </svg>
-            
+
                 <input
                     type="text"
                     placeholder="Cari Produk"
@@ -38,9 +38,9 @@
                 />
             </div>
         </div>
-    
+
         <div class="flex flex-wrap items-center gap-3 justify-end">
-            
+
             <button
                 onclick="window.dispatchEvent(new CustomEvent('open-add-product-category'))"
                 class="flex items-center gap-2 text-sm bg-green-600 hover:bg-green-700
@@ -57,7 +57,7 @@
                 <span class="text-xl leading-none">+</span>
                 <span class="hidden sm:inline">Tambahkan produk</span>
             </button>
-        
+
             <select
                 wire:model.live="sortBy"
                 class="border rounded-lg px-3 py-2 text-sm text-black dark:text-white
@@ -68,7 +68,7 @@
                 <option value="product_price">Harga</option>
                 <option value="product_stock">Stok</option>
             </select>
-        
+
             <button
                 wire:click="toggleSortDirection"
                 class="p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-600
@@ -77,23 +77,23 @@
             >
                 @if($sortDirection === 'asc')
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M5 15l7-7 7 7"/>
                     </svg>
                 @else
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M19 9l-7 7-7-7"/>
                     </svg>
                 @endif
             </button>
-        
+
         </div>
-    
+
     </div>
 
     <div class="overflow-x-auto bg-white dark:bg-neutral-800 rounded-xl shadow-sm">
-    
+
         <table class="w-full text-sm border-separate border-spacing-y-2">
             <thead class="text-gray-400">
                 <tr>
@@ -109,19 +109,19 @@
                     <th class="px-4 py-3 text-center">Aksi</th>
                 </tr>
             </thead>
-    
+
             <tbody class="text-center">
                 @forelse ($this->products as $index => $product)
                     <tr class="bg-white dark:bg-neutral-700 rounded-xl shadow-sm">
-    
+
                         <td class="px-4 py-4">
                             <input type="checkbox" class="rounded border-gray-300">
                         </td>
-    
+
                         <td class="px-4 py-4 font-medium">
                             {{ ($this->products->currentPage() - 1) * $this->products->perPage() + $index + 1 }}
                         </td>
-    
+
                         <td class="px-4 py-4">
                             <div class="flex items-center gap-3">
                                 <img
@@ -134,11 +134,11 @@
                                 </span>
                             </div>
                         </td>
-    
+
                         <td class="px-4 py-4">
                             {{ $product->category->category ?? '-' }}
                         </td>
-    
+
                         <td class="px-4 py-4 font-semibold whitespace-nowrap align-middle">
                             @if($product->product_discount_price)
                             Rp {{ number_format($product->product_discount_price, 0, ',', '.') }}
@@ -146,11 +146,11 @@
                             Rp {{ number_format($product->product_price, 0, ',', '.') }}
                             @endif
                         </td>
-    
+
                         <td class="px-4 py-4">
                             {{ $product->product_stock }}
                         </td>
-    
+
                         <td class="px-4 py-4">
                             <span
                                 class="inline-flex items-center justify-center
@@ -164,15 +164,15 @@
                                     : 'Tidak Tersedia' }}
                             </span>
                         </td>
-    
+
                         <td class="px-4 py-4 text-gray-500">
                             {{ $product->updated_at->format('d/m/Y') }}
                         </td>
-    
+
                         <td class="px-4 py-4 max-w-xs truncate text-gray-500">
                             {{ Str::limit(strip_tags($product->product_description), 10, '...') }}
                         </td>
-    
+
                         <td class="px-4 py-4">
                             <div class="flex justify-center gap-2">
                                 <button
@@ -180,7 +180,7 @@
                                     class="p-2 rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-200 transition">
                                     <x-svg.edit-icon/>
                                 </button>
-    
+
                                 <button
                                     wire:click="$dispatch('open-delete-product', { id: {{ $product->id }} })"
                                     class="p-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition">

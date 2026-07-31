@@ -33,7 +33,7 @@
       {{-- auth --}}
       <div class="flex items-center gap-4 p-5">
         @auth
-          @if (in_array(auth()->user()->role, ['admin', 'superadmin']))
+          @if (auth()->user()->role === 'admin')
 
             <a href="{{ route('admin.dashboard') }}"
                class="bg-yellow-400 text-green-800 px-4 py-2 rounded-full
