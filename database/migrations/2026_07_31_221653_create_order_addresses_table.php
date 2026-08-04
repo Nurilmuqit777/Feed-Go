@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('recipient_name');
             $table->string('recipient_phone');
             $table->string('email');
-            $table->string('phone_number');
+            $table->string('note')->nullable();
             $table->string('province');
-            $table->string('city');
+            $table->string('regency');
             $table->string('district');
             $table->string('village');
             $table->string('full_address');

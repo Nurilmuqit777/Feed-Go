@@ -22,7 +22,7 @@ class ProductDetail extends Component
             return redirect()->route('login');
         }
 
-        if (! Auth::user()->role !== 'user') {
+        if (Auth::user()->role !== 'user') {
             session()->flash('error', 'Hanya pengguna dengan peran "user" yang dapat menambahkan produk ke keranjang.');
             return;
         }

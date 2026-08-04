@@ -15,7 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('order_id')->constrained('orders');
             $table->decimal('amount', 10, 2)->unsigned();
-            $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
+            $table->string('payment_method')->nullable();
+            $table->string('transaction_id')->nullable()->unique();
+            $table->enum('status', ['pending', 'paid', 'failed', 'expired', 'cancelled', 'refunded'])->default('pending');
+            $table->text('snap_token')->nullable();
+            $table->timestamp('paid_at')->nullable();
+            $table->json('payload')->nullable();
             $table->timestamps();
         });
     }

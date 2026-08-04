@@ -11,6 +11,7 @@
                 <div>
                     <label class="block text-sm font-semibold text-[#2D5016] mb-2">Nama Lengkap</label>
                     <input
+                        wire:model.live ="recipient_name"
                         type="text"
                         class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#2D5016] focus:ring-2 focus:ring-[#2D5016]/20 transition-all"
                         placeholder=""
@@ -20,6 +21,7 @@
                 <div>
                     <label class="block text-sm font-semibold text-[#2D5016] mb-2">Email</label>
                     <input
+                        wire:model.live ="email"
                         type="email"
                         class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#2D5016] focus:ring-2 focus:ring-[#2D5016]/20 transition-all"
                         placeholder=""
@@ -29,6 +31,7 @@
                 <div>
                     <label class="block text-sm font-semibold text-[#2D5016] mb-2">Nomor HP / Whatsapp</label>
                     <input
+                        wire:model.live ="recipient_phone"
                         type="tel"
                         class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#2D5016] focus:ring-2 focus:ring-[#2D5016]/20 transition-all"
                         placeholder=""
@@ -38,6 +41,7 @@
                 <div>
                     <label class="block text-sm font-semibold text-[#2D5016] mb-2">Catatan Untuk Penjual</label>
                     <textarea
+                        wire:model.live="note"
                         rows="3"
                         class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#2D5016] focus:ring-2 focus:ring-[#2D5016]/20 transition-all resize-none"
                         placeholder=""
@@ -281,6 +285,7 @@
                 <div>
                     <label class="block text-sm font-semibold text-[#2D5016] mb-2">Alamat Lengkap</label>
                     <textarea
+                        wire:model.live="full_address"
                         rows="3"
                         class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#2D5016] focus:ring-2 focus:ring-[#2D5016]/20 transition-all resize-none"
                         placeholder="Nama jalan, nomor rumah, RT/RW..."
@@ -290,6 +295,7 @@
                 <div>
                     <label class="block text-sm font-semibold text-[#2D5016] mb-2">Kode Pos</label>
                     <input
+                        wire:model.live="postal_code"
                         type="text"
                         class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#2D5016] focus:ring-2 focus:ring-[#2D5016]/20 transition-all"
                         placeholder=""
@@ -351,72 +357,56 @@
             </div>
         </div>
 
-        <div>
-            <h2 class="text-2xl font-bold text-[#2E7D32] mb-1">Pilih Pembayaran</h2>
-            <p class="text-sm text-gray-500 mb-6">Data ini digunakan untuk keperluan pemesanan dan konfirmasi.</p>
-
-            <div class="space-y-3">
-
-                <label class="flex items-center gap-4 border-2 border-gray-200 rounded-2xl p-4 cursor-pointer hover:border-[#2D5016] transition-all has-[:checked]:border-[#2D5016] has-[:checked]:bg-green-50">
-                    <input type="radio" name="payment" value="qris" class="w-5 h-5 accent-[#2D5016]"/>
-                    <div class="w-12 h-10 flex items-center justify-center shrink-0">
-                        <img src="{{ asset('images/qris.webp') }}" alt="QRIS" class="w-full h-full object-contain"/>
-                    </div>
-                    <div class="flex-1">
-                        <p class="font-semibold text-gray-800 text-sm">- Semua Bank & E-Wallet</p>
-                        <p class="text-xs text-gray-500">Scan QR untuk bayar</p>
-                    </div>
-                    <span class="text-sm font-semibold text-gray-700">Rp 45.000</span>
-                </label>
-
-                <label class="flex items-center gap-4 border-2 border-gray-200 rounded-2xl p-4 cursor-pointer hover:border-[#2D5016] transition-all has-[:checked]:border-[#2D5016] has-[:checked]:bg-green-50">
-                    <input type="radio" name="payment" value="bank_transfer" class="w-5 h-5 accent-[#2D5016]"/>
-                    <div class="w-12 h-10 flex items-center justify-center shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="40" viewBox="0 0 51 56" fill="none">
-                            <path d="M25.3333 0L0 13.3333V18.6667H50.6667V13.3333M37.3333 24V42.6667H45.3333V24M0 56H50.6667V48H0M21.3333 24V42.6667H29.3333V24M5.33333 24V42.6667H13.3333V24H5.33333Z" fill="black"/>
-                        </svg>
-                    </div>
-                    <div class="flex-1">
-                        <p class="font-semibold text-gray-800 text-sm">Bank Transfer</p>
-                        <p class="text-xs text-gray-500">Pilih Bank Untuk membayar</p>
-                    </div>
-                </label>
-            </div>
-        </div>
-
-        <div class="bg-[#BBDFA6] rounded-3xl p-6 space-y-6">
+        <div class="bg-[#BBDFA6] rounded-3xl p-6 space-y-4">
 
             <h2 class="text-2xl font-bold text-[#2E7D32]">Ringkasan Produk</h2>
 
-            <div class="border-2 border-[#2D5016A6] rounded-2xl p-4 flex items-center gap-4">
-                <div class="w-14 h-14 rounded-xl bg-[#FFFFFF] flex items-center justify-center shrink-0">
-                    <img
-                        src="{{ asset('images/produk1.png') }}"
+            @foreach ($carts as $cart)
+                <div class="border-2 border-[#2D5016A6] rounded-2xl p-4 flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-xl bg-[#FFFFFF] flex items-center justify-center shrink-0">
+                        <img
+                        src="{{ asset('storage/'.$cart->product->product_image1) }}"
                         alt="Produk"
                         class="w-10 h-auto object-contain"
                     />
                 </div>
                 <div>
-                    <p class="font-medium text-[#2D5016] text-sm">FeedGo NutriGrow – Pakan Udang</p>
-                    <p class="text-xs text-[#2D5016] mt-0.5">Jumlah: 1</p>
+                    <p class="font-medium text-[#2D5016] text-sm">{{ $cart->product->product_name }} - {{\Illuminate\Support\Str::title($cart->product->category->category)}}</p>
+                    <p class="text-xs text-[#2D5016] mt-0.5">Jumlah: {{ $cart->quantity }}</p>
                 </div>
             </div>
+            @endforeach
 
             <div class="space-y-3">
 
                 <div class="flex justify-between">
-                    <span class="font-bold text-gray-800 text-sm">Produk</span>
-                    <span class="font-bold text-gray-800 text-sm">Subtotal</span>
+                    <span class="font-bold text-gray-800 text-lg">Produk</span>
+                    <span class="font-bold text-gray-800 text-lg">Ringkasan Biaya</span>
                 </div>
 
-                <div class="border-t border-[#B5D4A0]"></div>
+                @foreach ($carts as $cart)
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-[#2D5016]">
+                            {{ $cart->product->product_name }} - {{\Illuminate\Support\Str::title($cart->product->category->category)}}
+                            <span class="text-black">x {{ $cart->quantity }}</span>
+                        </span>
+                        <span class="text-sm text-gray-700 shrink-0 ml-4">Rp {{ number_format($cart->total_price, 0, ',', '.') }}</span>
+                    </div>
+                @endforeach
+
 
                 <div class="flex justify-between items-center">
                     <span class="text-sm text-[#2D5016]">
-                        FeedGo NutriGrow – Pakan Udang
-                        <span class="text-black">x 1</span>
+                        Potongan Harga
                     </span>
-                    <span class="text-sm text-gray-700 shrink-0 ml-4">Rp 45.000</span>
+                    <span class="text-sm text-[#E81010] shrink-0 ml-4t">- <span class=" line-through">Rp {{ number_format($carts->sum('total_price') - $carts->sum('total_discount_price'), 0, ',', '.') }}</span></span>
+                </div>
+
+                <div class="border-t border-[#2D5016A6]"></div>
+
+                <div class="flex justify-between items-center">
+                    <span class="text-sm text-black">Subtotal</span>
+                    <span class="text-sm text-gray-700 shrink-0 ml-4">Rp {{ number_format($carts->sum('total_discount_price'), 0, ',', '.') }}</span>
                 </div>
 
                 <div class="flex justify-between items-center">
@@ -432,16 +422,10 @@
                     <span class="text-sm text-gray-700 shrink-0 ml-4">Rp 30.000</span>
                 </div>
 
-                <div class="flex justify-between items-center">
-                    <span class="text-sm text-black">Subtotal</span>
-                    <span class="text-sm text-gray-700 shrink-0 ml-4">Rp 45.000</span>
-                </div>
-
                 <div class="flex justify-between items-start">
-                    <span class="font-bold text-black text-sm">Total</span>
+                    <span class="font-bold text-black text-sm">Total Tagihan</span>
                     <div class="text-right">
-                        <p class="text-xl font-bold text-[#2E7D32]">Rp 75.000</p>
-                        <p class="text-xs text-black mt-0.5">Pembayaran QRIS</p>
+                        <p class="text-xl font-bold text-[#2E7D32]">Rp {{ number_format($carts->sum('total_discount_price') , 0, ',', '.') }}</p>
                     </div>
                 </div>
             </div>
@@ -463,6 +447,8 @@
                 </label>
 
                 <button
+                    type="button"
+                    wire:click="checkout"
                     :disabled="!confirmed"
                     :class="confirmed
                         ? 'bg-[#EAAA00] text-white hover:bg-yellow-500 cursor-pointer'
@@ -475,4 +461,6 @@
             </div>
         </div>
     </div>
+
 </div>
+

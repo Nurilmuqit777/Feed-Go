@@ -48,11 +48,11 @@
                 Selesai
             </button>
             <button
-                @click="tab = 'returned'"
-                :class="tab === 'returned' ? 'border-b-2 border-[#2D5016] text-[#2E7D32]' : 'text-gray-500'"
+                @click="tab = 'cancelled'"
+                :class="tab === 'cancelled' ? 'border-b-2 border-[#2D5016] text-[#2E7D32]' : 'text-gray-500'"
                 class="text-sm md:text-lg font-medium pb-2 whitespace-nowrap transition-colors duration-300"
             >
-                Pengembalian
+                Dibatalkan
             </button>
         </div>
 
@@ -61,28 +61,30 @@
         </div>
 
         <div x-show="tab === 'pending'">
-            <livewire:user.order.waiting-payment />
+            <livewire:user.order.all-order status="pending" />
         </div>
 
         <div x-show="tab === 'processing'">
-            <livewire:user.order.processing-order />
+            <livewire:user.order.all-order status="processing" />
         </div>
 
         <div x-show="tab === 'shipped'">
-            <livewire:user.order.shipped-order />
+            <livewire:user.order.all-order status="shipped" />
         </div>
 
         <div x-show="tab === 'completed'">
-            <livewire:user.order.completed-order />
+            <livewire:user.order.all-order status="completed" />
         </div>
 
-        <div x-show="tab === 'returned'">
-            <livewire:user.order.returned-order />
+        <div x-show="tab === 'cancelled'">
+            <livewire:user.order.all-order status="cancelled" />
         </div>
 
 
 
     </div>
 </section>
+
+<x-layouts.app.superiority/>
 
 @endsection

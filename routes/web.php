@@ -23,6 +23,7 @@ Route::get('/kebijakan-privasi',[HomepageController::class, 'privacyPolicy'])->n
 Route::get('/syarat-dan-ketentuan',[HomepageController::class, 'termsConditions'])->name('terms.conditions');
 Route::get('/articles/search', [BlogController::class, 'search'])->name('articles.search');
 Route::get('/kontak-kami', [HomepageController::class, 'contact'])->name('contact');
+Route::post('/midtrans/notification', [OrderController::class, 'notification']);
 
 Route::middleware(['auth', 'role:admin,superadmin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
@@ -40,7 +41,8 @@ Route::middleware(['auth', 'role:admin,superadmin'])->group(function () {
 Route::middleware(['auth', 'role:user'])->group(function(){
     Route::get('/user/cart',[ProductController::class,'indexCart'])->name('user.cart');
     Route::get('/user/checkout',[ProductController::class,'indexCheckout'])->name('user.checkout');
-    Route::get('/user/orders', [OrderController::class, 'index'])->name('user.orders');
+    Route::get('/user/order', [OrderController::class, 'index'])->name('user.orders');
+    Route::get('/user/order/{invoice_number}', [OrderController::class, 'show'])->name('user.order-detail');
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -58,4 +60,15 @@ Route::middleware(['auth'])->group(function () {
             ),
         )
         ->name('two-factor.show');
+    Route::get('/payment/success', function () {
+        return view('payment.success');
+    })->name('payment.success');
+
+    Route::get('/payment/pending', function () {
+        return view('payment.pending');
+    })->name('payment.pending');
+
+    Route::get('/payment/failed', function () {
+        return view('payment.failed');
+    })->name('payment.failed');
 });

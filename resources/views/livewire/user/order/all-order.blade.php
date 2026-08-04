@@ -28,7 +28,7 @@
     </div>
 
     @forelse($orders as $order)
-    <div class="overflow-hidden shadow-sm">
+    <div class="overflow-hidden hover:scale-101 hover:shadow-md transition rounded-2xl border border-gray-200 bg-white">
 
         <div class="p-6">
             <div class="flex flex-col md:flex-row gap-6">
@@ -38,63 +38,93 @@
                     <div class="flex items-center gap-2">
                         @php
                             $statusConfig = match($order->status) {
-                                'selesai' => ['icon' => '✅', 'text' => 'Selesai', 'color' => 'text-[#2D5016]'],
-                                'diproses' => ['icon' => '🔄', 'text' => 'Diproses', 'color' => 'text-blue-600'],
-                                'dikirim' => ['icon' => '🚚', 'text' => 'Dikirim', 'color' => 'text-orange-500'],
-                                'dibatalkan' => ['icon' => '❌', 'text' => 'Dibatalkan', 'color' => 'text-red-600'],
-                                'menunggu' => ['icon' => '⏳', 'text' => 'Menunggu', 'color' => 'text-yellow-600'],
+                                'pending' => ['icon' => 'pending', 'text' => 'Menunggu pembayaran', 'color' => 'text-[#2D5016]'],
+                                'processing' => ['icon' => 'processing', 'text' => 'diproses', 'color' => 'text-blue-600'],
+                                'shipped' => ['icon' => 'shipped', 'text' => 'dikirim', 'color' => 'text-orange-500'],
+                                'completed' => ['icon' => 'completed', 'text' => 'selesai', 'color' => 'text-green-600'],
+                                'cancelled' => ['icon' => 'cancelled', 'text' => 'dibatalkan', 'color' => 'text-red-600'],
                                 default => ['icon' => '📦', 'text' => ucfirst($order->status), 'color' => 'text-gray-600'],
                             };
                         @endphp
-                        <span class="text-xl">{{ $statusConfig['icon'] }}</span>
+
+                        @switch($statusConfig['icon'])
+
+                            @case('pending')
+                                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26" fill="none">
+                                    <circle cx="13" cy="13" r="13" fill="#FFC633"/>
+                                </svg>
+                                @break
+
+                            @case('processing')
+                                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26" fill="none">
+                                    <circle cx="13" cy="13" r="13" fill="#2563EB"/>
+                                </svg>
+                                @break
+
+                            @case('shipped')
+                                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26" fill="none">
+                                    <circle cx="13" cy="13" r="13" fill="#7C3AED"/>
+                                </svg>
+                                @break
+
+                            @case('completed')
+                                <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34" fill="none">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M17.0002 29.75C19.3035 29.7502 21.5639 29.1264 23.5411 27.945C25.5184 26.7636 27.1387 25.0686 28.2298 23.0401C29.321 21.0117 29.8423 18.7255 29.7383 16.4245C29.6344 14.1235 28.909 11.8937 27.6394 9.97192L17.5031 21.2344C17.0297 21.7606 16.3764 22.0905 15.6719 22.1592C14.9674 22.2279 14.2627 22.0304 13.6965 21.6056L9.06688 18.1333C8.7663 17.9079 8.56758 17.5723 8.51445 17.2003C8.46131 16.8284 8.55811 16.4506 8.78354 16.15C9.00898 15.8494 9.34458 15.6507 9.71653 15.5976C10.0885 15.5444 10.4663 15.6412 10.7669 15.8667L15.3965 19.3389L25.8034 7.7775C24.2958 6.33832 22.4583 5.29068 20.4519 4.72631C18.4455 4.16195 16.3314 4.09805 14.2946 4.54024C12.2577 4.98242 10.3604 5.91719 8.76863 7.2627C7.17686 8.60821 5.93922 10.3234 5.16407 12.2582C4.38892 14.1929 4.0999 16.2882 4.32232 18.3606C4.54474 20.4329 5.2718 22.4192 6.43987 24.1454C7.60793 25.8716 9.18136 27.2851 11.0224 28.2622C12.8634 29.2393 14.916 29.7501 17.0002 29.75Z" fill="#388E3C"/>
+                                </svg>
+                                @break
+
+                            @case('cancelled')
+                                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26" fill="none">
+                                    <circle cx="13" cy="13" r="13" fill="#E81010"/>
+                                </svg>
+                                @break
+                        @endswitch
                         <h3 class="text-xl font-bold {{ $statusConfig['color'] }}">
                             Status : {{ $statusConfig['text'] }}
                         </h3>
                     </div>
 
-                    <p class="text-gray-500 text-sm">FeedGo</p>
-
-                    @foreach($order->items as $item)
+                    @foreach($order->orderDetails as $detail)
                     <div class="space-y-1">
                         <div class="flex justify-between items-start">
                             <div>
-                                <p class="text-gray-800 text-sm">{{ $item->product->product_name }}</p>
-                                <p class="text-gray-500 text-sm">x {{ $item->quantity }}</p>
+                                <p class="text-gray-800 text-md">{{ $detail->product->product_name }} - {{ \Illuminate\Support\Str::title($detail->product->category->category) }}</p>
+                                <p class="text-gray-500 text-md">x {{ $detail->quantity_ordered }}</p>
                             </div>
                             <div class="text-right shrink-0 ml-4">
-                                @if($item->product->product_discount_price)
-                                <p class="text-gray-400 text-sm line-through">
-                                    Rp {{ number_format($item->product->product_price, 0, ',', '.') }}
+                                @if($detail->discount_price_at_purchase)
+                                <p class="text-gray-400 text-md line-through">
+                                    Rp {{ number_format($detail->price_at_purchase, 0, ',', '.') }}
                                 </p>
                                 @endif
-                                <p class="text-[#2D5016] font-semibold text-sm">
-                                    Rp {{ number_format($item->product->product_discount_price ?? $item->product->product_price, 0, ',', '.') }}
+                                <p class="text-[#2D5016] font-semibold text-md">
+                                    Rp {{ number_format($detail->discount_price_at_purchase ?? $detail->price_at_purchase, 0, ',', '.') }}
                                 </p>
                             </div>
                         </div>
                     </div>
                     @endforeach
 
-                    <div class="flex justify-between items-center">
+                    {{-- <div class="flex justify-between items-center">
                         <p class="text-gray-700 text-sm">
                             Pengiriman: {{ $order->shipping_method }} ({{ $order->shipping_duration }})
                         </p>
                         <p class="text-[#2D5016] font-semibold text-sm shrink-0 ml-4">
                             Rp {{ number_format($order->shipping_cost, 0, ',', '.') }}
                         </p>
-                    </div>
+                    </div> --}}
                 </div>
 
                 <div class="shrink-0">
-                    @if($order->items->first())
+                    @if($order->orderDetails->first())
                     <div class="relative w-full md:w-48 h-48 rounded-2xl overflow-hidden bg-[#6C9D50]">
                         <img
-                            src="{{ asset('storage/' . $order->items->first()->product->product_image1) }}"
-                            alt="{{ $order->items->first()->product->product_name }}"
-                            class="w-full h-full object-cover"
+                            src="{{ asset('storage/' . $order->orderDetails->first()->product->product_image1) }}"
+                            alt="{{ $order->orderDetails->first()->product->product_name }}"
+                            class="w-full h-full object-cover p-5"
                         />
-                        <div class="absolute bottom-2 left-2 bg-black/50 text-white text-xs px-2 py-0.5 rounded-full">
-                            Berat: {{ $order->items->first()->product->product_weight }}{{ $order->items->first()->product->product_unit }}
+                        <div class="absolute bottom-2 left-2 text-white text-xs px-2 py-0.5 rounded-full">
+                            Berat: {{ $order->orderDetails->first()->product->product_weight }}{{ $order->orderDetails->first()->product->product_unit }}
                         </div>
                     </div>
                     @endif
@@ -102,30 +132,75 @@
             </div>
         </div>
 
-        <div class="border-t border-gray-100"></div>
+        <div class="border-t border-[#CDCDCD80]"></div>
 
         <div class="px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
 
             <div class="space-y-2">
 
-                <p class="font-bold text-gray-800 text-sm">
+                <p class="font-bold text-gray-800 text-md">
                     No. Pesanan:
-                    <span class="text-[#2D5016]">#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT) }}</span>
+                    <span class="text-[#2D5016]">#{{ ($order->invoice_number) }}</span>
                 </p>
 
-                @if($order->status === 'selesai')
+
+                @if($order->status === 'completed')
                 <div class="flex items-center gap-2">
-                    <span class="text-yellow-500">⭐</span>
+                    <span class="text-yellow-500"><x-svg.pin-icon /></span>
                     <p class="text-sm text-gray-700">Pesanan telah tiba di alamat tujuan</p>
                 </div>
                 <div class="flex items-center gap-4">
                     <div class="flex items-center gap-1">
-                        <span class="text-yellow-500 text-sm">⭐</span>
+                        <span class="text-yellow-500 text-sm"><x-svg.star-icon /></span>
                         <button class="text-sm text-[#2D5016] font-medium hover:underline transition">
                             Nilai Produk
                         </button>
                     </div>
-                    <button class="text-sm text-[#2D5016] font-medium hover:underline transition">
+                    <button class="text-sm text-[#2E7D32] font-medium hover:underline transition">
+                        Hubungi FeedGo
+                    </button>
+                </div>
+
+                @elseif ($order->status === 'pending')
+                <div class="flex items-center gap-2">
+                    <span class="text-yellow-500"><x-svg.pin-icon /></span>
+                    <p class="text-sm text-gray-700">Pesanan otomatis dibatalkan jika waktu habis</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="text-sm text-[#2E7D32] font-medium hover:underline transition">
+                        Hubungi FeedGo
+                    </button>
+                </div>
+
+                @elseif ($order->status === 'shipped')
+                <div class="flex items-center gap-2">
+                    <span class="text-yellow-500"><x-svg.pin-icon /></span>
+                    <p class="text-sm text-gray-700">Estimasi tiba: 30 - 31 maret 2026</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="text-sm text-[#2E7D32] font-medium hover:underline transition">
+                        Hubungi FeedGo
+                    </button>
+                </div>
+
+                @elseif ($order->status === 'cancelled')
+                <div class="flex items-center gap-2">
+                    <span class="text-yellow-500"><x-svg.pin-icon /></span>
+                    <p class="text-sm text-gray-700">Pesanan dibatalkan</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="text-sm text-[#2E7D32] font-medium hover:underline transition">
+                        Hubungi FeedGo
+                    </button>
+                </div>
+
+                @elseif ($order->status === 'processing')
+                <div class="flex items-center gap-2">
+                    <span class="text-yellow-500"><x-svg.pin-icon /></span>
+                    <p class="text-sm text-gray-700">Nomor resi akan dikirim setelah pesanan dikemas</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="text-sm text-[#2E7D32] font-medium hover:underline transition">
                         Hubungi FeedGo
                     </button>
                 </div>
@@ -142,7 +217,7 @@
                 </p>
 
                 <div class="flex flex-wrap gap-2">
-                    @if($order->status === 'selesai')
+                    @if($order->status === 'completed')
 
                         <button class="px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95">
                             Komplain
@@ -153,27 +228,20 @@
                         </button>
 
                         <a
-                            href="{{ route('user.order.detail', $order->id) }}"
+                            href="{{ route('user.order-detail', $order->invoice_number) }}"
                             class="flex items-center justify-center px-5 py-2.5 bg-[#EAAA00] hover:bg-yellow-500 text-white text-sm font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95">
                             Lihat Pesanan
                         </a>
 
-                    @elseif($order->status === 'menunggu')
+                    @elseif($order->status === 'pending')
 
                         <a
-                            href="{{ route('user.payment', $order->id) }}"
+                            href="{{ route('user.order-detail', $order->invoice_number) }}"
                             class="flex items-center justify-center px-5 py-2.5 bg-[#EAAA00] hover:bg-yellow-500 text-white text-sm font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95">
-                            Bayar Sekarang
+                            Lanjutkan Pembayaran
                         </a>
 
-                        <button
-                            wire:click="cancelOrder({{ $order->id }})"
-                            wire:confirm="Apakah Anda yakin ingin membatalkan pesanan ini?"
-                            class="px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95">
-                            Batalkan
-                        </button>
-
-                    @elseif($order->status === 'dikirim')
+                    @elseif($order->status === 'shipped')
 
                         <button
                             wire:click="confirmOrder({{ $order->id }})"
@@ -183,7 +251,7 @@
                         </button>
 
                         <a
-                            href="{{ route('user.order.detail', $order->id) }}"
+                            href="{{ route('user.order-detail', $order->invoice_number) }}"
                             class="flex items-center justify-center px-5 py-2.5 bg-[#EAAA00] hover:bg-yellow-500 text-white text-sm font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95">
                             Lihat Pesanan
                         </a>
@@ -191,7 +259,7 @@
                     @else
 
                         <a
-                            href="{{ route('user.order.detail', $order->id) }}"
+                            href="{{ route('user.order-detail', $order->invoice_number) }}"
                             class="flex items-center justify-center px-5 py-2.5 bg-[#EAAA00] hover:bg-yellow-500 text-white text-sm font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95">
                             Lihat Pesanan
                         </a>

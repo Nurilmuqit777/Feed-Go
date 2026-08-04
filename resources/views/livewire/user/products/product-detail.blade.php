@@ -74,7 +74,6 @@
             <span class="text-[#2D5016]">| 5 customer Reviews</span>
         </div>
 
-        @if (auth()->check() && auth()->user()->role === 'user')
         <div class="flex items-center gap-4 pt-2">
 
             <div x-data="{ quantity: 1 }" class="flex items-center gap-4">
@@ -99,6 +98,6 @@
 
             </div>
         </div>
-        @endif
+
     </div>
 </div>

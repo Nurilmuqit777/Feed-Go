@@ -14,7 +14,7 @@ class AllOrder extends Component
 
     public $search = '';
 
-    public function updateSearch()
+    public function updatingSearch()
     {
         $this->resetPage();
     }
@@ -23,10 +23,10 @@ class AllOrder extends Component
     {
         $order = Order::where('id', $orderId)
                       ->where('user_id', Auth::id())
-                      ->where('status', 'menunggu')
+                      ->where('status', 'pending')
                       ->firstOrFail();
-    
-        $order->update(['status' => 'dibatalkan']);
+
+        $order->update(['status' => 'cancelled']);
         $this->dispatch('order-cancelled');
     }
 
@@ -34,22 +34,24 @@ public function confirmOrder($orderId)
     {
         $order = Order::where('id', $orderId)
                       ->where('user_id', Auth::id())
-                      ->where('status', 'dikirim')
+                      ->where('status', 'shipped')
                       ->firstOrFail();
 
-        $order->update(['status' => 'selesai']);
+        $order->update(['status' => 'completed']);
         $this->dispatch('order-confirmed');
     }
 
     public function render()
     {
-        $orders = Order::with(['items.product', 'shipping'])
-            ->where('user_id', Auth::id())
+        $orders = Order::with(['orderDetails.product', 'orderAddress', 'payments'])
             ->when($this->search, function($query) {
-                $query->where('order_number', 'like', '%' . $this->search . '%')
-                      ->orWhereHas('items.product', function($q) {
-                          $q->where('product_name', 'like', '%' . $this->search . '%');
+                $query->where(function ($q) {
+                    $q->where('invoice_number', 'like', '%' . $this->search . '%')
+                      ->orWhereHas('orderDetails.product', function ($product) {
+                          $product->where('product_name','like','%' . $this->search . '%'
+                          );
                       });
+                });
             })
             ->latest()
             ->paginate(10);

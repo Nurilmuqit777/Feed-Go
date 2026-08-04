@@ -8,7 +8,7 @@ use App\Models\ProductCategory;
 use Livewire\WithPagination;
 
 class ProductList extends Component
-{   
+{
     use WithPagination;
 
     public $search = '';
@@ -24,7 +24,7 @@ class ProductList extends Component
     public function paginationView()
     {
         return 'livewire.pagination.custom-pagination';
-    }   
+    }
 
     public function updatingSearch()
     {
@@ -48,7 +48,7 @@ class ProductList extends Component
     }
 
     public function render()
-    {   
+    {
         $products = Product::with('category')->where('product_status', 'available');
 
         if ($this->search) {

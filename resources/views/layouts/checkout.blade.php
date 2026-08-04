@@ -30,4 +30,5 @@
 <section class="max-w-6xl mx-auto bg-[#F5F5F5] rounded-3xl -mt-20 relative z-20 p-10">
     <livewire:user.checkout/>
 </section>
+<x-layouts.app.superiority/>
 @endsection

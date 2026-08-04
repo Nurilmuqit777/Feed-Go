@@ -1,7 +1,7 @@
 <div class="space-y-4">
 
     <div class="flex flex-wrap items-center gap-3 bg-gray-50 dark:bg-neutral-700/50 p-4 rounded-lg">
-        
+
         <div class="flex flex-wrap items-center gap-3">
             <div class="flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -9,10 +9,10 @@
                 </svg>
                 <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Filter By</span>
             </div>
-    
-            <button 
+
+            <button
                 wire:click="sortByColumn('created_at')"
-                class="flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 dark:border-neutral-600 
+                class="flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 dark:border-neutral-600
                        rounded-lg bg-white dark:bg-neutral-800 text-gray-700 dark:text-gray-300
                        hover:bg-gray-50 dark:hover:bg-neutral-700 transition
                        {{ $sortBy === 'created_at' ? 'ring-2 ring-blue-500 border-blue-500' : '' }}">
@@ -27,10 +27,10 @@
                     </svg>
                 @endif
             </button>
-    
-            <button 
+
+            <button
                 wire:click="sortByColumn('id')"
-                class="flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 dark:border-neutral-600 
+                class="flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 dark:border-neutral-600
                        rounded-lg bg-white dark:bg-neutral-800 text-gray-700 dark:text-gray-300
                        hover:bg-gray-50 dark:hover:bg-neutral-700 transition
                        {{ $sortBy === 'id' ? 'ring-2 ring-blue-500 border-blue-500' : '' }}">
@@ -45,9 +45,9 @@
                     </svg>
                 @endif
             </button>
-    
+
             <select wire:model.live="filterStatus"
-                    class="px-4 py-2 text-sm border border-gray-300 dark:border-neutral-600 
+                    class="px-4 py-2 text-sm border border-gray-300 dark:border-neutral-600
                            rounded-lg bg-white dark:bg-neutral-800 text-gray-700 dark:text-gray-300
                            focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 <option value="">Status Pesanan</option>
@@ -56,10 +56,10 @@
                 <option value="completed">Selesai</option>
                 <option value="cancelled">Dibatalkan</option>
             </select>
-    
+
             @if($search || $filterStatus )
             <button wire:click="resetFilters"
-                    class="flex items-center gap-2 px-4 py-2 text-sm text-red-600 dark:text-red-400 
+                    class="flex items-center gap-2 px-4 py-2 text-sm text-red-600 dark:text-red-400
                            hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -68,7 +68,7 @@
             </button>
             @endif
         </div>
-        
+
         <div class=" w-full md:w-auto ml-auto">
             <div class="relative max-w-md">
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -76,10 +76,10 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </div>
-                <input type="text" 
+                <input type="text"
                 wire:model.live.debounce.300ms="search"
                 placeholder="Cari ID Pesanan / Nama Pemesan"
-                class="px-4 pl-10 py-2 text-sm border border-gray-300 dark:border-neutral-600 
+                class="px-4 pl-10 py-2 text-sm border border-gray-300 dark:border-neutral-600
                        rounded-lg bg-white dark:bg-neutral-800 text-gray-700 dark:text-gray-300
                        focus:ring-2 focus:ring-blue-500 focus:border-transparent
                        placeholder:text-gray-400"/>

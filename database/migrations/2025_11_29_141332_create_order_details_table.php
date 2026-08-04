@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained('products');
             $table->unsignedInteger('quantity_ordered');
             $table->decimal('price_at_purchase', 10, 2)->unsigned();
+            $table->decimal('discount_price_at_purchase', 10, 2)->unsigned()->nullable();
+            $table->decimal('sub_total', 10, 2)->unsigned();
             $table->timestamps();
         });
     }

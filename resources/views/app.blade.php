@@ -8,6 +8,7 @@
 
     <link rel="icon" href="{{ asset('images/FeedGo.webp') }}">
 
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <link rel="preconnect" href="https://fonts.googleapis.com">

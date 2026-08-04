@@ -36,4 +36,5 @@ class Cart extends Model
     {
         return $this->quantity * ($this->product->product_price - ($this->product->product_discount_price ?? $this->product->product_price));
     }
+
 }

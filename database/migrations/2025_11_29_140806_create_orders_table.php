@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->enum('status', ['pending', 'processing', 'completed', 'cancelled'])->default('pending');
+            $table->string('invoice_number')->unique();
+            $table->enum('status', ['pending', 'processing', 'completed', 'delivered', 'cancelled'])->default('pending');
             $table->decimal('total_price', 10, 2)->unsigned();
             $table->timestamps();
         });
