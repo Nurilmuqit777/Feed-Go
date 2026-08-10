@@ -37,9 +37,9 @@
             </button>
             @endif
 
-            @if($showResults && $search)
+            @if($showResults)
             <div
-                x-show="focused"
+                x-show="true"
                 @click.away="focused = false"
                 x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0 translate-y-1"
@@ -75,14 +75,10 @@
                             <div class="flex-1 min-w-0">
                                 <span class="inline-block text-white text-xs px-2 py-0.5 rounded-full mb-1"
                                       style="background-color: {{ $badgeColor }}">
-                                    {{ $products->category->category }}
+                                    {{ Str::title($products->category->category) }}
                                 </span>
                                 <h4 class="text-sm font-semibold text-gray-900 group-hover:text-[#2D5016] line-clamp-1 transition">
-                                    {!! str_replace(
-                                        $search,
-                                        '<mark class="bg-yellow-200 text-gray-900">' . $search . '</mark>',
-                                        $products->product_name
-                                    ) !!}
+                                    {{ $products->product_name }}
                                 </h4>
                                 <div class="text-xs text-gray-600 line-clamp-2 mt-1 trix-content">
                                     {!! $products->product_description !!}

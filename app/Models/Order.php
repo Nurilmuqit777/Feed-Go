@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
-    protected $fillable = ['user_id', 'status', 'total_price', 'invoice_number'];
+    protected $fillable = ['user_id', 'status','expired_at', 'total_price', 'invoice_number'];
 
     protected $casts = [
         'total_price' => 'decimal:2',

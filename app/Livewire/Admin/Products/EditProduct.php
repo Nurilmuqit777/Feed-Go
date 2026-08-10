@@ -6,11 +6,10 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\Product;
 use App\Models\ProductCategory;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
 class EditProduct extends Component
-{   
+{
     use WithFileUploads;
 
     public $open = false;
@@ -70,9 +69,9 @@ class EditProduct extends Component
     {
         $this->categories = ProductCategory::orderBy('category')->get();
     }
-    
+
     public function open($id)
-    {      
+    {
         $product = Product::findOrFail($id);
 
         $this->productId = $product->id;
@@ -85,7 +84,7 @@ class EditProduct extends Component
         $this->product_stock = $product->product_stock;
         $this->product_status = $product->product_status;
         $this->category_id = $product->category_id;
-        
+
         $this->product_images = collect([
             $product->product_image1,
             $product->product_image2,
@@ -100,13 +99,13 @@ class EditProduct extends Component
     public function updatedNewImage()
     {
         if (!$this->new_image) return;
-    
+
         if (count($this->product_images) >= 4) {
             $this->addError('product_images', 'Maksimal 4 gambar');
             $this->new_image = null;
             return;
         }
-    
+
         $this->product_images[] = $this->new_image;
         $this->new_image = null;
     }
@@ -137,7 +136,7 @@ class EditProduct extends Component
             if (Storage::disk('public')->exists($oldImage)) {
                 Storage::disk('public')->delete($oldImage);
             }
-        }   
+        }
 
         $discount = $this->product_discount_price === '' ? null : $this->product_discount_price;
 
@@ -150,7 +149,6 @@ class EditProduct extends Component
             'product_discount_price' => $discount,
             'product_stock' => $this->product_stock,
             'product_status' => $this->product_status,
-            'product_slug' => Str::slug($this->product_name . '-' . Str::random(6)),
             'category_id' => $this->category_id,
 
             'product_image1' => null,

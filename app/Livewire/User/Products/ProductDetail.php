@@ -23,7 +23,11 @@ class ProductDetail extends Component
         }
 
         if (Auth::user()->role !== 'user') {
-            session()->flash('error', 'Hanya pengguna dengan peran "user" yang dapat menambahkan produk ke keranjang.');
+            $this->dispatch('toast', [
+                'type' => 'error',
+                'title' => 'Akses Ditolak',
+                'message' => 'Hanya pengguna yang dapat menambahkan produk ke keranjang.'
+            ]);
             return;
         }
 
@@ -37,7 +41,11 @@ class ProductDetail extends Component
         $currentQty = $cart->exists ? $cart->quantity : 0;
 
         if (($currentQty + $quantity) > $product->product_stock) {
-            session()->flash('error', 'Jumlah produk di keranjang melebihi stok yang tersedia.');
+            $this->dispatch('toast', [
+                'type' => 'error',
+                'title' => 'Stok Tidak Cukup',
+                'message' => 'Jumlah produk di keranjang melebihi stok yang tersedia.'
+            ]);
             return;
         }
 
@@ -46,7 +54,11 @@ class ProductDetail extends Component
 
         $this->dispatch('cart-updated');
 
-        session()->flash('success', 'Produk berhasil ditambahkan ke keranjang.');
+        $this->dispatch('toast', [
+            'type' => 'success',
+            'title' => 'Berhasil',
+            'message' => "{$product->product_name} berhasil ditambahkan ke keranjang."
+        ]);
     }
 
     public function render()

@@ -81,19 +81,27 @@
                 <div class="flex items-center overflow-hidden">
 
                     <button @click="if(quantity > 1 ) quantity--" :disabled="quantity <= 1" class="px-3 bg-white text-green-700 font-bold hover:bg-green-300 transition" :class="quantity <= 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-300'">
-                        −
+                        <x-svg.minus-icon/>
                     </button>
 
                     <span x-text="quantity" class="px-4 text-white font-medium"></span>
 
                     <button @click="if(quantity < {{ $product->product_stock }}) quantity++" :disabled="quantity >= {{ $product->product_stock }}" class="px-3 bg-white text-green-700 font-bold hover:bg-green-300 transition" :class="quantity >= {{ $product->product_stock }}? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-300'">
-                        +
+                        <x-svg.plus-icon/>
                     </button>
 
                 </div>
 
                 <button wire:click="addToCart(quantity)" class="bg-[#EAAA00] hover:bg-yellow-500 text-white font-semibold px-6 py-2 rounded-full">
-                    Keranjang
+                    <span wire:loading.remove wire:target="addToCart">
+                        Keranjang
+                    </span>
+                        <span wire:loading wire:target="addToCart" class="flex items-center gap-2">
+                            <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" class="opacity-25"/>
+                                <path fill="currentColor" class="opacity-75" d="M4 12a8 8 0 018-8"/>
+                            </svg>
+                        </span>
                 </button>
 
             </div>

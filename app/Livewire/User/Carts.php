@@ -8,12 +8,34 @@ use Livewire\Component;
 
 class Carts extends Component
 {
-    public function remove($id)
+    public ?int $cartToDelete = null;
+
+    public bool $showDeleteModal = false;
+
+    public function confirmDelete($id)
+    {
+        $this->cartToDelete = $id;
+        $this->showDeleteModal = true;
+    }
+
+    public function remove()
     {
         Cart::where('user_id', Auth::id())
-            ->where('id', $id)
+            ->where('id', $this->cartToDelete)
             ->firstOrFail()
             ->delete();
+
+        $this->showDeleteModal = false;
+        $this->cartToDelete = null;
+
+        $this->dispatch('cart-updated');
+
+        $this->dispatch('toast', [
+        'type' => 'success',
+        'title' => 'Berhasil',
+        'message' => 'Produk berhasil dihapus dari keranjang.'
+        ]);
+
     }
 
     public function increase($id)
@@ -23,9 +45,19 @@ class Carts extends Component
             ->where('id', $id)
             ->firstOrFail();
 
-        if ($cart->quantity < $cart->product->product_stock) {
-            $cart->increment('quantity');
+        if ($cart->quantity >= $cart->product->product_stock) {
+
+            $this->dispatch('toast', [
+                'type' => 'error',
+                'title' => 'Stok Tidak Cukup',
+                'message' => 'Jumlah produk sudah mencapai batas stok.'
+            ]);
+
+            return;
         }
+
+        $cart->increment('quantity');
+
     }
 
     public function decrease($id)

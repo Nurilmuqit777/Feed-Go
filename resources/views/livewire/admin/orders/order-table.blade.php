@@ -119,7 +119,7 @@
                         {{ ($orders->currentPage() - 1) * $orders->perPage() + $index + 1 }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-gray-100">
-                        {{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }}
+                        {{ $order->invoice_number }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-gray-600 dark:text-gray-400">
                         {{ $order->created_at->format('d M Y') }}
@@ -128,7 +128,7 @@
                         {{ $order->user->name }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap font-semibold text-gray-900 dark:text-gray-100">
-                        {{ $order->total_price_formatted }}
+                        Rp. {{ number_format($order->total_price) }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold

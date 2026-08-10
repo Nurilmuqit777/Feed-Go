@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'rajaongkir' =>[
+        'key_check' => env('RAJAONGKIR_API_KEY_SHIPPING_COST'),
+        'origin' => env('RAJAONGKIR_ORIGIN')
+    ]
+
 ];

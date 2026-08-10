@@ -34,7 +34,7 @@ public function confirmOrder($orderId)
     {
         $order = Order::where('id', $orderId)
                       ->where('user_id', Auth::id())
-                      ->where('status', 'shipped')
+                      ->where('status', 'delivered')
                       ->firstOrFail();
 
         $order->update(['status' => 'completed']);
@@ -44,13 +44,19 @@ public function confirmOrder($orderId)
     public function render()
     {
         $orders = Order::with(['orderDetails.product', 'orderAddress', 'payments'])
-            ->when($this->search, function($query) {
+            ->when($this->search, function ($query) {
                 $query->where(function ($q) {
+
                     $q->where('invoice_number', 'like', '%' . $this->search . '%')
+
                       ->orWhereHas('orderDetails.product', function ($product) {
-                          $product->where('product_name','like','%' . $this->search . '%'
-                          );
+                          $product->where('product_name', 'like', '%' . $this->search . '%');
+                      })
+
+                      ->orWhereHas('orderDetails.product.category', function ($category) {
+                          $category->where('category', 'like', '%' . $this->search . '%');
                       });
+
                 });
             })
             ->latest()

@@ -38,12 +38,11 @@
                     <div class="flex items-center gap-2">
                         @php
                             $statusConfig = match($order->status) {
-                                'pending' => ['icon' => 'pending', 'text' => 'Menunggu pembayaran', 'color' => 'text-[#2D5016]'],
-                                'processing' => ['icon' => 'processing', 'text' => 'diproses', 'color' => 'text-blue-600'],
-                                'shipped' => ['icon' => 'shipped', 'text' => 'dikirim', 'color' => 'text-orange-500'],
-                                'completed' => ['icon' => 'completed', 'text' => 'selesai', 'color' => 'text-green-600'],
-                                'cancelled' => ['icon' => 'cancelled', 'text' => 'dibatalkan', 'color' => 'text-red-600'],
-                                default => ['icon' => '📦', 'text' => ucfirst($order->status), 'color' => 'text-gray-600'],
+                                'pending' => ['icon' => 'pending', 'text' => 'Menunggu pembayaran'],
+                                'processing' => ['icon' => 'processing', 'text' => 'Diproses'],
+                                'delivered' => ['icon' => 'delivered', 'text' => 'Dikirim'],
+                                'completed' => ['icon' => 'completed', 'text' => 'Selesai'],
+                                'cancelled' => ['icon' => 'cancelled', 'text' => 'Dibatalkan'],
                             };
                         @endphp
 
@@ -61,7 +60,7 @@
                                 </svg>
                                 @break
 
-                            @case('shipped')
+                            @case('delivered')
                                 <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26" fill="none">
                                     <circle cx="13" cy="13" r="13" fill="#7C3AED"/>
                                 </svg>
@@ -79,8 +78,8 @@
                                 </svg>
                                 @break
                         @endswitch
-                        <h3 class="text-xl font-bold {{ $statusConfig['color'] }}">
-                            Status : {{ $statusConfig['text'] }}
+                        <h3 class="text-xl font-bold text-black">
+                            Status: {{ $statusConfig['text'] }}
                         </h3>
                     </div>
 
@@ -172,7 +171,7 @@
                     </button>
                 </div>
 
-                @elseif ($order->status === 'shipped')
+                @elseif ($order->status === 'delivered')
                 <div class="flex items-center gap-2">
                     <span class="text-yellow-500"><x-svg.pin-icon /></span>
                     <p class="text-sm text-gray-700">Estimasi tiba: 30 - 31 maret 2026</p>
@@ -241,7 +240,7 @@
                             Lanjutkan Pembayaran
                         </a>
 
-                    @elseif($order->status === 'shipped')
+                    @elseif($order->status === 'delivered')
 
                         <button
                             wire:click="confirmOrder({{ $order->id }})"
@@ -256,12 +255,12 @@
                             Lihat Pesanan
                         </a>
 
-                    @else
+                    @elseif($order->status === 'processing')
 
                         <a
                             href="{{ route('user.order-detail', $order->invoice_number) }}"
                             class="flex items-center justify-center px-5 py-2.5 bg-[#EAAA00] hover:bg-yellow-500 text-white text-sm font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95">
-                            Lihat Pesanan
+                            Lihat Detail
                         </a>
                     @endif
                 </div>

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Payment;
 use App\Models\Order;
+use App\Models\Cart;
 use Midtrans\Config;
 use Midtrans\Notification;
 
@@ -41,7 +42,9 @@ class OrderController extends Controller
         try {
             $notification = new Notification();
 
-            $payment = Payment::with('order')
+            $payment = Payment::with([
+                'order.orderDetails.product'
+                ])
                 ->whereHas('order', function ($q) use ($notification) {
                 $q->where('invoice_number', $notification->order_id);
                 })
@@ -51,6 +54,11 @@ class OrderController extends Controller
                 return response()->json([
                     'message' => 'Payment not found'
                 ], 404);
+            }
+            if ($payment->order->status === 'cancelled') {
+                return response()->json([
+                    'message' => 'Order already cancelled'
+                ]);
             }
 
             $payment->payload = json_encode($request->all());
@@ -65,14 +73,30 @@ class OrderController extends Controller
                         $payment->order->update([
                             'status' => 'processing'
                         ]);
+                        foreach ($payment->order->orderDetails as $detail) {
+                            $detail->product->decrement(
+                                'product_stock',
+                                $detail->quantity_ordered
+                            );
+                        }
+                        Cart::where('user_id', $payment->order->user_id)->delete();
                     }
                     break;
                 case 'settlement':
-                    $payment->status = 'paid';
-                    $payment->paid_at = now();
-                    $payment->order->update([
-                        'status' => 'processing'
-                    ]);
+                    if ($payment->status !== 'paid'){
+                        $payment->status = 'paid';
+                        $payment->paid_at = now();
+                        $payment->order->update([
+                            'status' => 'processing'
+                        ]);
+                        foreach ($payment->order->orderDetails as $detail) {
+                            $detail->product->decrement(
+                                'product_stock',
+                                $detail->quantity_ordered
+                            );
+                        }
+                        Cart::where('user_id', $payment->order->user_id)->delete();
+                    }
                     break;
                 case 'pending':
                     $payment->status = 'pending';

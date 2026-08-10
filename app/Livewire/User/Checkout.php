@@ -16,14 +16,19 @@ use Illuminate\Support\Facades\DB;
 class Checkout extends Component
 {
     public $provinces = [];
-    public $regencies = [];
+    public $cities = [];
     public $districts = [];
-    public $villages = [];
+    public $subdistricts = [];
 
     public $province = '';
-    public $regency = '';
+    public $city = '';
     public $district = '';
-    public $villagesCode = '';
+    public $subdistrict = '';
+
+    public $courier = 'jne:jnt:sicepat';
+    public $shippingOptions = [];
+    public $selectedShipping = null;
+    public $shippingCost = 0;
 
     public $recipient_name;
     public $recipient_phone;
@@ -32,14 +37,23 @@ class Checkout extends Component
     public $postal_code;
     public $note;
 
+    public $total_weight = 0;
+
     public function mount()
     {
         $user = auth()->guard('web')->user();
         $this->recipient_name = $user->name ?? '';
         $this->email = $user->email ?? '';
 
-        $response = Http::get('https://wilayah.id/api/provinces.json');
-        $this->provinces = $response->json()['data'] ?? [];
+        $response = Http::withHeaders([
+            'key' => config('services.rajaongkir.key_check'),
+        ])->get(
+            'https://rajaongkir.komerce.id/api/v1/destination/province'
+        );
+
+        if ($response->successful()) {
+            $this->provinces = $response->json('data', []);
+        }
     }
 
     protected function rules()
@@ -49,154 +63,257 @@ class Checkout extends Component
             'recipient_phone' => 'required|string|max:20',
             'email' => 'required|email|max:255',
             'province' => 'required|string|max:255',
-            'regency' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
             'district' => 'required|string|max:255',
-            'villagesCode' => 'required|string|max:255',
+            'subdistrict' => 'required|string|max:255',
             'full_address' => 'required|string|max:500',
             'postal_code' => 'required|string|max:10',
             'note' => 'nullable|string|max:500',
         ];
     }
 
-    private function getNameByCode(array $items, ?string $code): ?string
+    public function updatedProvince($provinceId)
     {
-        $item = collect($items)->firstWhere('code', $code);
+        $this->reset([
+            'city',
+            'district',
+            'subdistrict',
+            'districts',
+            'subdistricts',
+        ]);
 
-        return $item['name'] ?? null;
-    }
-
-    private function getSelectedRegionNames(): array
-    {
-        return [
-            'province' => $this->getNameByCode($this->provinces, $this->province),
-            'regency' => $this->getNameByCode($this->regencies, $this->regency),
-            'district' => $this->getNameByCode($this->districts, $this->district),
-            'village' => $this->getNameByCode($this->villages, $this->villagesCode),
-        ];
-    }
-
-    public function updatedProvince($province_code)
-    {
-        $this->reset(['regency', 'district', 'villagesCode', 'districts', 'villages']);
-
-        if (!$province_code){
-            $this->regencies =[];
+        if (!$provinceId) {
+            $this->cities = [];
             return;
         }
 
-        $response = Http::get(
-            "https://wilayah.id/api/regencies/{$province_code}.json"
+        $response = Http::withHeaders([
+            'key' => config('services.rajaongkir.key_check'),
+        ])->get(
+            "https://rajaongkir.komerce.id/api/v1/destination/city/{$provinceId}"
         );
 
-        $this->regencies = $response->json()['data'] ?? [];
+        if ($response->successful()) {
+            $this->cities = $response->json('data', []);
+        }
     }
 
-    public function updatedRegency($regency_code)
+    public function updatedCity($cityId)
     {
         $this->reset([
             'district',
-            'villagesCode',
-            'villages',
+            'subdistrict',
+            'subdistricts',
         ]);
 
-        if (!$regency_code) {
+        if (!$cityId) {
             $this->districts = [];
             return;
         }
 
-        $response = Http::get(
-            "https://wilayah.id/api/districts/{$regency_code}.json"
+        $response = Http::withHeaders([
+            'key' => config('services.rajaongkir.key_check'),
+        ])->get(
+            "https://rajaongkir.komerce.id/api/v1/destination/district/{$cityId}"
         );
 
-        $this->districts = $response->json()['data'] ?? [];
+        if ($response->successful()) {
+            $this->districts = $response->json('data', []);
+        }
     }
 
-    public function updatedDistrict($district_code)
+    public function updatedDistrict($districtId)
     {
         $this->reset([
-            'villagesCode',
+            'subdistrict',
         ]);
 
-        if (!$district_code) {
-            $this->villages = [];
+        if (!$districtId) {
+            $this->subdistricts = [];
             return;
         }
 
-        $response = Http::get(
-            "https://wilayah.id/api/villages/{$district_code}.json"
+        $response = Http::withHeaders([
+            'key' => config('services.rajaongkir.key_check'),
+        ])->get(
+            "https://rajaongkir.komerce.id/api/v1/destination/sub-district/{$districtId}"
         );
 
-        $this->villages = $response->json()['data'] ?? [];
+        if ($response->successful()) {
+            $this->subdistricts = $response->json('data', []);
+        }
     }
 
-    public function checkout()
+    public function updatedSubDistrict($subdistrictId)
     {
-        $this->validate();
-        Config::$serverKey = config('midtrans.serverKey');
-        Config::$isProduction = config('midtrans.isProduction');
-        Config::$isSanitized = config('midtrans.isSanitized');
-        Config::$is3ds = config('midtrans.is3ds');
+        if (!$subdistrictId) {
+            $this->shippingOptions = [];
+            $this->selectedShipping = null;
+            $this->shippingCost = 0;
 
-        $existingOrder = Order::with('payments')
-            ->where('user_id', auth()->guard('web')->id())
-            ->where('status', 'pending')
-            ->latest()
-            ->first();
-
-        if (
-            $existingOrder &&
-            $existingOrder->payment &&
-            $existingOrder->payment->status === 'pending'
-        ) {
-            return redirect()->route(
-                'user.orders.show',
-                $existingOrder->invoice_number
-            );
+            return;
         }
 
-        $regions = $this->getSelectedRegionNames();
+        $this->calculateShipping();
+    }
+
+    private function getSelectedRegionNames(): array
+    {
+        $province = collect($this->provinces)
+            ->firstWhere('id', $this->province);
+
+        $city = collect($this->cities)
+            ->firstWhere('id', $this->city);
+
+        $district = collect($this->districts)
+            ->firstWhere('id', $this->district);
+
+        $subdistrict = collect($this->subdistricts)
+            ->firstWhere('id', $this->subdistrict);
+
+        return [
+            'province' => $province['name'] ?? null,
+            'city' => $city['name'] ?? null,
+            'district' => $district['name'] ?? null,
+            'subdistrict' => $subdistrict['name'] ?? null,
+            'postal_code' => $subdistrict['zip_code'] ?? null,
+        ];
+    }
+
+    private function getTotalWeight($carts): int
+    {
+        return (int) $carts->sum(function ($cart){
+            $weight = $cart->product->product_weight;
+            if ($cart->product->product_unit === 'kg') {
+            $weight *= 1000;
+            }
+
+            return $weight * $cart->quantity;
+        });
+    }
+
+    public function calculateShipping()
+    {
+        if (!$this->subdistrict) {
+            $this->shippingOptions = [];
+            $this->selectedShipping = null;
+            $this->shippingCost = 0;
+
+            return;
+        }
 
         $carts = Cart::with('product')
             ->where('user_id', auth()->guard('web')->id())
             ->get();
 
         if ($carts->isEmpty()) {
-            session()->flash('error', 'Keranjang belanja kosong.');
+            $this->shippingOptions = [];
+            $this->selectedShipping = null;
+            $this->shippingCost = 0;
+
             return;
         }
 
-        foreach ($carts as $cart) {
-            if ($cart->product->product_status !== 'available') {
-                session()->flash(
-                    'error',
-                    "{$cart->product->product_name} sedang tidak tersedia."
-                );
-                return;
-            }
+        $weight = $this->getTotalWeight($carts);
 
-            if ($cart->quantity > $cart->product->product_stock) {
-                session()->flash(
-                    'error',
-                    "Stok {$cart->product->product_name} tidak mencukupi."
-                );
-                return;
-            }
+        if ($weight <= 0) {
+            $this->shippingOptions = [];
+            $this->selectedShipping = null;
+            $this->shippingCost = 0;
+
+            return;
         }
 
-        $order = null;
+        $response = Http::withHeaders([
+            'key' => config('services.rajaongkir.key_check'),
+        ])->asForm()->post(
+            'https://rajaongkir.komerce.id/api/v1/calculate/domestic-cost',
+            [
+                'origin' => config('services.rajaongkir.origin'),
+                'destination' => $this->subdistrict,
+                'weight' => $weight,
+                'courier' => $this->courier,
+                'price' => 'lowest',
+            ]
+        );
 
-        try{
-            DB::transaction(function () use ($carts, $regions, &$order) {
+        if ($response->successful()) {
+
+            $this->shippingOptions = $response->json('data', []);
+
+        } else {
+
+            $this->shippingOptions = [];
+            $this->selectedShipping = null;
+            $this->shippingCost = 0;
+        }
+    }
+    
+    public function updatedSelectedShipping($value)
+    {
+        $shipping = collect($this->shippingOptions)
+            ->first(function ($item) use ($value) {
+                return $item['code'] . ':' . $item['service'] === $value;
+            });
+
+        $this->shippingCost = $shipping['cost'] ?? 0;
+    }
+
+    public function checkout()
+    {
+        try {
+
+            $this->validate();
+
+            Config::$serverKey = config('midtrans.serverKey');
+            Config::$isProduction = config('midtrans.isProduction');
+            Config::$isSanitized = config('midtrans.isSanitized');
+            Config::$is3ds = config('midtrans.is3ds');
+
+            $regions = $this->getSelectedRegionNames();
+
+            $carts = Cart::with('product')
+                ->where('user_id', auth()->guard('web')->id())
+                ->get();
+
+            $this->total_weight = $this->getTotalWeight($carts);
+
+            if ($carts->isEmpty()) {
+                session()->flash('error', 'Keranjang belanja kosong.');
+                return;
+            }
+
+            foreach ($carts as $cart) {
+
+                if (! $cart->product || $cart->product->product_status !== 'available') {
+                    session()->flash(
+                        'error',
+                        "{$cart->product->product_name} sedang tidak tersedia."
+                    );
+                    return;
+                }
+
+                if ($cart->quantity > $cart->product->product_stock) {
+                    session()->flash(
+                        'error',
+                        "Stok {$cart->product->product_name} tidak mencukupi."
+                    );
+                    return;
+                }
+            }
+
+            $order = DB::transaction(function () use ($carts, $regions, &$order) {
 
                 $invoice = 'FG-' . now()->format('YmdHisv');
 
-                $total = $carts->sum(fn($cart) => $cart->total_discount_price);
+                $total = $carts->sum(fn ($cart) => $cart->total_discount_price);
 
                 $order = Order::create([
                     'user_id' => auth()->guard('web')->id(),
                     'invoice_number' => $invoice,
                     'status' => 'pending',
                     'total_price' => $total,
+                    'expired_at' => now()->addMinutes(15),
                 ]);
 
                 OrderAddress::create([
@@ -205,14 +322,12 @@ class Checkout extends Component
                     'recipient_phone' => $this->recipient_phone,
                     'email' => $this->email,
                     'note' => $this->note,
-
                     'province' => $regions['province'],
-                    'regency' => $regions['regency'],
+                    'regency' => $regions['city'],
                     'district' => $regions['district'],
-                    'village' => $regions['village'],
-
+                    'village' => $regions['subdistrict'],
                     'full_address' => $this->full_address,
-                    'postal_code' => $this->postal_code,
+                    'postal_code' => $this->postal_code ?: $regions['postal_code'],
                 ]);
 
                 foreach ($carts as $cart) {
@@ -232,38 +347,55 @@ class Checkout extends Component
                     'amount' => $total,
                     'status' => 'pending',
                 ]);
-
-                $params = [
-                    'transaction_details' => [
-                        'order_id' => $invoice,
-                        'gross_amount' => $total,
-                    ],
-                    'customer_details' => [
-                        'first_name' => $this->recipient_name,
-                        'email' => $this->email,
-                        'phone' => $this->recipient_phone,
-                    ],
+                return [
+                    'order' => $order,
+                    'payment' => $payment,
+                    'total' => $total,
+                    'invoice' => $invoice,
                 ];
 
-                $payment->update([
-                    'snap_token' => Snap::getSnapToken($params),
-                ]);
-
             });
+
+            $params = [
+                'transaction_details' => [
+                    'order_id' => $order['invoice'],
+                    'gross_amount' => $order['total'],
+                ],
+                'customer_details' => [
+                    'first_name' => $this->recipient_name,
+                    'email' => $this->email,
+                    'phone' => $this->recipient_phone,
+                ],
+            ];
+
+            $snapToken = Snap::getSnapToken($params);
+
+            $order['payment']->update([
+                'snap_token' => $snapToken,
+            ]);
+
+            Cart::where('user_id', auth()->guard('web')->id())->delete();
+
+            if (! $order) {
+                session()->flash('error', 'Terjadi kesalahan saat membuat pesanan.');
+                return;
+            }
+
+            return redirect()->route(
+                'user.order-detail',
+                $order['order']->invoice_number
+            );
+
         } catch (\Exception $e) {
-            session()->flash('error', 'Terjadi kesalahan saat memproses checkout: ' . $e->getMessage());
+            session()->flash(
+                'error',
+                'Terjadi kesalahan saat memproses checkout: ' . $e->getMessage()
+            );
+
             return;
+
         }
 
-        if (! $order) {
-            session()->flash('error', 'Terjadi kesalahan saat membuat pesanan.');
-            return;
-        }
-
-        return redirect()->route(
-            'user.order-detail',
-            $order->invoice_number
-        );
     }
 
     public function render()
@@ -272,6 +404,7 @@ class Checkout extends Component
             ->where('user_id', auth()->guard('web')->id())
             ->get();
 
+        $this->total_weight = $this->getTotalWeight($carts);
         $subTotal = $carts ->sum->discount_total_price;
 
         return view('livewire.user.checkout',[
