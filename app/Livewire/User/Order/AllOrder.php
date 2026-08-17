@@ -13,6 +13,7 @@ class AllOrder extends Component
     use WithPagination;
 
     public $search = '';
+    public $status = null;
 
     public function updatingSearch()
     {
@@ -34,7 +35,7 @@ public function confirmOrder($orderId)
     {
         $order = Order::where('id', $orderId)
                       ->where('user_id', Auth::id())
-                      ->where('status', 'delivered')
+                      ->where('status', 'shipped')
                       ->firstOrFail();
 
         $order->update(['status' => 'completed']);
@@ -43,7 +44,20 @@ public function confirmOrder($orderId)
 
     public function render()
     {
-        $orders = Order::with(['orderDetails.product', 'orderAddress', 'payments'])
+        $orders = Order::with(['orderDetails.product', 'orderAddress', 'payments', 'shipping'])
+            ->where('user_id', Auth::id())
+            ->when($this->status, function ($query) {
+
+                if ($this->status === 'shipped') {
+                    $query->whereHas('shipping', function ($shipping) {
+                        $shipping->where('status', 'shipped');
+                    });
+
+                } else {
+                    $query->where('status', $this->status);
+                }
+
+            })
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
 
@@ -62,8 +76,11 @@ public function confirmOrder($orderId)
             ->latest()
             ->paginate(10);
 
+            $hasOrders = Order::where('user_id', Auth::id())->exists();
+
         return view('livewire.user.order.all-order', [
-            'orders' => $orders
+            'orders' => $orders,
+            'hasOrders' => $hasOrders
         ]);
     }
 }

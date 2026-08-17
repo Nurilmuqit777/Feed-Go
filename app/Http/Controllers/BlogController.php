@@ -45,25 +45,6 @@ class BlogController extends Controller
         return view('layouts.blogs', compact('popularArticles', 'trendingArticles', 'featuredArticles'));
     }
 
-    public function search(Request $request)
-    {
-        $query = $request->input('search');
-
-        $articles = Blog::with(['category', 'user'])
-            ->where('status', 'published')
-            ->where(function($q) use ($query) {
-                $q->where('title', 'like', '%' . $query . '%')
-                  ->orWhere('short_description', 'like', '%' . $query . '%')
-                  ->orWhereHas('category', function($cat) use ($query) {
-                      $cat->where('category', 'like', '%' . $query . '%');
-                  });
-            })
-            ->latest()
-            ->paginate(12);
-
-        return view('articles.search', compact('articles', 'query'));
-    }
-
     /**
      * Show the form for creating a new resource.
      */

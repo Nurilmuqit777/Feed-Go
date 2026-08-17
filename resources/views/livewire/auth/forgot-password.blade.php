@@ -4,9 +4,6 @@
     <div class="flex justify-between w-full">
         {{-- <x-auth-header :title="__('Forgot password')" :description="__('Enter your email to receive a password reset link')" /> --}}
 
-        <!-- Session Status -->
-        <x-auth-session-status class="text-center" :status="session('status')" />
-
         <section class="w-1/2 flex flex-col justify-start pl-20 text-white space-y-3 pt-32">
             <p class="text-4xl font-bold mb-0">
                 Lupa kata sandi?
@@ -15,6 +12,12 @@
             <p class="text-xl mb-0">
                 Jangan khawatir, kami akan mengirimkan tautan pemulihan jika email terdaftar.
             </p>
+
+            @if (session('status'))
+                <flux:text class="font-medium !text-green-600 dark:!text-green-400">
+                    {{ __('Tautan untuk mengatur ulang kata sandi telah dikirimkan ke alamat email Anda.') }}
+                </flux:text>
+            @endif
         </section>
 
         <section class="w-1/2 flex items-start justify-end pr-30 pt-32">

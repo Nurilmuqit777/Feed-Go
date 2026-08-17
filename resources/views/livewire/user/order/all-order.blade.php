@@ -1,5 +1,5 @@
 <div class="space-y-6">
-
+    @if($hasOrders)
     <div class="flex items-center gap-3 border-2 border-gray-200 rounded-lg px-5 py-3 max-w-lg focus-within:border-[#2D5016] focus-within:ring-2 focus-within:ring-[#2D5016]/20 transition-all bg-[#D9D9D9]">
         <svg class="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/>
@@ -26,6 +26,7 @@
         </button>
         @endif
     </div>
+    @endif
 
     @forelse($orders as $order)
     <div class="overflow-hidden hover:scale-101 hover:shadow-md transition rounded-2xl border border-gray-200 bg-white">
@@ -40,7 +41,7 @@
                             $statusConfig = match($order->status) {
                                 'pending' => ['icon' => 'pending', 'text' => 'Menunggu pembayaran'],
                                 'processing' => ['icon' => 'processing', 'text' => 'Diproses'],
-                                'delivered' => ['icon' => 'delivered', 'text' => 'Dikirim'],
+                                'shipped' => ['icon' => 'shipped', 'text' => 'Dikirim'],
                                 'completed' => ['icon' => 'completed', 'text' => 'Selesai'],
                                 'cancelled' => ['icon' => 'cancelled', 'text' => 'Dibatalkan'],
                             };
@@ -60,7 +61,7 @@
                                 </svg>
                                 @break
 
-                            @case('delivered')
+                            @case('shipped')
                                 <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26" fill="none">
                                     <circle cx="13" cy="13" r="13" fill="#7C3AED"/>
                                 </svg>
@@ -171,7 +172,7 @@
                     </button>
                 </div>
 
-                @elseif ($order->status === 'delivered')
+                @elseif ($order->status === 'shipped')
                 <div class="flex items-center gap-2">
                     <span class="text-yellow-500"><x-svg.pin-icon /></span>
                     <p class="text-sm text-gray-700">Estimasi tiba: 30 - 31 maret 2026</p>
@@ -240,7 +241,7 @@
                             Lanjutkan Pembayaran
                         </a>
 
-                    @elseif($order->status === 'delivered')
+                    @elseif($order->status === 'shipped')
 
                         <button
                             wire:click="confirmOrder({{ $order->id }})"
@@ -269,28 +270,83 @@
     </div>
 
     @empty
-
     <div class="flex flex-col items-center justify-center py-20 rounded-2xl border-3 border-gray-200">
+
         <svg class="w-24 h-24 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
         </svg>
-        <h3 class="text-xl font-semibold text-gray-700 mb-2">Belum Ada Pesanan</h3>
-        <p class="text-gray-500 text-center mb-6">
-            @if($search)
-                Tidak ada pesanan yang sesuai dengan pencarian "{{ $search }}"
-            @else
-                Anda belum memiliki riwayat pesanan
-            @endif
-        </p>
+
         @if($search)
+
+            <h3 class="text-xl font-semibold text-gray-700 mb-2">
+                Pesanan Tidak Ditemukan
+            </h3>
+
+            <p class="text-gray-500 text-center mb-6">
+                Tidak ada pesanan yang sesuai dengan pencarian
+                "{{ $search }}"
+            </p>
+
             <button wire:click="$set('search', '')" class="px-6 py-3 bg-[#2D5016] text-white rounded-xl hover:bg-[#1B5E20] transition">
                 Reset Pencarian
             </button>
-        @else
+
+        @elseif(!$hasOrders)
+
+            <h3 class="text-xl font-semibold text-gray-700 mb-2">
+                Belum Ada Pesanan
+            </h3>
+
+            <p class="text-gray-500 text-center mb-6">
+                Anda belum memiliki riwayat pesanan
+            </p>
+
             <a href="{{ route('produk') }}" class="px-6 py-3 bg-[#2D5016] text-white rounded-xl hover:bg-[#1B5E20] transition">
                 Mulai Belanja
             </a>
+
+        @else
+
+            @php
+                $emptyMessages = [
+                    'pending' => [
+                        'title' => 'Belum Ada Pesanan Menunggu Pembayaran',
+                        'message' => 'Tidak ada pesanan yang sedang menunggu pembayaran.',
+                    ],
+                    'processing' => [
+                        'title' => 'Belum Ada Pesanan Diproses',
+                        'message' => 'Tidak ada pesanan yang sedang diproses.',
+                    ],
+                    'shipped' => [
+                        'title' => 'Belum Ada Pesanan Dikirim',
+                        'message' => 'Tidak ada pesanan yang sedang dikirim.',
+                    ],
+                    'completed' => [
+                        'title' => 'Belum Ada Pesanan Selesai',
+                        'message' => 'Tidak ada pesanan yang telah selesai.',
+                    ],
+                    'cancelled' => [
+                        'title' => 'Belum Ada Pesanan Dibatalkan',
+                        'message' => 'Tidak ada pesanan yang dibatalkan.',
+                    ],
+                ];
+
+                $emptyState = $emptyMessages[$status] ?? [
+                    'title' => 'Belum Ada Pesanan',
+                    'message' => 'Tidak ada pesanan pada kategori ini.',
+                ];
+            @endphp
+
+            <h3 class="text-xl font-semibold text-gray-700 mb-2">
+                {{ $emptyState['title'] }}
+            </h3>
+
+            <p class="text-gray-500 text-center">
+                {{ $emptyState['message'] }}
+            </p>
+
         @endif
+
     </div>
     @endforelse
 

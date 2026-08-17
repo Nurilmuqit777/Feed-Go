@@ -10,9 +10,14 @@ class LoginResponse implements LoginResponseContract
     {
         $user = $request->user();
 
-        if (in_array($user->role, ['admin', 'superadmin'])) {
+        if ($user->role === 'admin') {
             return redirect('/admin/dashboard');
         }
+
+        if (! $user->hasVerifiedEmail()) {
+            return redirect()->route('verification.notice');
+        }
+
 
         $request->session()->forget('url.intended');
 

@@ -21,11 +21,10 @@ Route::get('/artikel/{slug}', [BlogController::class, 'show'])->name('article.sh
 Route::get('/tentang-kami', [AboutUsController::class, 'index'])->name('tentangkami');
 Route::get('/kebijakan-privasi',[HomepageController::class, 'privacyPolicy'])->name('privacy.policy');
 Route::get('/syarat-dan-ketentuan',[HomepageController::class, 'termsConditions'])->name('terms.conditions');
-Route::get('/articles/search', [BlogController::class, 'search'])->name('articles.search');
 Route::get('/kontak-kami', [HomepageController::class, 'contact'])->name('contact');
 Route::post('/midtrans/notification', [OrderController::class, 'notification']);
 
-Route::middleware(['auth', 'role:admin,superadmin'])->group(function () {
+Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/product', [AdminController::class, 'product'])->name('admin.product');
     Route::get('/admin/order', [AdminController::class, 'order'])->name('admin.order');
@@ -38,7 +37,7 @@ Route::middleware(['auth', 'role:admin,superadmin'])->group(function () {
     Route::get('/admin/sales-data', [AdminController::class, 'getSalesData'])->name('admin.sales-data');
 });
 
-Route::middleware(['auth', 'role:user'])->group(function(){
+Route::middleware(['auth', 'role:user', 'verified'])->group(function(){
     Route::get('/user/cart',[ProductController::class,'indexCart'])->name('user.cart');
     Route::get('/user/checkout',[ProductController::class,'indexCheckout'])->name('user.checkout');
     Route::get('/user/order', [OrderController::class, 'index'])->name('user.orders');
@@ -60,15 +59,4 @@ Route::middleware(['auth'])->group(function () {
             ),
         )
         ->name('two-factor.show');
-    Route::get('/payment/success', function () {
-        return view('payment.success');
-    })->name('payment.success');
-
-    Route::get('/payment/pending', function () {
-        return view('payment.pending');
-    })->name('payment.pending');
-
-    Route::get('/payment/failed', function () {
-        return view('payment.failed');
-    })->name('payment.failed');
 });

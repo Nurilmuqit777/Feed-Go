@@ -6,7 +6,7 @@
 
         <!-- Session Status -->
         <x-auth-session-status class="text-center" :status="session('status')" />
-        
+
         <section class="w-1/2 flex flex-col justify-start pl-20 text-white space-y-3 pt-32">
             <p class="text-4xl font-bold mb-0">
                 Daftar ke <span class="text-yellow-400">Akun FeedGo</span>
@@ -15,7 +15,7 @@
             <p class="text-2xl font-bold mb-0">
                 Mulai akses layanan FeedGo dengan membuat akun baru.
             </p>
-        
+
             <p class="text-sm text-gray-300 mb-0 mt-3">Solusi pakan ternak berbasis riset untuk produktivitas berkelanjutan</p>
             <ul class="flex gap-6 text-sm text-gray-300 mt-0">
                 <li>• Teruji</li>
@@ -27,6 +27,14 @@
         <section class="w-1/2 flex items-start justify-end pr-30 pt-32">
 
             <div class="w-[350px] space-y-6">
+                @if ($errors->any())
+                    <div class="rounded-xl bg-red-500/10 border border-red-400/30 p-3">
+                        <p class="text-sm text-red-400">
+                            {{ $errors->first() }}
+                        </p>
+                    </div>
+                @endif
+
                 <form method="POST" action="{{ route('register.store') }}" class="flex flex-col gap-6">
                 @csrf
 
@@ -34,7 +42,7 @@
                     <div class="flex items-center gap-3 rounded-xl">
 
                         <flux:icon.user class="text-white w-5 h-5" />
-                    
+
                         <flux:input
                             name="name"
                             :value="old('name')"
@@ -44,7 +52,7 @@
                             placeholder="Masukkan nama anda"
                             class="flex-1 bg-transparent border-none shadow-none outline-none px-0"
                         />
-                    
+
                     </div>
 
                     {{-- Email --}}

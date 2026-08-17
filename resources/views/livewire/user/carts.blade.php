@@ -83,9 +83,14 @@
                 </h2>
                 <div class="space-y-6">
                     <div class="flex justify-between">
-                        <span class="text-md font-medium">
-                            {{ $totalItem }} produk
-                        </span>
+                        <div class="text-left">
+                            <p class="text-md font-medium">
+                                {{ $totalItem }} produk
+                            </p>
+                            <p class="text-md font-medium">
+                                Potongan Harga
+                            </p>
+                        </div>
                         <div class="text-left">
                             <p class="text-md text-gray-500">
                                 Rp. {{ number_format($originalTotal, 0, ',', '.') }}

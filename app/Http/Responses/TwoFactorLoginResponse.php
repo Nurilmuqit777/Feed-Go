@@ -10,11 +10,17 @@ class TwoFactorLoginResponse implements TwoFactorLoginResponseContract
     {
         $user = $request->user();
 
-        $request->session()->forget('url.intended');
+        if ($user->role === 'admin') {
+            $request->session()->forget('url.intended');
 
-        if (in_array($user->role, ['admin', 'superadmin'])) {
             return redirect()->route('admin.dashboard');
         }
+
+        if (! $user->hasVerifiedEmail()) {
+            return redirect()->route('verification.notice');
+        }
+        
+        $request->session()->forget('url.intended');
 
         return redirect()->route('beranda');
     }

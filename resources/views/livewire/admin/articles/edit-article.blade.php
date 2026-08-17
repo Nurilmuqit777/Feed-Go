@@ -12,7 +12,7 @@
                         <div class="relative">
                             <img src="{{ $thumbnail->temporaryUrl() }}"
                                  class="h-60 w-full object-contain rounded-lg border">
-                            
+
                             <button
                                 type="button"
                                 wire:click="removeImage"
@@ -37,7 +37,7 @@
                         </div>
                     @endif
                 </div>
-                                
+
                 <label
                     for="imageUploadEdit"
                     class="border-2 border-dashed rounded-xl p-6 cursor-pointer
@@ -67,12 +67,12 @@
                            class="w-full rounded-lg border p-2" placeholder="Ketik judul artikel di sini">
                     @error('title') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
                 </div>
-                                
+
                 <div>
                     <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
                         Kategori
                     </label>
-                
+
                     <select
                         wire:model.defer="category_id"
                         class="w-full rounded-lg border p-2
@@ -81,59 +81,50 @@
                                text-gray-900 dark:text-white"
                     >
                         <option value="">Pilih kategori</option>
-                
+
                         @foreach ($categories as $category)
                             <option value="{{ $category->id }}">
                                 {{ $category->category }}
                             </option>
                         @endforeach
                     </select>
-                
+
                     @error('category_id')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
-                
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Status
-                        </label>
-                    
-                        <select
-                            wire:model.defer="status"
-                            class="w-full rounded-lg border p-2
-                                   bg-white dark:bg-neutral-700
-                                   border-gray-300 dark:border-neutral-600
-                                   text-gray-900 dark:text-white"
-                        >
-                            <option value="">Pilih status</option>
-                    
-                            @foreach (['draft', 'published'] as $status)
-                                <option value="{{ $status }}">
-                                    {{ ucfirst($status) }}
-                                </option>
-                            @endforeach
-                        </select>
-                    
-                        @error('status')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
 
-                    <div>
-                        <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Lama Baca (menit)
-                        </label>
-                        <input wire:model.defer="reading_time"
-                           class="w-full rounded-lg border p-2" placeholder="Ketik lama baca" type="number">
-                        @error('reading_time') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
-                    </div>
+                <div>
+                    
+                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Status
+                    </label>
+
+                    <select
+                        wire:model.defer="status"
+                        class="w-full rounded-lg border p-2
+                               bg-white dark:bg-neutral-700
+                               border-gray-300 dark:border-neutral-600
+                               text-gray-900 dark:text-white"
+                    >
+                        <option value="">Pilih status</option>
+
+                        @foreach (['draft', 'published'] as $status)
+                            <option value="{{ $status }}">
+                                {{ ucfirst($status) }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    @error('status')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
+
                 <div class="flex items-center gap-3">
-                    <input 
-                        type="checkbox" 
+                    <input
+                        type="checkbox"
                         wire:model.defer="is_featured"
                         id="is_featured"
                         class="w-4 h-4 text-[#2E7D32] bg-gray-100 border-gray-300 rounded focus:ring-[#2E7D32]"
@@ -154,7 +145,7 @@
                               rows="3"></textarea>
                     @error('short_description') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
                 </div>
-                
+
                 <div wire:ignore>
                     <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
                         Deskripsi Artikel

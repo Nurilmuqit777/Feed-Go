@@ -11,7 +11,9 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderAddress;
 use App\Models\Payment;
+use App\Models\Shipping;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class Checkout extends Component
 {
@@ -69,6 +71,7 @@ class Checkout extends Component
             'full_address' => 'required|string|max:500',
             'postal_code' => 'required|string|max:10',
             'note' => 'nullable|string|max:500',
+            'selectedShipping'=> 'required|string'
         ];
     }
 
@@ -157,6 +160,26 @@ class Checkout extends Component
         $this->calculateShipping();
     }
 
+    protected function messages()
+    {
+        return [
+            'recipient_name.required' => 'Nama penerima wajib diisi.',
+            'recipient_phone.required' => 'Nomor telepon wajib diisi.',
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+
+            'province.required' => 'Provinsi wajib dipilih.',
+            'city.required' => 'Kota/Kabupaten wajib dipilih.',
+            'district.required' => 'Kecamatan wajib dipilih.',
+            'subdistrict.required' => 'Kelurahan/Desa wajib dipilih.',
+
+            'full_address.required' => 'Alamat lengkap wajib diisi.',
+            'postal_code.required' => 'Kode pos wajib diisi.',
+
+            'selectedShipping.required' => 'Metode pengiriman wajib dipilih.',
+        ];
+    }
+
     private function getSelectedRegionNames(): array
     {
         $province = collect($this->provinces)
@@ -216,14 +239,6 @@ class Checkout extends Component
 
         $weight = $this->getTotalWeight($carts);
 
-        if ($weight <= 0) {
-            $this->shippingOptions = [];
-            $this->selectedShipping = null;
-            $this->shippingCost = 0;
-
-            return;
-        }
-
         $response = Http::withHeaders([
             'key' => config('services.rajaongkir.key_check'),
         ])->asForm()->post(
@@ -248,15 +263,20 @@ class Checkout extends Component
             $this->shippingCost = 0;
         }
     }
-    
+
     public function updatedSelectedShipping($value)
     {
         $shipping = collect($this->shippingOptions)
             ->first(function ($item) use ($value) {
-                return $item['code'] . ':' . $item['service'] === $value;
+                return $item['code'] . '|' . $item['service'] === $value;
             });
 
-        $this->shippingCost = $shipping['cost'] ?? 0;
+        if (!$shipping) {
+            $this->shippingCost = 0;
+            return;
+        }
+
+        $this->shippingCost = (int) $shipping['cost'];
     }
 
     public function checkout()
@@ -272,11 +292,25 @@ class Checkout extends Component
 
             $regions = $this->getSelectedRegionNames();
 
+            $shipping = collect($this->shippingOptions)
+                ->first(function ($item) {
+                    return $item['code'] . '|' . $item['service'] === $this->selectedShipping;
+                });
+
+            if (!$shipping) {
+                session()->flash(
+                    'error',
+                    'Metode pengiriman tidak valid. Silakan pilih kembali.'
+                );
+
+                return;
+            }
+
+            $shippingCost = (int) $shipping['cost'];
+
             $carts = Cart::with('product')
                 ->where('user_id', auth()->guard('web')->id())
                 ->get();
-
-            $this->total_weight = $this->getTotalWeight($carts);
 
             if ($carts->isEmpty()) {
                 session()->flash('error', 'Keranjang belanja kosong.');
@@ -302,11 +336,15 @@ class Checkout extends Component
                 }
             }
 
-            $order = DB::transaction(function () use ($carts, $regions, &$order) {
+            $subTotal = $carts->sum(
+                fn ($cart) => $cart->total_discount_price
+            );
+
+            $total = $subTotal + $shippingCost;
+
+            $result = DB::transaction(function () use ($carts, $regions, $shipping, $shippingCost, $total) {
 
                 $invoice = 'FG-' . now()->format('YmdHisv');
-
-                $total = $carts->sum(fn ($cart) => $cart->total_discount_price);
 
                 $order = Order::create([
                     'user_id' => auth()->guard('web')->id(),
@@ -342,11 +380,20 @@ class Checkout extends Component
                     ]);
                 }
 
+                Shipping::create([
+                    'order_id' => $order->id,
+                    'courier' => $shipping['code'],
+                    'service' => $shipping['service'],
+                    'cost' => $shippingCost,
+                    'status' => 'submitted',
+                ]);
+
                 $payment = Payment::create([
                     'order_id' => $order->id,
                     'amount' => $total,
                     'status' => 'pending',
                 ]);
+
                 return [
                     'order' => $order,
                     'payment' => $payment,
@@ -356,11 +403,30 @@ class Checkout extends Component
 
             });
 
+            $itemDetails = [];
+
+            foreach ($carts as $cart) {
+                $itemDetails[] = [
+                    'id' => (string) $cart->product_id,
+                    'price' => (int) $cart->total_discount_price,
+                    'quantity' => 1,
+                    'name' => $cart->product->product_name . ' (' . $cart->quantity . ' pcs)',
+                ];
+            }
+
+            $itemDetails[] = [
+                'id' => 'SHIPPING',
+                'price' => $shippingCost,
+                'quantity' => 1,
+                'name' => 'Ongkos Kirim - ' . strtoupper($shipping['code']) . ' ' . $shipping['service'],
+            ];
+
             $params = [
                 'transaction_details' => [
-                    'order_id' => $order['invoice'],
-                    'gross_amount' => $order['total'],
+                    'order_id' => $result['invoice'],
+                    'gross_amount' => $result['total'],
                 ],
+                'item_details' => $itemDetails,
                 'customer_details' => [
                     'first_name' => $this->recipient_name,
                     'email' => $this->email,
@@ -370,30 +436,42 @@ class Checkout extends Component
 
             $snapToken = Snap::getSnapToken($params);
 
-            $order['payment']->update([
+            $result['payment']->update([
                 'snap_token' => $snapToken,
             ]);
 
             Cart::where('user_id', auth()->guard('web')->id())->delete();
 
-            if (! $order) {
+            if (! $result) {
                 session()->flash('error', 'Terjadi kesalahan saat membuat pesanan.');
                 return;
             }
 
             return redirect()->route(
                 'user.order-detail',
-                $order['order']->invoice_number
+                $result['order']->invoice_number
             );
 
-        } catch (\Exception $e) {
-            session()->flash(
-                'error',
-                'Terjadi kesalahan saat memproses checkout: ' . $e->getMessage()
-            );
+        } catch (ValidationException $e) {
+            $this->setErrorBag($e->validator->errors());
+
+            $this->dispatch('toast', [
+                'type' => 'error',
+                'title' => 'Data Belum Lengkap',
+                'message' => 'Silakan lengkapi data checkout terlebih dahulu.',
+            ]);
 
             return;
 
+        }
+        catch(\Exception $e){
+            $this->dispatch('toast', [
+                'type' => 'error',
+                'title' => 'Checkout Gagal',
+                'message' => 'Terjadi kesalahan saat memproses checkout.',
+            ]);
+
+            return;
         }
 
     }
@@ -405,11 +483,14 @@ class Checkout extends Component
             ->get();
 
         $this->total_weight = $this->getTotalWeight($carts);
-        $subTotal = $carts ->sum->discount_total_price;
+        $subTotal = $carts->sum->total_discount_price;
+        $grandTotal = $subTotal + $this->shippingCost;
 
         return view('livewire.user.checkout',[
             'carts' => $carts,
             'subTotal' => $subTotal,
+            'grandTotal' => $grandTotal,
+            'shippingCost' => $this->shippingCost,
         ]);
     }
 }

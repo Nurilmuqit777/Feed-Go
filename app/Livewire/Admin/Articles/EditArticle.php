@@ -20,7 +20,6 @@ class EditArticle extends Component
     public $user_id;
     public $title;
     public $short_description;
-    public $reading_time;
     public $content;
     public $thumbnail;
     public $status;
@@ -64,7 +63,6 @@ class EditArticle extends Component
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'short_description' => 'required|string|max:500',
-            'reading_time' => 'required|integer|min:1',
             'thumbnail' => 'nullable|image|max:512',
             'status' => 'required|in:draft,published',
             'category_id' => 'required|exists:blog_categories,id',
@@ -80,7 +78,6 @@ class EditArticle extends Component
         $this->user_id = $article->user_id;
         $this->title = $article->title;
         $this->short_description = $article->short_description;
-        $this->reading_time = $article->reading_time;
         $this->content = $article->content;
         $this->status = $article->status;
         $this->category_id = $article->category_id;
@@ -124,7 +121,6 @@ class EditArticle extends Component
             'user_id' => $this->user_id,
             'title' => $this->title,
             'short_description' => $this->short_description,
-            'reading_time' => $this->reading_time,
             'content' => $this->content,
             'thumbnail' => $thumbnailPath,
             'status' => $this->status,
@@ -149,7 +145,6 @@ class EditArticle extends Component
             'user_id',
             'title',
             'short_description',
-            'reading_time',
             'content',
             'thumbnail',
             'status',

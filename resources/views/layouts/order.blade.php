@@ -80,8 +80,6 @@
             <livewire:user.order.all-order status="cancelled" />
         </div>
 
-
-
     </div>
 </section>
 

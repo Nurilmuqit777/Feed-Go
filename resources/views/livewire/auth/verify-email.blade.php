@@ -1,29 +1,80 @@
+@section('title', 'Verifikasi Email')
+
 <x-layouts.auth>
-    <div class="mt-4 flex flex-col gap-6">
-        <flux:text class="text-center">
-            {{ __('Please verify your email address by clicking on the link we just emailed to you.') }}
-        </flux:text>
 
-        @if (session('status') == 'verification-link-sent')
-            <flux:text class="text-center font-medium !dark:text-green-400 !text-green-600">
-                {{ __('A new verification link has been sent to the email address you provided during registration.') }}
-            </flux:text>
-        @endif
+    <div class="flex items-center justify-between w-full">
 
-        <div class="flex flex-col items-center justify-between space-y-3">
-            <form method="POST" action="{{ route('verification.send') }}">
-                @csrf
-                <flux:button type="submit" variant="primary" class="w-full">
-                    {{ __('Resend verification email') }}
-                </flux:button>
-            </form>
+        <section class="w-1/2 flex flex-col justify-start pl-20 text-white space-y-3 pt-32">
+            <div class="max-w-xl space-y-4">
 
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-               <flux:button variant="ghost" type="submit" class="text-sm cursor-pointer" data-test="logout-button">
-                    {{ __('Log out') }}
-                </flux:button>
-            </form>
-        </div>
+                <h1 class="text-4xl font-bold">
+                    Verifikasi Email
+                </h1>
+
+                <p class="text-xl leading-relaxed">
+                    Verifikasi email Anda melalui tautan yang telah
+                    dikirimkan ke alamat email yang Anda gunakan saat
+                    mendaftar.
+                </p>
+
+                @if (session('status') == 'verification-link-sent')
+                    <flux:text class="font-medium !dark:text-green-400 !text-green-600">
+                        {{ __('Tautan verifikasi baru telah dikirimkan ke alamat email Anda.') }}
+                    </flux:text>
+                @endif
+
+            </div>
+        </section>
+
+        <section class="w-1/2 flex items-start justify-end pr-30 pt-32">
+
+            <div class="w-full max-w-[350px] space-y-6">
+
+                <form
+                    method="POST"
+                    action="{{ route('verification.send') }}"
+                    class="flex flex-col gap-6"
+                >
+                    @csrf
+
+                    <div class="flex items-center gap-3">
+                        <flux:icon.envelope
+                            class="text-white w-5 h-5 shrink-0"
+                        />
+
+                        <flux:input
+                            type="email"
+                            value="{{ auth()->user()->email }}"
+                            disabled
+                            class="flex-1"
+                        />
+                    </div>
+
+                    <flux:button
+                        type="submit"
+                        variant="primary"
+                        class="w-full text-white bg-yellow-400 hover:bg-yellow-500"
+                    >
+                        Kirim ulang verifikasi email
+                    </flux:button>
+                </form>
+
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+
+                    <flux:button
+                        variant="ghost"
+                        type="submit"
+                        class="w-full text-white text-sm cursor-pointer"
+                    >
+                        Keluar
+                    </flux:button>
+                </form>
+
+            </div>
+
+        </section>
+
     </div>
+
 </x-layouts.auth>

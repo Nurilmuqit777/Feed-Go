@@ -16,6 +16,11 @@
                         class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#2D5016] focus:ring-2 focus:ring-[#2D5016]/20 transition-all"
                         placeholder=""
                     />
+                    @error('recipient_name')
+                        <p class="text-sm text-red-500 mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
 
                 <div>
@@ -26,6 +31,11 @@
                         class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#2D5016] focus:ring-2 focus:ring-[#2D5016]/20 transition-all"
                         placeholder=""
                     />
+                    @error('email')
+                        <p class="text-sm text-red-500 mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
 
                 <div>
@@ -36,6 +46,11 @@
                         class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#2D5016] focus:ring-2 focus:ring-[#2D5016]/20 transition-all"
                         placeholder=""
                     />
+                    @error('recipient_phone')
+                        <p class="text-sm text-red-500 mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
 
                 <div>
@@ -109,6 +124,11 @@
                             @endforeach
                         </div>
                     </div>
+                    @error('province')
+                        <p class="text-sm text-red-500 mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
 
                 <div x-data="{open: false, selected: @entangle('city')}" class="relative">
@@ -166,6 +186,11 @@
                             @endforeach
                         </div>
                     </div>
+                    @error('city')
+                        <p class="text-sm text-red-500 mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
 
                 <div x-data="{open: false, selected: @entangle('district')}" class="relative">
@@ -223,6 +248,11 @@
                             @endforeach
                         </div>
                     </div>
+                    @error('district')
+                        <p class="text-sm text-red-500 mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
 
                 <div x-data="{open: false, selected: @entangle('subdistrict')}" class="relative">
@@ -280,6 +310,11 @@
                             @endforeach
                         </div>
                     </div>
+                    @error('subdistrict')
+                        <p class="text-sm text-red-500 mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
 
                 <div>
@@ -290,6 +325,11 @@
                         class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#2D5016] focus:ring-2 focus:ring-[#2D5016]/20 transition-all resize-none"
                         placeholder="Nama jalan, nomor rumah, RT/RW..."
                     ></textarea>
+                    @error('full_address')
+                        <p class="text-sm text-red-500 mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
 
                 <div>
@@ -300,6 +340,11 @@
                         class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#2D5016] focus:ring-2 focus:ring-[#2D5016]/20 transition-all"
                         placeholder=""
                     />
+                    @error('postal_code')
+                        <p class="text-sm text-red-500 mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
             </div>
         </div>
@@ -335,7 +380,7 @@
                             <input
                                 type="radio"
                                 name="shipping"
-                                value="{{ $shipping['code'] }}:{{ $shipping['service'] }}"
+                                value="{{ $shipping['code'] }}|{{ $shipping['service'] }}"
                                 wire:model.live="selectedShipping"
                                 class="w-5 h-5 accent-[#2D5016]"
                             />
@@ -374,6 +419,11 @@
                     @endforeach
 
                 @endif
+                @error('selectedShipping')
+                    <p class="text-sm text-red-500 mt-1">
+                        {{ $message }}
+                    </p>
+                @enderror
             </div>
         </div>
 
@@ -460,7 +510,7 @@
                 <div class="flex justify-between items-start">
                     <span class="font-bold text-black text-sm">Total Tagihan</span>
                     <div class="text-right">
-                        <p class="text-xl font-bold text-[#2E7D32]">Rp {{ number_format($carts->sum('total_discount_price') , 0, ',', '.') }}</p>
+                        <p class="text-xl font-bold text-[#2E7D32]">Rp {{ number_format($grandTotal , 0, ',', '.') }}</p>
                     </div>
                 </div>
             </div>

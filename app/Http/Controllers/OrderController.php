@@ -24,6 +24,7 @@ class OrderController extends Controller
         'orderDetails.product.category',
         'orderAddress',
         'payments',
+        'shipping'
         ])
         ->where('invoice_number', $invoice)
         ->where('user_id', Auth::id())
