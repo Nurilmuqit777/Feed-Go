@@ -46,7 +46,7 @@
                             type="email"
                             value="{{ auth()->user()->email }}"
                             disabled
-                            class="flex-1"
+                            class="flex-1 dark"
                         />
                     </div>
 
@@ -65,7 +65,7 @@
                     <flux:button
                         variant="ghost"
                         type="submit"
-                        class="w-full text-white text-sm cursor-pointer"
+                        class="w-full text-white text-sm cursor-pointer dark"
                     >
                         Keluar
                     </flux:button>

@@ -44,12 +44,12 @@ public function confirmOrder($orderId)
 
     public function render()
     {
-        $orders = Order::with(['orderDetails.product', 'orderAddress', 'payments', 'shipping'])
+        $orders = Order::with(['orderDetails.product', 'orderAddress.shipping', 'payments',])
             ->where('user_id', Auth::id())
             ->when($this->status, function ($query) {
 
                 if ($this->status === 'shipped') {
-                    $query->whereHas('shipping', function ($shipping) {
+                    $query->whereHas('orderAddress.shipping', function ($shipping) {
                         $shipping->where('status', 'shipped');
                     });
 

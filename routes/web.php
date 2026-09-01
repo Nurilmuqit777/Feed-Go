@@ -30,16 +30,17 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/order', [AdminController::class, 'order'])->name('admin.order');
     Route::get('/admin/user-profile', [AdminController::class, 'profile'])->name('admin.userprofile');
     Route::get('/admin/delivery', [AdminController::class, 'delivery'])->name('admin.delivery');
-    Route::get('/admin/payment', [AdminController::class, 'payment'])->name('admin.payment');
     Route::get('/admin/report', [AdminController::class, 'report'])->name('admin.report');
     Route::get('/admin/article', [AdminController::class, 'article'])->name('admin.article');
     Route::get('settings/appearance', Appearance::class)->name('appearance.edit');
     Route::get('/admin/sales-data', [AdminController::class, 'getSalesData'])->name('admin.sales-data');
+    Route::get('/admin/order/{invoice_number}',[AdminController::class, 'OrderDetail'])->name('admin.order-detail');
+    Route::get('/admin/delivery/{invoice_number}',[AdminController::class,'OrderShipping'])->name('admin.order-shipping');
 });
 
 Route::middleware(['auth', 'role:user', 'verified'])->group(function(){
     Route::get('/user/cart',[ProductController::class,'indexCart'])->name('user.cart');
-    Route::get('/user/checkout',[ProductController::class,'indexCheckout'])->name('user.checkout');
+    Route::get('/user/checkout',[ProductController::class,'indexCheckout'])->middleware('cart.not.empty')->name('user.checkout');
     Route::get('/user/order', [OrderController::class, 'index'])->name('user.orders');
     Route::get('/user/order/{invoice_number}', [OrderController::class, 'show'])->name('user.order-detail');
 });

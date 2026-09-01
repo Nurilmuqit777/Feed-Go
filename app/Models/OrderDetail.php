@@ -27,9 +27,9 @@ class OrderDetail extends Model
         return $this->belongsTo(Product::class);
     }
 
-        public function getSubtotalAttribute(): float
+    public function getSubtotalAttribute(): float
     {
-        return $this->quantity_ordered * $this->price_at_purchase;
+        return $this->quantity_ordered * $this->discount_price_at_purchase ?? $this->price_at_purchase;
     }
 
     public function getPriceFormattedAttribute(): string

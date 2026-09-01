@@ -12,7 +12,7 @@ class Carts extends Component
 
     public bool $showDeleteModal = false;
 
-    public function confirmDelete($id)
+    public function confirmDelete(int $id)
     {
         $this->cartToDelete = $id;
         $this->showDeleteModal = true;
@@ -38,7 +38,7 @@ class Carts extends Component
 
     }
 
-    public function increase($id)
+    public function increase(int $id)
     {
         $cart = Cart::with('product')
             ->where('user_id', Auth::id())
@@ -60,7 +60,7 @@ class Carts extends Component
 
     }
 
-    public function decrease($id)
+    public function decrease(int $id)
     {
         $cart = Cart::where('user_id', Auth::id())
             ->where('id', $id)

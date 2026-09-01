@@ -6,7 +6,7 @@ use Livewire\Component;
 use App\Models\BlogCategory;
 
 class AddArticleCategory extends Component
-{   
+{
         
     public $open = false;
     public $category = '';

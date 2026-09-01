@@ -29,7 +29,7 @@
             <button
                 x-show="!showRecoveryCodes"
                 @click="showRecoveryCodes = true"
-                class="bg-[#2E7D32] text-white px-4 py-2 rounded-lg hover:bg-green-800 transition"
+                class="bg-[#2E7D32] text-white px-4 py-2 rounded-lg hover:bg-green-800 transition hover:scale-103 active:scale-95"
             >
                 Lihat Kode Pemulihan
             </button>
@@ -37,7 +37,7 @@
             <button
                 x-show="showRecoveryCodes"
                 @click="showRecoveryCodes = false"
-                class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition"
+                class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition hover:scale-103 active:scale-95"
             >
                 Sembunyikan
             </button>
@@ -46,7 +46,7 @@
                 <button
                     x-show="showRecoveryCodes"
                     wire:click="regenerateRecoveryCodes"
-                    class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition"
+                    class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition hover:scale-103 active:scale-95"
                 >
                     Regenerasi Kode
                 </button>

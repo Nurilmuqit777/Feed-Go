@@ -19,4 +19,17 @@ class Payment extends Model
         return $this->belongsTo(Order::class);
     }
 
+    public function getstatusPaymentAttribute()
+    {
+        return match($this->status) {
+            'pending' => 'Menunggu',
+            'paid' => 'Dibayar',
+            'failed' => 'Gagal',
+            'expired' => 'Kadaluarsa',
+            'cancelled' => 'Dibatalkan',
+            'refunded' => 'dikembalikan',
+            default => $this->status,
+        };
+    }
+
 }

@@ -64,27 +64,9 @@
                 </ul>
             </section>
 
-            <section>
-                <h2 class="font-semibold text-lg">5. Data Pengembalian & Komplain</h2>
-                <ul class="list-disc pl-5 space-y-1 ml-5">
-                    <li>Bukti foto/video pengembalian digunakan hanya untuk verfikasi</li>
-                    <li>Data ini disimpan untuk kepentingan audit internal</li>
-                    <li>FeedGo berhak menghapus data sesuai kebijakan retensi</li>
-                </ul>
-            </section>
 
             <section>
-                <h2 class="font-semibold text-lg">6. Pengembalian & Komplain</h2>
-                <span>Pengguna berhak untuk:</span>
-                <ul class="list-disc pl-5 space-y-1 ml-5">
-                    <li>Mengakses data pribadinya</li>
-                    <li>Memperbarui data</li>
-                    <li>Meminta penghapusan akun sesuai ketentuan hukum</li>
-                </ul>
-            </section>
-
-            <section>
-                <h2 class="font-semibold text-lg">7. Cookie & Teknologi Serupa</h2>
+                <h2 class="font-semibold text-lg">5. Cookie & Teknologi Serupa</h2>
                 <span>FeedGo menggunakan cookie untuk:</span>
                 <ul class="list-disc pl-5 space-y-1 ml-5">
                     <li>Autentikasi</li>
@@ -94,12 +76,12 @@
             </section>
 
             <section>
-                <h2 class="font-semibold text-lg">8. Perubahan Kebijakan Privasi</h2>
+                <h2 class="font-semibold text-lg">6. Perubahan Kebijakan Privasi</h2>
                 <span>FeedGo dapat memperbarui Kebijakan Privasi sewaktu-waktu.</span>
             </section>
 
             <section>
-                <h2 class="font-semibold text-lg">9. Kontak</h2>
+                <h2 class="font-semibold text-lg">7. Kontak</h2>
                 <p>Jika ada pertanyaan terkait Syarat & Ketentuan atau Kebijakan Privasi, silakan hubungi:</p>
                 <p class="underline">hello@feedgo.com</p>
                 <p>WhatsApp Admin FeedGo</p>

@@ -352,79 +352,206 @@
 
     <div class="space-y-10">
 
-        <div>
-            <h2 class="text-2xl font-bold text-[#2E7D32] mb-1">Metode Pengiriman</h2>
-            <p class="text-sm text-gray-500 mb-6">Data ini digunakan untuk keperluan pemesanan dan konfirmasi.</p>
+        <div x-data="{open: false, selected: @entangle('selectedShipping').live}"
+            @click.outside="open = false"
+            class="relative"
+        >
+            <h2 class="text-2xl font-bold text-[#2E7D32] mb-1">
+                Metode Pengiriman
+            </h2>
 
-            <div class="space-y-3">
-                @if (!$subdistrict)
+            <p class="text-sm text-gray-500 mb-6">
+                Data ini digunakan untuk keperluan pemesanan dan konfirmasi.
+            </p>
 
-                    <div class="border-2 border-gray-200 rounded-2xl p-4 text-sm text-gray-500">
-                        Silakan pilih Desa/Kelurahan terlebih dahulu.
-                    </div>
+            @if (!$subdistrict)
 
-                @elseif (empty($shippingOptions))
+                <div class="border-2 border-gray-200 rounded-2xl p-4 text-sm text-gray-500">
+                    Silakan pilih Desa/Kelurahan terlebih dahulu.
+                </div>
 
-                    <div class="border-2 border-gray-200 rounded-2xl p-4 text-sm text-gray-500">
-                        Belum ada pilihan pengiriman.
-                    </div>
+            @elseif (empty($shippingOptions))
 
-                @else
+                <div class="border-2 border-gray-200 rounded-2xl p-4 text-sm text-gray-500">
+                    Belum ada pilihan pengiriman.
+                </div>
 
-                    @foreach ($shippingOptions as $shipping)
+            @else
 
-                        <label
-                            class="flex items-center gap-4 border-2 border-gray-200 rounded-2xl p-4 cursor-pointer hover:border-[#2D5016] transition-all has-[:checked]:border-[#2D5016] has-[:checked]:bg-green-50"
-                        >
+                <div class="relative">
 
-                            <input
-                                type="radio"
-                                name="shipping"
-                                value="{{ $shipping['code'] }}|{{ $shipping['service'] }}"
-                                wire:model.live="selectedShipping"
-                                class="w-5 h-5 accent-[#2D5016]"
-                            />
+                    <button type="button" @click="open = !open" class="w-full flex items-center justify-between gap-4 border-2 border-gray-200 rounded-2xl bg-white px-5 py-4 hover:border-[#2D5016] focus:border-[#2D5016] transition">
 
-                            <div class="w-10 h-10 bg-[#EAAA00] rounded-xl flex items-center justify-center shrink-0">
-                                <span class="text-xs font-bold text-white uppercase">
-                                    {{ strtoupper($shipping['code']) }}
-                                </span>
+                        <template x-if="!selected">
+                            <div class="text-left">
+                                <p class="text-sm font-medium text-gray-500">
+                                    Pilih metode pengiriman
+                                </p>
+                                <p class="text-xs text-gray-400 mt-1">
+                                    Pilih layanan yang tersedia
+                                </p>
                             </div>
+                        </template>
 
-                            <div class="flex-1">
+                        <template x-if="selected">
 
-                                <p class="font-semibold text-black text-sm">
-                                    {{ strtoupper($shipping['code']) }}
-                                    {{ $shipping['service'] }}
-                                </p>
+                            <div class="text-left flex items-center gap-3">
 
-                                <p class="text-xs text-[#6B7280]">
-                                    {{ $shipping['description'] ?? 'Layanan pengiriman' }}
-                                </p>
+                                <div class="w-11 h-11 rounded-xl bg-white border border-gray-200 flex items-center justify-center shrink-0 p-2">
+                                    @php
+                                        $selectedCode = $selectedShipping
+                                            ? strtolower(explode('|', $selectedShipping)[0])
+                                            : null;
 
-                                @if (!empty($shipping['etd']))
-                                    <p class="text-xs text-[#6B7280] mt-1">
-                                        Estimasi {{ $shipping['etd'] }}
+                                        $selectedLogo = match ($selectedCode) {
+                                            'jne' => 'jne.webp',
+                                            'jnt', 'j&t' => 'jnt.webp',
+                                            'sicepat', 'sicepat_reg' => 'sicepat.webp',
+                                            default => null,
+                                        };
+                                    @endphp
+
+                                    @if ($selectedLogo)
+                                        <img
+                                            src="{{ asset('images/' . $selectedLogo) }}"
+                                            alt="{{ strtoupper($selectedCode) }}"
+                                            class="max-w-full max-h-full object-contain"
+                                        >
+                                    @else
+                                        <span class="text-xs font-bold text-[#2D5016] uppercase">
+                                            {{ strtoupper($selectedCode ?? '') }}
+                                        </span>
+                                    @endif
+                                </div>
+
+                                <div>
+                                    <p
+                                        class="text-sm font-semibold text-gray-800"
+                                        x-text="selected.split('|')[0].toUpperCase() + ' ' + selected.split('|')[1]"
+                                    ></p>
+
+                                    <p class="text-xs text-gray-400">
+                                        Metode pengiriman dipilih
                                     </p>
-                                @endif
+                                </div>
 
                             </div>
 
-                            <span class="text-sm font-semibold text-gray-700">
-                                Rp {{ number_format($shipping['cost'], 0, ',', '.') }}
-                            </span>
+                        </template>
 
-                        </label>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#2D5016] transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7"/>
+                        </svg>
 
-                    @endforeach
+                    </button>
 
-                @endif
-                @error('selectedShipping')
-                    <p class="text-sm text-red-500 mt-1">
-                        {{ $message }}
-                    </p>
-                @enderror
-            </div>
+                    <div
+                        x-show="open"
+                        x-transition:enter="transition ease-out duration-150"
+                        x-transition:enter-start="opacity-0 -translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0"
+                        x-transition:leave="transition ease-in duration-100"
+                        x-transition:leave-start="opacity-100 translate-y-0"
+                        x-transition:leave-end="opacity-0 -translate-y-2"
+                        class="absolute z-50 w-full mt-2 bg-white border-2 border-gray-200 rounded-2xl shadow-xl overflow-hidden"
+                        style="display: none;"
+                    >
+
+                        <div class="max-h-80 overflow-y-auto">
+
+                            @foreach ($shippingOptions as $shipping)
+
+                                @php
+                                    $shippingValue = $shipping['code'] . '|' . $shipping['service'];
+                                @endphp
+
+                                <button
+                                    type="button"
+                                    @click="
+                                        selected = '{{ $shippingValue }}';
+                                        open = false;
+                                    "
+                                    class="w-full flex items-center gap-4 p-4 text-left hover:bg-green-50 transition border-b border-gray-100 last:border-b-0">
+
+                                    @php
+                                        $logo = match (strtolower($shipping['code'])) {
+                                            'jne' => 'jne.webp',
+                                            'jnt', 'j&t' => 'jnt.webp',
+                                            'sicepat', 'sicepat_reg' => 'sicepat.webp',
+                                        };
+                                    @endphp
+
+                                    <div class="w-11 h-11 rounded-xl bg-white border border-gray-200 flex items-center justify-center shrink-0 p-2">
+                                        @if($logo)
+                                            <img
+                                                src="{{ asset('images/' . $logo) }}"
+                                                alt="{{ strtoupper($shipping['code']) }}"
+                                                class="max-w-full max-h-full object-contain"
+                                            >
+                                        @else
+                                            <span class="text-xs font-bold text-[#2D5016] uppercase">
+                                                {{ strtoupper($shipping['code']) }}
+                                            </span>
+                                        @endif
+                                    </div>
+
+                                    <div class="flex-1 min-w-0">
+
+                                        <div class="flex items-center gap-2">
+
+                                            <p class="font-semibold text-gray-800 text-sm">
+                                                {{ strtoupper($shipping['code']) }}
+                                                {{ $shipping['service'] }}
+                                            </p>
+
+                                            <template
+                                                x-if="selected === '{{ $shippingValue }}'"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#2E7D32]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m5 12 4 4L19 7"/>
+                                                </svg>
+                                            </template>
+
+                                        </div>
+
+                                        <p class="text-xs text-gray-500 mt-1">
+                                            {{ $shipping['description'] ?? 'Layanan pengiriman' }}
+                                        </p>
+
+                                        @if (!empty($shipping['etd']))
+                                            <p class="text-xs text-gray-400 mt-1">
+                                                Estimasi {{ str_ireplace('day', 'hari', $shipping['etd']) }}
+                                            </p>
+                                        @endif
+
+                                    </div>
+
+                                    <div class="text-right shrink-0">
+
+                                        <p class="text-sm font-semibold text-gray-700">
+                                            Rp {{ number_format($shipping['cost'], 0, ',', '.') }}
+                                        </p>
+
+                                    </div>
+
+                                </button>
+
+                            @endforeach
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            @endif
+
+            @error('selectedShipping')
+                <p class="text-sm text-red-500 mt-2">
+                    {{ $message }}
+                </p>
+            @enderror
+
         </div>
 
         <div class="bg-[#BBDFA6] rounded-3xl p-6 space-y-4">

@@ -69,18 +69,6 @@
                         </flux:navlist.item>
 
                         <flux:navlist.item
-                            class="flux-box {{ request()->routeIs('admin.payment') ? 'is-current' : '' }}"
-                            href="{{ route('admin.payment') }}"
-                            wire:navigate
-                        >
-                            <x-slot:icon>
-                                <x-svg.payment-icon class="w-5 h-5" />
-                            </x-slot:icon>
-
-                            {{ __('Pembayaran') }}
-                        </flux:navlist.item>
-
-                        <flux:navlist.item
                             class="flux-box {{ request()->routeIs('admin.userprofile') ? 'is-current' : '' }}"
                             href="{{ route('admin.userprofile') }}"
                             wire:navigate
@@ -151,7 +139,7 @@
                         <flux:menu.separator />
 
                         <flux:menu.radio.group>
-                            <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
+                            <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>{{ __('Pengaturan') }}</flux:menu.item>
                         </flux:menu.radio.group>
 
                         <flux:menu.separator />
@@ -159,7 +147,7 @@
                         <form method="POST" action="{{ route('logout') }}" class="w-full">
                             @csrf
                             <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
-                                {{ __('Log Out') }}
+                                {{ __('Keluar') }}
                             </flux:menu.item>
                         </form>
                     </flux:menu>
@@ -203,7 +191,7 @@
                             <flux:menu.separator />
 
                             <flux:menu.radio.group>
-                                <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
+                                <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>{{ __('Pengaturan') }}</flux:menu.item>
                             </flux:menu.radio.group>
 
                             <flux:menu.separator />
@@ -211,7 +199,7 @@
                             <form method="POST" action="{{ route('logout') }}" class="w-full">
                                 @csrf
                                 <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
-                                    {{ __('Log Out') }}
+                                    {{ __('Keluar') }}
                                 </flux:menu.item>
                             </form>
                         </flux:menu>

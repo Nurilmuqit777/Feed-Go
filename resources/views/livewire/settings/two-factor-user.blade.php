@@ -31,13 +31,13 @@
 
                     @if(!$twoFactorEnabled)
                     <button wire:click="enable"
-                        class="bg-green-700 text-white px-5 py-2 rounded hover:bg-green-800 transition">
+                        class="bg-green-700 text-white px-5 py-2 rounded hover:bg-green-800 hover:scale-103 active:scale-95 transition">
                         Aktifkan 2FA
                     </button>
                     @else
                     <livewire:settings.two-factor.recovery-codes :$requiresConfirmation />
                     <button wire:click="disable"
-                        class="bg-red-600 text-white px-5 py-2 rounded hover:bg-red-700 transition">
+                        class="bg-red-600 text-white px-5 py-2 rounded hover:bg-red-700 hover:scale-103 active:scale-95 transition">
                         Nonaktifkan 2FA
                     </button>
                     @endif
@@ -78,7 +78,7 @@
 
                 <button
                     wire:click="showVerificationIfNecessary"
-                    class="w-full bg-green-700 hover:bg-green-800 text-white py-2 rounded-lg transition"
+                    class="w-full bg-green-700 hover:bg-green-800 text-white py-2 rounded-lg transition hover:scale-103 active:scale-95"
                 >
                     Lanjut
                 </button>
@@ -194,14 +194,14 @@
                     <div class="flex gap-2">
                         <button
                             wire:click="resetVerification"
-                            class="flex-1 border rounded-lg py-2 hover:bg-gray-100"
+                            class="flex-1 border rounded-lg py-2 hover:bg-gray-100 hover:scale-103 active:scale-95"
                         >
                             Kembali
                         </button>
 
                         <button
                             wire:click="confirmTwoFactor"
-                            class="flex-1 bg-green-700 text-white rounded-lg py-2 hover:bg-green-800"
+                            class="flex-1 bg-green-700 text-white rounded-lg py-2 hover:bg-green-800 hover:scale-103 active:scale-95"
                         >
                             Konfirmasi
                         </button>
@@ -212,7 +212,7 @@
 
             <button
                 wire:click="closeModal"
-                class="text-xs text-gray-500 underline w-full"
+                class="text-xs text-gray-500 hover:underline w-full"
             >
                 Tutup
             </button>

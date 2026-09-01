@@ -21,6 +21,17 @@
 
         <section class="w-1/2 flex items-start justify-end pr-30 pt-32">
             <div class="w-[350px] space-y-6">
+
+                @if ($errors->any())
+                <div class="rounded-xl bg-red-500/10 border border-red-400/30 p-3">
+                    @foreach ($errors->all() as $error)
+                        <p class="text-sm text-red-400">
+                            {{ $error }}
+                        </p>
+                    @endforeach
+                </div>
+                @endif
+
                 <form method="POST" action="{{ route('password.confirm.store') }}" class="flex flex-col gap-6">
                     @csrf
 
@@ -34,6 +45,7 @@
                             autocomplete="current-password"
                             :placeholder="__('Masukkan sandi anda')"
                             viewable
+                            class="dark"
                         />
                     </div>
 

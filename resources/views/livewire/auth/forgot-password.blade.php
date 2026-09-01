@@ -1,4 +1,4 @@
-@section('title', 'lupa password')
+@section('title', 'lupa kata sandi')
 
 <x-layouts.auth>
     <div class="flex justify-between w-full">
@@ -22,6 +22,17 @@
 
         <section class="w-1/2 flex items-start justify-end pr-30 pt-32">
             <div class="w-[350px] space-y-6">
+
+                @if ($errors->any())
+                <div class="rounded-xl bg-red-500/10 border border-red-400/30 p-3">
+                    @foreach ($errors->all() as $error)
+                        <p class="text-sm text-red-400">
+                            {{ $error }}
+                        </p>
+                    @endforeach
+                </div>
+                @endif
+
                 <form method="POST" action="{{ route('password.email') }}" class="flex flex-col gap-6">
                     @csrf
 
@@ -35,6 +46,7 @@
                             required
                             autofocus
                             placeholder="Masukkan email anda"
+                            class="dark"
                         />
                     </div>
 
@@ -44,7 +56,7 @@
                 </form>
                 <div class="space-x-1 rtl:space-x-reverse text-sm text-zinc-400">
                     <span>Kembali ke</span>
-                    <flux:link class="text-yellow-400 hover:text-yellow-200" :href="route('login')" wire:navigate>masuk</flux:link>
+                    <flux:link class="text-yellow-400 dark" :href="route('login')" wire:navigate>masuk</flux:link>
                 </div>
             </div>
         </section>

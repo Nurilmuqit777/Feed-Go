@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Product;
-use App\Models\Blog;
+use App\Models\Order;
 
 class AdminController extends Controller
 {
@@ -19,8 +18,7 @@ class AdminController extends Controller
 
     public function product()
     {
-        $products = Product::all();
-        return view('admin.product', compact('products'));
+        return view('admin.product');
     }
 
     public function order()
@@ -38,11 +36,6 @@ class AdminController extends Controller
         return view('admin.delivery');
     }
 
-    public function payment()
-    {
-        return view('admin.payment');
-    }
-
     public function report()
     {
         return view('admin.report');
@@ -50,8 +43,26 @@ class AdminController extends Controller
 
     public function article()
     {
-        $articles= Blog::all();
-        return view('admin.article', compact('articles'));
+        return view('admin.article');
+    }
+
+    public function orderDetail(string $invoice)
+    {
+        $order = Order::with([
+            'orderDetails.product.category',
+            'orderAddress',
+            'payments',
+        ])
+        ->where('invoice_number', $invoice)
+        ->firstOrFail();
+        return view('admin.order.order-detail', compact('order'));
+    }
+
+    public function orderShipping(string $invoice_number)
+    {
+        return view('admin.order.order-detail-shipping', [
+            'invoice_number' => $invoice_number,
+        ]);
     }
 
     public function getSalesData(Request $request)

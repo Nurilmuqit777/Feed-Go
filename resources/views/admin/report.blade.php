@@ -16,9 +16,9 @@
                         </svg>
                     </div>
                     <h2 class="font-bold text-4xl">95</h2>
-                </div> 
+                </div>
                 <div class="mb-2">
-                    <span class="font-bold text-sm">Pesanan bulan ini</span> 
+                    <span class="font-bold text-sm">Pesanan bulan ini</span>
                 </div>
             </div>
             <div class="relative overflow-hidden rounded-xl p-1 text-center border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800">
@@ -29,9 +29,9 @@
                         </svg>
                     </div>
                     <h2 class="font-bold text-4xl">95</h2>
-                </div> 
+                </div>
                 <div class="mb-2">
-                    <span class="font-bold text-sm">pembayaran diverifikasi</span> 
+                    <span class="font-bold text-sm">pembayaran diverifikasi</span>
                 </div>
             </div>
             <div class="relative overflow-hidden rounded-xl p-1 text-center border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800">
@@ -42,9 +42,9 @@
                         </svg>
                     </div>
                     <h2 class="font-bold text-4xl">95</h2>
-                </div> 
+                </div>
                 <div class="mb-2">
-                    <span class="font-bold text-sm">Pesanan dikirim</span> 
+                    <span class="font-bold text-sm">Pesanan dikirim</span>
                 </div>
             </div>
             <div class="relative overflow-hidden rounded-xl p-1 text-center border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800">
@@ -55,9 +55,9 @@
                         </svg>
                     </div>
                     <h2 class="font-bold text-4xl">95</h2>
-                </div> 
+                </div>
                 <div class="mb-2">
-                    <span class="font-bold text-sm">Pesanan baru minggu ini</span> 
+                    <span class="font-bold text-sm">Pesanan baru minggu ini</span>
                 </div>
             </div>
             <div class="relative overflow-hidden rounded-xl p-1 text-center border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800">
@@ -68,9 +68,9 @@
                         </svg>
                     </div>
                     <h2 class="font-bold text-4xl">95</h2>
-                </div> 
+                </div>
                 <div class="mb-2">
-                    <span class="font-bold text-sm">Pembayaran menunggu</span> 
+                    <span class="font-bold text-sm">Pembayaran menunggu</span>
                 </div>
             </div>
         </div>
@@ -85,14 +85,14 @@
                 </div>
             </div>
 
-            <button class="flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 dark:border-neutral-600 
+            <button class="flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 dark:border-neutral-600
                        rounded-lg bg-white dark:bg-neutral-800 text-gray-700 dark:text-gray-300
                        hover:bg-gray-50 dark:hover:bg-neutral-700 transition">
                 <span>Metode Pembayaran</span>
             </button>
 
-            <select 
-                    class="px-4 py-2 text-sm border border-gray-300 dark:border-neutral-600 
+            <select
+                    class="px-4 py-2 text-sm border border-gray-300 dark:border-neutral-600
                            rounded-lg bg-white dark:bg-neutral-800 text-gray-700 dark:text-gray-300
                            focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 <option value="">Status</option>
@@ -102,12 +102,12 @@
                 <option value="cancelled">Dibatalkan</option>
             </select>
 
-            <button class="flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 dark:border-neutral-600 
+            <button class="flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 dark:border-neutral-600
                        rounded-lg bg-white dark:bg-neutral-800 text-gray-700 dark:text-gray-300
                        hover:bg-gray-50 dark:hover:bg-neutral-700 transition">
                 <span>Rentang Tanggal</span>
             </button>
-            
+
             <div class=" w-full md:w-auto ml-auto">
                 <div class="relative max-w-md">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -115,9 +115,9 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </div>
-                    <input type="text" 
+                    <input type="text"
                     placeholder="Cari ID Pesanan / Nama Pemesan"
-                    class="px-4 pl-10 py-2 text-sm border border-gray-300 dark:border-neutral-600 
+                    class="px-4 pl-10 py-2 text-sm border border-gray-300 dark:border-neutral-600
                            rounded-lg bg-white dark:bg-neutral-800 text-gray-700 dark:text-gray-300
                            focus:ring-2 focus:ring-blue-500 focus:border-transparent
                            placeholder:text-gray-400"/>
@@ -134,7 +134,7 @@
                             Tanggal pembayaran
                         </th>
                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            ID Pesanan 
+                            ID Pesanan
                         </th>
                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                             Pembeli
@@ -157,7 +157,7 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">
                             001
-                        </td>   
+                        </td>
                         <td class="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">
                             Mirza
                         </td>

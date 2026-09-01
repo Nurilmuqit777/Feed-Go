@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('shippings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->constrained('orders')->cascadeOnDelete();
+            $table->foreignId('order_address_id')->constrained('order_addresses')->cascadeOnDelete();
             $table->string('courier');
             $table->string('service');
             $table->unsignedInteger('cost');
-            $table->string('tracking_number')->nullable();
+            $table->string('tracking_number')->nullable()->unique();
             $table->enum('status',['submitted', 'picked_up', 'shipped', 'cancelled', 'finished'])->default('submitted');
+            $table->string('estimate')->nullable();
+            $table->timestamp('shipped_at')->nullable();
             $table->timestamps();
         });
     }

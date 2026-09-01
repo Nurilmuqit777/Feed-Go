@@ -29,3 +29,6 @@ Schedule::call(function () {
         });
 
 })->everyMinute();
+
+Schedule::command('app:prune-expired-cache')
+    ->hourly();

@@ -15,12 +15,13 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'role' => RoleMiddleware::class,
+            'cart.not.empty' => \App\Http\Middleware\EnsureCartNotEmpty::class,
         ]);
 
         $middleware->validateCsrfTokens(except: [
         'midtrans/notification',
         ]);
-        
+
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

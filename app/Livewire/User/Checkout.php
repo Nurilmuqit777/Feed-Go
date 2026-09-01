@@ -14,6 +14,7 @@ use App\Models\Payment;
 use App\Models\Shipping;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Cache;
 
 class Checkout extends Component
 {
@@ -47,15 +48,21 @@ class Checkout extends Component
         $this->recipient_name = $user->name ?? '';
         $this->email = $user->email ?? '';
 
-        $response = Http::withHeaders([
-            'key' => config('services.rajaongkir.key_check'),
-        ])->get(
-            'https://rajaongkir.komerce.id/api/v1/destination/province'
-        );
+        $this->provinces = Cache::remember(
+            'rajaongkir.provinces',
+            now()->addDay(),
+            function () {
+                $response = Http::withHeaders([
+                    'key' => config('services.rajaongkir.key_check'),
+                ])->get(
+                    'https://rajaongkir.komerce.id/api/v1/destination/province'
+                );
 
-        if ($response->successful()) {
-            $this->provinces = $response->json('data', []);
-        }
+                return $response->successful()
+                    ? $response->json('data', [])
+                    : [];
+            }
+        );
     }
 
     protected function rules()
@@ -90,15 +97,22 @@ class Checkout extends Component
             return;
         }
 
-        $response = Http::withHeaders([
-            'key' => config('services.rajaongkir.key_check'),
-        ])->get(
-            "https://rajaongkir.komerce.id/api/v1/destination/city/{$provinceId}"
-        );
+        $this->cities = Cache::remember(
+            "rajaongkir.cities.{$provinceId}",
+            now()->addDay(),
+            function () use ($provinceId) {
 
-        if ($response->successful()) {
-            $this->cities = $response->json('data', []);
-        }
+                $response = Http::withHeaders([
+                    'key' => config('services.rajaongkir.key_check'),
+                ])->get(
+                    "https://rajaongkir.komerce.id/api/v1/destination/city/{$provinceId}"
+                );
+
+                return $response->successful()
+                    ? $response->json('data', [])
+                    : [];
+            }
+        );
     }
 
     public function updatedCity($cityId)
@@ -114,15 +128,22 @@ class Checkout extends Component
             return;
         }
 
-        $response = Http::withHeaders([
-            'key' => config('services.rajaongkir.key_check'),
-        ])->get(
-            "https://rajaongkir.komerce.id/api/v1/destination/district/{$cityId}"
-        );
+        $this->districts = Cache::remember(
+            "rajaongkir.districts.{$cityId}",
+            now()->addDay(),
+            function () use ($cityId) {
 
-        if ($response->successful()) {
-            $this->districts = $response->json('data', []);
-        }
+                $response = Http::withHeaders([
+                    'key' => config('services.rajaongkir.key_check'),
+                ])->get(
+                    "https://rajaongkir.komerce.id/api/v1/destination/district/{$cityId}"
+                );
+
+                return $response->successful()
+                    ? $response->json('data', [])
+                    : [];
+            }
+        );
     }
 
     public function updatedDistrict($districtId)
@@ -136,15 +157,22 @@ class Checkout extends Component
             return;
         }
 
-        $response = Http::withHeaders([
-            'key' => config('services.rajaongkir.key_check'),
-        ])->get(
-            "https://rajaongkir.komerce.id/api/v1/destination/sub-district/{$districtId}"
-        );
+        $this->subdistricts = Cache::remember(
+            "rajaongkir.subdistricts.{$districtId}",
+            now()->addDay(),
+            function () use ($districtId) {
 
-        if ($response->successful()) {
-            $this->subdistricts = $response->json('data', []);
-        }
+                $response = Http::withHeaders([
+                    'key' => config('services.rajaongkir.key_check'),
+                ])->get(
+                    "https://rajaongkir.komerce.id/api/v1/destination/sub-district/{$districtId}"
+                );
+
+                return $response->successful()
+                    ? $response->json('data', [])
+                    : [];
+            }
+        );
     }
 
     public function updatedSubDistrict($subdistrictId)
@@ -239,29 +267,36 @@ class Checkout extends Component
 
         $weight = $this->getTotalWeight($carts);
 
-        $response = Http::withHeaders([
-            'key' => config('services.rajaongkir.key_check'),
-        ])->asForm()->post(
-            'https://rajaongkir.komerce.id/api/v1/calculate/domestic-cost',
-            [
-                'origin' => config('services.rajaongkir.origin'),
-                'destination' => $this->subdistrict,
-                'weight' => $weight,
-                'courier' => $this->courier,
-                'price' => 'lowest',
-            ]
+        $cacheKey = 'shipping.' . md5(
+            config('services.rajaongkir.origin')
+            . '|' . $this->subdistrict
+            . '|' . $weight
+            . '|' . $this->courier
         );
 
-        if ($response->successful()) {
+        $this->shippingOptions = Cache::remember(
+            $cacheKey,
+            now()->addMinutes(10),
+            function () use ($weight) {
 
-            $this->shippingOptions = $response->json('data', []);
+                $response = Http::withHeaders([
+                    'key' => config('services.rajaongkir.key_check'),
+                ])->asForm()->post(
+                    'https://rajaongkir.komerce.id/api/v1/calculate/domestic-cost',
+                    [
+                        'origin' => config('services.rajaongkir.origin'),
+                        'destination' => $this->subdistrict,
+                        'weight' => $weight,
+                        'courier' => $this->courier,
+                        'price' => 'lowest',
+                    ]
+                );
 
-        } else {
-
-            $this->shippingOptions = [];
-            $this->selectedShipping = null;
-            $this->shippingCost = 0;
-        }
+                return $response->successful()
+                    ? $response->json('data', [])
+                    : [];
+            }
+        );
     }
 
     public function updatedSelectedShipping($value)
@@ -354,7 +389,7 @@ class Checkout extends Component
                     'expired_at' => now()->addMinutes(15),
                 ]);
 
-                OrderAddress::create([
+                $orderAddress = OrderAddress::create([
                     'order_id' => $order->id,
                     'recipient_name' => $this->recipient_name,
                     'recipient_phone' => $this->recipient_phone,
@@ -381,10 +416,11 @@ class Checkout extends Component
                 }
 
                 Shipping::create([
-                    'order_id' => $order->id,
+                    'order_address_id' => $orderAddress->id,
                     'courier' => $shipping['code'],
                     'service' => $shipping['service'],
                     'cost' => $shippingCost,
+                    'estimate' => $shipping['etd'] ?? '-',
                     'status' => 'submitted',
                 ]);
 

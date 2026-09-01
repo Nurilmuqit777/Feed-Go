@@ -41,7 +41,7 @@
                             $statusConfig = match($order->status) {
                                 'pending' => ['icon' => 'pending', 'text' => 'Menunggu pembayaran'],
                                 'processing' => ['icon' => 'processing', 'text' => 'Diproses'],
-                                'shipped' => ['icon' => 'shipped', 'text' => 'Dikirim'],
+                                'delivered' => ['icon' => 'delivered', 'text' => 'Dikirim'],
                                 'completed' => ['icon' => 'completed', 'text' => 'Selesai'],
                                 'cancelled' => ['icon' => 'cancelled', 'text' => 'Dibatalkan'],
                             };
@@ -61,7 +61,7 @@
                                 </svg>
                                 @break
 
-                            @case('shipped')
+                            @case('delivered')
                                 <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26" fill="none">
                                     <circle cx="13" cy="13" r="13" fill="#7C3AED"/>
                                 </svg>
@@ -172,7 +172,7 @@
                     </button>
                 </div>
 
-                @elseif ($order->status === 'shipped')
+                @elseif ($order->status === 'delivered')
                 <div class="flex items-center gap-2">
                     <span class="text-yellow-500"><x-svg.pin-icon /></span>
                     <p class="text-sm text-gray-700">Estimasi tiba: 30 - 31 maret 2026</p>
@@ -241,7 +241,7 @@
                             Lanjutkan Pembayaran
                         </a>
 
-                    @elseif($order->status === 'shipped')
+                    @elseif($order->status === 'delivered')
 
                         <button
                             wire:click="confirmOrder({{ $order->id }})"
@@ -317,7 +317,7 @@
                         'title' => 'Belum Ada Pesanan Diproses',
                         'message' => 'Tidak ada pesanan yang sedang diproses.',
                     ],
-                    'shipped' => [
+                    'delivered' => [
                         'title' => 'Belum Ada Pesanan Dikirim',
                         'message' => 'Tidak ada pesanan yang sedang dikirim.',
                     ],

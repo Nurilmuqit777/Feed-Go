@@ -14,12 +14,16 @@ class OrderTable extends Component
     public $filterStatus = '';
     public $sortBy = 'created_at';
     public $sortDirection = 'desc';
+    public $startDate = '';
+    public $endDate = '';
 
     protected $queryString = [
         'search' => ['except' => ''],
         'filterStatus' => ['except' => ''],
         'sortBy' => ['except' => 'created_at'],
         'sortDirection' => ['except' => 'desc'],
+        'startDate' => ['except' => ''],
+        'endDate' => ['except' => '']
     ];
 
     public function updatingSearch()
@@ -27,7 +31,22 @@ class OrderTable extends Component
         $this->resetPage();
     }
 
-    public function sortByColumn($column)
+    public function updatingFilterStatus()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingStartDate()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingEndDate()
+    {
+        $this->resetPage();
+    }
+
+    public function sortByColumn(string $column)
     {
         if ($this->sortBy === $column) {
             $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
@@ -35,28 +54,45 @@ class OrderTable extends Component
             $this->sortBy = $column;
             $this->sortDirection = 'desc';
         }
+        $this->resetPage();
     }
 
     public function resetFilters()
     {
-        $this->reset(['search', 'filterStatus']);
+        $this->reset(['search', 'filterStatus', 'startDate', 'endDate']);
+        $this->sortBy = 'created_at';
+        $this->sortDirection = 'desc';
         $this->resetPage();
     }
 
     public function render()
     {
         $orders = Order::query()
-            ->with(['user', 'orderDetails.product'])
+            ->with('orderAddress')
+
             ->when($this->search, function ($query) {
-                $query->where('id', 'like', '%' . $this->search . '%')
-                    ->orWhereHas('user', function ($q) {
-                        $q->where('name', 'like', '%' . $this->search . '%');
-                    });
+                $query->where(function ($q) {
+                    $q->where('invoice_number', 'like', '%' . $this->search . '%')
+                      ->orWhereHas('orderAddress', function ($q) {
+                          $q->where('recipient_name', 'like', '%' . $this->search . '%');
+                      });
+                });
             })
+
             ->when($this->filterStatus, function ($query) {
                 $query->where('status', $this->filterStatus);
             })
-            ->orderBy('created_at', 'desc')
+
+            ->when($this->startDate, function ($query) {
+                $query->whereDate('created_at', '>=', $this->startDate);
+            })
+
+            ->when($this->endDate, function ($query) {
+                $query->whereDate('created_at', '<=', $this->endDate);
+            })
+
+            ->orderBy($this->sortBy, $this->sortDirection)
+
             ->paginate(10);
 
         return view('livewire.admin.orders.order-table', [

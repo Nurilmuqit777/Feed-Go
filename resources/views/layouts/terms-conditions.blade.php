@@ -67,38 +67,7 @@
             </section>
 
             <section>
-                <h2 class="font-semibold text-lg">6. Pengembalian & Komplain</h2>
-
-                <h3 class="font-semibold text-lg ml-2">6.1 Ketentuan Umum</h3>
-                <ul class="list-decimal pl-5 space-y-1 ml-5">
-                    <li>Pengajuan pengembalian hanya dapat dilakukan setelah pesanan berstatus Selesai</li>
-                    <li>Pengembalian hanya berlaku jika:
-                        <ul class="list-disc pl-5 space-y-1 ml-2">
-                            <li>Produk rusak saat diterima</li>
-                            <li>Produk tidak sesuai dengan pesanan</li>
-                            <li>Kemasan bocor atau sobek</li>
-                        </ul>
-                    </li>
-                    <li>Produk yang sudah digunakan tidak dapat dikembalikan</li>
-                </ul>
-
-                <h3 class="font-semibold text-lg ml-2">6.2 Proses Pengajuan</h3>
-                <ul class="list-decimal pl-5 space-y-1 ml-5">
-                    <li>Pengguna wajib mengisi form pengembalian di halaman FeedGo</li>
-                    <li>Pengguna wajib melampirkan bukti foto atau video</li>
-                    <li>Pengajuan akan diverifikasi oleh tim FeedGo dalam waktu 1–3 hari kerja</li>
-                </ul>
-
-                <h3 class="font-semibold text-lg ml-2">6.3 Keputusan</h3>
-                <ul class="list-decimal pl-5 space-y-1 ml-5">
-                    <li>FeedGo berhak menerima atau menolak pengajuan pengembalian</li>
-                    <li>Keputusan FeedGo bersifat final dan mengikat</li>
-                    <li>Pengembalian dana atau penggantian produk dilakukan sesuai kebijakan internal FeedGo</li>
-                </ul>
-            </section>
-
-            <section>
-                <h2 class="font-semibold text-lg">7. Pembatasan Tanggung Jawab</h2>
+                <h2 class="font-semibold text-lg">6. Pembatasan Tanggung Jawab</h2>
                 <ul class="list-disc pl-5 space-y-1 ml-5">
                     <li>FeedGo tidak bertanggung jawab atas kerugian tidak langsung</li>
                     <li>FeedGo tidak menjamin hasil penggunaan produk di luar petunjuk</li>
@@ -106,17 +75,17 @@
             </section>
 
             <section>
-                <h2 class="font-semibold text-lg">8. Perubahan Syarat & Ketentuan</h2>
+                <h2 class="font-semibold text-lg">7. Perubahan Syarat & Ketentuan</h2>
                 <span>FeedGo berhak mengubah isi Syarat & Ketentuan kapan saja. Perubahan akan diinformasikan melalui platform resmi</span>
             </section>
 
             <section>
-                <h2 class="font-semibold text-lg">9. Hukum yang Berlaku</h2>
+                <h2 class="font-semibold text-lg">8. Hukum yang Berlaku</h2>
                 <span>Syarat & Ketentuan ini tunduk pada hukum Republik Indonesia</span>
             </section>
 
             <section>
-                <h2 class="font-semibold text-lg">10. Kontak</h2>
+                <h2 class="font-semibold text-lg">9. Kontak</h2>
                 <p>Jika ada pertanyaan terkait Syarat & Ketentuan atau Kebijakan Privasi, silakan hubungi:</p>
                 <p class="underline">hello@feedgo.com</p>
                 <p>WhatsApp Admin FeedGo</p>

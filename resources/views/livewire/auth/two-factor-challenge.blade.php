@@ -43,12 +43,23 @@
 
         <div class="w-1/2 flex items-start justify-end pr-30 pt-32">
             <div class="w-[350px] space-y-6">
+
+                @if ($errors->any())
+                <div class="rounded-xl bg-red-500/10 border border-red-400/30 p-3">
+                    @foreach ($errors->all() as $error)
+                        <p class="text-sm text-red-400">
+                            {{ $error }}
+                        </p>
+                    @endforeach
+                </div>
+                @endif
+
                 <form method="POST" action="{{ route('two-factor.login.store') }}">
                     @csrf
                     <div class="space-y-5 text-center">
                         <div x-show="!showRecoveryInput">
                             <div class="flex items-center justify-center my-5">
-                                <flux:otp x-model="code" length="6" name="code" submit="auto" />
+                                <flux:otp x-model="code" length="6" name="code" class="dark" />
                             </div>
                         </div>
                         <div x-show="showRecoveryInput">
@@ -60,6 +71,7 @@
                                     x-bind:required="showRecoveryInput"
                                     autocomplete="one-time-code"
                                     x-model="recovery_code"
+                                    class="dark"
                                 />
                             </div>
                             @error('recovery_code')
@@ -77,8 +89,8 @@
                         </flux:button>
                     </div>
                     <div class="mt-5 space-x-0.5 text-sm leading-5 text-center">
-                        <span class="opacity-50">{{ __('atau') }}</span>
-                        <div class="inline font-medium underline cursor-pointer opacity-80">
+                        <span class="text-white/50">{{ __('atau') }}</span>
+                        <div class="inline font-medium underline cursor-pointer text-white/80 hover:text-white transition">
                             <span x-show="!showRecoveryInput" @click="toggleInput()">{{ __('masuk dengan kode pemulihan') }}</span>
                             <span x-show="showRecoveryInput" @click="toggleInput()">{{ __('masuk dengan kode autentikasi') }}</span>
                         </div>

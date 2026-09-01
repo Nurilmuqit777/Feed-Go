@@ -1,3 +1,4 @@
+
 <div>
     @if ($carts->isEmpty())
         <div class="flex flex-col items-center justify-center gap-4 py-20">
@@ -190,3 +191,16 @@
 
     @endif
 </div>
+@if (session('toast'))
+    <script>
+        setTimeout(() => {
+            window.dispatchEvent(new CustomEvent('toast', {
+                detail: [{
+                    type: @js(session('toast.type')),
+                    title: @js(session('toast.title')),
+                    message: @js(session('toast.message')),
+                }]
+            }));
+        }, 100);
+    </script>
+@endif

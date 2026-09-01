@@ -18,13 +18,12 @@ class OrderController extends Controller
         return view('layouts.order');
     }
 
-    public function show($invoice)
+    public function show(string $invoice)
     {
         $order = Order::with([
         'orderDetails.product.category',
         'orderAddress',
         'payments',
-        'shipping'
         ])
         ->where('invoice_number', $invoice)
         ->where('user_id', Auth::id())

@@ -7,7 +7,6 @@
 
         <p class="text-xs text-gray-500 leading-relaxed">
             Menghapus akun akan menghilangkan seluruh data akun Anda secara permanen.
-            Silakan masukkan password untuk konfirmasi.
         </p>
     </div>
 
@@ -40,7 +39,7 @@
 
                     <p class="text-sm text-gray-500 mt-2 leading-relaxed">
                         Setelah akun dihapus, seluruh data akan dihapus permanen.
-                        Masukkan password Anda untuk mengonfirmasi.
+                        Masukkan kata sandi Anda untuk mengonfirmasi.
                     </p>
                 </div>
 

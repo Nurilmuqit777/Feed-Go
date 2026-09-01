@@ -21,7 +21,7 @@
                                     : $image->temporaryUrl() }}"
                                 class="h-32 w-full object-contain rounded-lg border"
                             />
-                        
+
                             <button
                                 type="button"
                                 wire:click="removeImage({{ $index }})"
@@ -68,7 +68,7 @@
                 @error('product_images')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
-            
+
                 @error('product_images.*')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
@@ -87,7 +87,7 @@
                     <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
                         Kategori
                     </label>
-                
+
                     <select
                         wire:model.defer="category_id"
                         class="w-full rounded-lg border p-2
@@ -96,7 +96,7 @@
                                text-gray-900 dark:text-white"
                     >
                         <option value="">Pilih kategori</option>
-                
+
                         @if (!empty($categories) && is_iterable($categories))
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}">
@@ -105,7 +105,7 @@
                             @endforeach
                         @endif
                     </select>
-                
+
                     @error('category_id')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
@@ -138,7 +138,7 @@
                                placeholder="Contoh: 2">
                         @error('product_weight') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
                     </div>
-                
+
                     <div>
                         <label class="text-sm font-medium">Satuan</label>
                         <select wire:model.defer="product_unit"
@@ -163,7 +163,7 @@
                                placeholder="Jumlah stok">
                         @error('product_stock') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
                     </div>
-                
+
                     <div>
                         <label class="text-sm font-medium">Status Produk</label>
                         <select wire:model.defer="product_status"
@@ -172,13 +172,13 @@
                                border-gray-300 dark:border-neutral-600
                                text-gray-900 dark:text-white">
                             <option value="">Pilih status</option>
-                            <option value="available">tersedia</option>
-                            <option value="unavailable">Tidak tersedia</option>
+                            <option value="available">Tampilkan</option>
+                            <option value="unavailable">Sembunyikan</option>
                         </select>
                         @error('product_status') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
                     </div>
                 </div>
-                
+
                 <div wire:ignore>
                     <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Deskripsi</label>
                     <input id="product_description" type="hidden" name="product_description" wire:model.defer="product_description">

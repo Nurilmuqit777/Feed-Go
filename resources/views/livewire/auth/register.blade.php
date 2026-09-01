@@ -51,6 +51,7 @@
                             autocomplete="name"
                             placeholder="Masukkan nama anda"
                             class="flex-1 bg-transparent border-none shadow-none outline-none px-0"
+                            class="dark"
                         />
 
                     </div>
@@ -67,6 +68,7 @@
                             required
                             autocomplete="email"
                             placeholder="masukkan email anda"
+                            class="dark"
                         />
                     </div>
 
@@ -81,6 +83,7 @@
                             autocomplete="new-password"
                             :placeholder="__('Masukkan sandi anda')"
                             viewable
+                            class="dark"
                         />
                     </div>
 
@@ -95,6 +98,7 @@
                             autocomplete="new-password"
                             :placeholder="__('Konfirmasi sandi anda')"
                             viewable
+                            class="dark"
                         />
                     </div>
 
@@ -105,9 +109,9 @@
                    </div>
                 </form>
 
-                <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-600 dark:text-zinc-400">
+                <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-400">
                     <span>Sudah punya akun?</span>
-                    <flux:link class="text-yellow-400 hover:text-yellow-200" :href="route('login')" wire:navigate>Masuk</flux:link>
+                    <flux:link class="text-yellow-400 dark" :href="route('login')" wire:navigate>Masuk</flux:link>
                 </div>
             </div>
 

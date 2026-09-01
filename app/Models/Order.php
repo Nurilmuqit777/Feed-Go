@@ -35,11 +35,6 @@ class Order extends Model
         return $this->hasOne(Payment::class);
     }
 
-    public function shipping():HasOne
-    {
-        return $this->hasOne(Shipping::class);
-    }
-
     public function getFormattedTotalPriceAttribute(): string
     {
         return 'Rp ' . number_format($this->total_price, 0, ',', '.');
@@ -60,24 +55,12 @@ class Order extends Model
         return $this->orderDetails->sum(fn($detail) => ($detail->discount_price_at_purchase ?? $detail->price_at_purchase) * $detail->quantity_ordered);
     }
 
-    public function getStatusColorAttribute(): string
-    {
-        return match($this->status) {
-            'pending' => 'yellow',
-            'processing' => 'blue',
-            'shipped' => 'orange',
-            'completed' => 'green',
-            'cancelled' => 'red',
-            default => 'gray',
-        };
-    }
-
     public function getStatusLabelAttribute(): string
     {
         return match($this->status) {
             'pending' => 'Tertunda',
             'processing' => 'Diproses',
-            'shipped' => 'Dikirim',
+            'delivered' => 'Dikirim',
             'completed' => 'Selesai',
             'cancelled' => 'Dibatalkan',
             default => $this->status,

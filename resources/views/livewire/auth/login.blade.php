@@ -49,6 +49,7 @@
                             autofocus
                             autocomplete="email"
                             placeholder="Masukkan email anda"
+                            class="dark"
                         />
                     </div>
 
@@ -63,14 +64,17 @@
                                 autocomplete="current-password"
                                 :placeholder="__('Masukkan sandi anda')"
                                 viewable
+                                class="dark"
                             />
                     </div>
 
                     <div class=" flex items-center justify-between text-sm">
-                        <flux:checkbox  name="remember" :label="__('Ingat saya')" />
+                        <div class="[&_ui-label]:!text-white">
+                            <flux:checkbox name="remember" class="dark" :label="__('Ingat saya')" />
+                        </div>
 
                         @if (Route::has('password.request'))
-                            <flux:link class="text-yellow-300 hover:underline" :href="route('password.request')" wire:navigate>
+                            <flux:link class="text-yellow-300 dark" :href="route('password.request')" wire:navigate>
                                 Lupa kata sandi?
                             </flux:link>
                         @endif
@@ -85,9 +89,9 @@
                 </form>
 
                 @if (Route::has('register'))
-                    <div class="space-x-1 text-sm text-center rtl:space-x-reverse text-zinc-600 dark:text-zinc-400">
+                    <div class="space-x-1 text-sm text-center rtl:space-x-reverse text-zinc-400">
                         <span>Belum punya akun?</span>
-                        <flux:link class="text-yellow-400 hover:text-yellow-200" :href="route('register')" wire:navigate>Daftar</flux:link>
+                        <flux:link class="text-yellow-400 dark" :href="route('register')" wire:navigate>Daftar</flux:link>
                     </div>
                 @endif
             </div>

@@ -57,6 +57,8 @@ class Products extends Component
 
     public function render()
     {
-        return view('livewire.admin.products.products');
+        return view('livewire.admin.products.products', [
+            'products' => $this->products
+        ]);
     }
 }

@@ -58,7 +58,7 @@
                     <p class="flex items-center gap-2">
                         <span class="font-bold">Status Pembayaran:</span>
 
-                        {{ ucfirst($order->payments->status) }}
+                        {{ ucfirst($order->payments->statusPayment) }}
 
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 25" fill="none">
                             <path d="M12.5 0C10.8585 0 9.23303 0.323322 7.71646 0.951506C6.19989 1.57969 4.8219 2.50043 3.66117 3.66117C1.31696 6.00537 0 9.18479 0 12.5C0 15.8152 1.31696 18.9946 3.66117 21.3388C4.8219 22.4996 6.19989 23.4203 7.71646 24.0485C9.23303 24.6767 10.8585 25 12.5 25C15.8152 25 18.9946 23.683 21.3388 21.3388C23.683 18.9946 25 15.8152 25 12.5C25 10.8585 24.6767 9.23303 24.0485 7.71646C23.4203 6.19989 22.4996 4.8219 21.3388 3.66117C20.1781 2.50043 18.8001 1.57969 17.2835 0.951506C15.767 0.323322 14.1415 0 12.5 0ZM17.75 17.75L11.25 13.75V6.25H13.125V12.75L18.75 16.125L17.75 17.75Z" fill="#2D5016"/>
@@ -70,23 +70,23 @@
                         #{{ $order->invoice_number }}
                     </p>
                     <div
-    x-data="countdown('{{ $order->expired_at }}')"
-    x-init="start()"
->
-    <p class="text-sm text-red-600 font-medium">
-        Selesaikan pembayaran dalam
-    </p>
+                        x-data="countdown('{{ $order->expired_at }}')"
+                        x-init="start()"
+                    >
+                        <p class="text-sm text-red-600 font-medium">
+                            Selesaikan pembayaran dalam
+                        </p>
 
-    <h2
-        x-text="time"
-        class="text-3xl font-bold text-red-600"
-    ></h2>
-</div>
+                        <h2
+                            x-text="time"
+                            class="text-3xl font-bold text-red-600"
+                        ></h2>
+                    </div>
 
                 </div>
 
                 @elseif ($order->status === 'cancelled')
-                                    <div class="space-y-3 text-[#2D5016] font-semibold">
+                <div class="space-y-3 text-[#2D5016] font-semibold">
 
                     <p>
                         <span class="font-bold">Tanggal Pesanan:</span>
@@ -96,7 +96,7 @@
                     <p class="flex items-center gap-2">
                         <span class="font-bold">Status Pembayaran:</span>
 
-                        {{ ucfirst($order->payments->status) }}
+                        {{ ucfirst($order->payments->statusPayment) }}
 
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 25" fill="none">
                             <path d="M12.5 0C10.8585 0 9.23303 0.323322 7.71646 0.951506C6.19989 1.57969 4.8219 2.50043 3.66117 3.66117C1.31696 6.00537 0 9.18479 0 12.5C0 15.8152 1.31696 18.9946 3.66117 21.3388C4.8219 22.4996 6.19989 23.4203 7.71646 24.0485C9.23303 24.6767 10.8585 25 12.5 25C15.8152 25 18.9946 23.683 21.3388 21.3388C23.683 18.9946 25 15.8152 25 12.5C25 10.8585 24.6767 9.23303 24.0485 7.71646C23.4203 6.19989 22.4996 4.8219 21.3388 3.66117C20.1781 2.50043 18.8001 1.57969 17.2835 0.951506C15.767 0.323322 14.1415 0 12.5 0ZM17.75 17.75L11.25 13.75V6.25H13.125V12.75L18.75 16.125L17.75 17.75Z" fill="#2D5016"/>
@@ -172,7 +172,7 @@
                     <div class="flex justify-between items-center">
                         <div class="flex items-center gap-2">
                             <span class="text-md text-black">Pengiriman</span>
-                            @if ($order->shipping)
+                            @if ($order->orderAddress->shipping)
 
                             <div class="flex items-center gap-1.5 bg-[#EAAA00] rounded-full px-2 py-0.5">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
@@ -180,13 +180,13 @@
                                 </svg>
                             </div>
                             <span class="text-black text-md font-medium">
-                                {{ $order->shipping->courier }} | {{ $order->shipping->service }}
+                                {{ $order->orderAddress->shipping->courier }} | {{ $order->orderAddress->shipping->service }}
                             </span>
                             @endif
                         </div>
                         <span class="text-md text-gray-700 shrink-0 ml-4">
-                            @if ($order->shipping)
-                                Rp {{ number_format($order->shipping->cost, 0, ',', '.') }}
+                            @if ($order->orderAddress->shipping)
+                                Rp {{ number_format($order->orderAddress->shipping->cost, 0, ',', '.') }}
                             @else
                             -
                             @endif
