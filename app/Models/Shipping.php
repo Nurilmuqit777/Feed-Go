@@ -17,6 +17,10 @@ class Shipping extends Model
         'status'
     ];
 
+    protected $casts =[
+        'shipped_at' => 'datetime',
+    ];
+
     public function orderAddress()
     {
         return $this ->belongsTo(OrderAddress::class);
@@ -26,7 +30,6 @@ class Shipping extends Model
     {
         return match($this->status) {
             'submitted' => 'Menunggu',
-            'picked_up' => 'Diproses',
             'shipped' => 'Dikirim',
             'cancelled' => 'Dibatalkan',
             'finished' => 'Selesai',

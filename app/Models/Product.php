@@ -23,6 +23,22 @@ class Product extends Model
         return $this->hasMany(Cart::class);
     }
 
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasManyThrough(
+            Review::class, OrderDetail::class,
+            'product_id',
+            'order_detail_id',
+            'id',
+            'id'
+        );
+    }
+
     public function getDiscountPercentageAttribute()
     {
         if ($this->product_discount_price && $this->product_price > 0) {

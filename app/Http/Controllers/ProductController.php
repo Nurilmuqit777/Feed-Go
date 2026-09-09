@@ -47,8 +47,17 @@ class ProductController extends Controller
      */
     public function show(string $slug)
     {
-        $product = Product::where('product_slug', $slug)->firstOrFail();
-        return view('layouts.product-detail', compact('product'));
+        $product = Product::with(['category', 'reviews.user'])->where('product_slug', $slug)->firstOrFail();
+
+        $relatedProducts = Product::with('category')
+        ->where('category_id', $product->category_id)
+        ->where('id', '!=', $product->id)
+        ->where('product_status', 'available')
+        ->latest()
+        ->take(4)
+        ->get();
+
+        return view('layouts.product-detail', compact('product','relatedProducts'));
     }
 
     /**

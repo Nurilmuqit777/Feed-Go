@@ -42,7 +42,7 @@
                        text-white px-4 py-2 rounded-xl font-medium transition"
             >
                 <span class="text-xl leading-none">+</span>
-                <span class="hidden sm:inline">Tambahkan Kategori</span>
+                <span class="hidden sm:inline">Kelola Kategori</span>
             </button>
             <button
                 onclick="window.dispatchEvent(new CustomEvent('open-add-article'))"

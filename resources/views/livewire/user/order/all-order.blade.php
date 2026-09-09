@@ -102,17 +102,34 @@
                                 </p>
                             </div>
                         </div>
+                        @if($order->status === 'completed')
+                            @if(!$detail->review)
+                                <div class="flex items-center justify-end gap-1">
+                                    <span class="text-yellow-500 text-sm"><x-svg.star-icon /></span>
+                                    <button wire:click="$dispatch('open-product-reviews', { orderDetailId: {{ $detail->id }} })" class="text-sm text-[#2E7D32] font-medium hover:underline transition">
+                                        Nilai Produk
+                                    </button>
+                                </div>
+                                @else
+                                <div class="flex justify-end gap-1 items-center">
+                                    <span class="text-yellow-500 text-sm"><x-svg.star-icon /></span>
+                                    <button type="button" wire:click="$dispatch('open-product-reviews', { orderDetailId: {{ $detail->id }} })" class="text-sm text-[#2E7D32] font-medium hover:underline transition">
+                                        Tampilkan Penilaian
+                                    </button>
+                                </div>
+                            @endif
+                        @endif
                     </div>
                     @endforeach
 
-                    {{-- <div class="flex justify-between items-center">
+                    <div class="flex justify-between items-center">
                         <p class="text-gray-700 text-sm">
-                            Pengiriman: {{ $order->shipping_method }} ({{ $order->shipping_duration }})
+                            Pengiriman: {{ $order->orderAddress->shipping->courier }} | {{ $order->orderAddress->shipping->service}}
                         </p>
                         <p class="text-[#2D5016] font-semibold text-sm shrink-0 ml-4">
-                            Rp {{ number_format($order->shipping_cost, 0, ',', '.') }}
+                            Rp {{ number_format($order->orderAddress->shipping->cost, 0, ',', '.') }}
                         </p>
-                    </div> --}}
+                    </div>
                 </div>
 
                 <div class="shrink-0">
@@ -139,9 +156,13 @@
             <div class="space-y-2">
 
                 <p class="font-bold text-gray-800 text-md">
-                    No. Pesanan:
-                    <span class="text-[#2D5016]">#{{ ($order->invoice_number) }}</span>
+                    No. Pesanan: <span class="text-[#2D5016]">#{{ ($order->invoice_number) }}</span>
                 </p>
+                @if ($order->orderAddress->shipping->tracking_number)
+                    <p class="font-bold text-gray-800 text-md">
+                        No. Resi: <span class="text-[#2D5016]">#{{ $order->orderAddress->shipping->tracking_number }}</span>
+                    </p>
+                @endif
 
 
                 @if($order->status === 'completed')
@@ -149,16 +170,13 @@
                     <span class="text-yellow-500"><x-svg.pin-icon /></span>
                     <p class="text-sm text-gray-700">Pesanan telah tiba di alamat tujuan</p>
                 </div>
-                <div class="flex items-center gap-4">
-                    <div class="flex items-center gap-1">
-                        <span class="text-yellow-500 text-sm"><x-svg.star-icon /></span>
-                        <button class="text-sm text-[#2D5016] font-medium hover:underline transition">
-                            Nilai Produk
-                        </button>
-                    </div>
-                    <button class="text-sm text-[#2E7D32] font-medium hover:underline transition">
+                <div class="flex items-center">
+                    <a href="{{ route('contact') }}" class="text-sm text-[#2E7D32] font-medium hover:underline transition">
                         Hubungi FeedGo
-                    </button>
+                    </a>
+                </div>
+                <div class="flex items-center gap-2">
+                    <p class="text-sm text-[#EAAA00]">Bantu pengguna lain dengan memberikan ulasan</p>
                 </div>
 
                 @elseif ($order->status === 'pending')
@@ -167,31 +185,27 @@
                     <p class="text-sm text-gray-700">Pesanan otomatis dibatalkan jika waktu habis</p>
                 </div>
                 <div class="flex items-center gap-4">
-                    <button class="text-sm text-[#2E7D32] font-medium hover:underline transition">
+                    <a href="{{ route('contact') }}" class="text-sm text-[#2E7D32] font-medium hover:underline transition">
                         Hubungi FeedGo
-                    </button>
+                    </a>
                 </div>
 
                 @elseif ($order->status === 'delivered')
                 <div class="flex items-center gap-2">
                     <span class="text-yellow-500"><x-svg.pin-icon /></span>
-                    <p class="text-sm text-gray-700">Estimasi tiba: 30 - 31 maret 2026</p>
+                    <p class="text-sm text-gray-700">Estimasi tiba: {{ !empty($order->orderAddress->shipping->estimate) ? str_replace('day', 'hari', $order->orderAddress->shipping->estimate) : '-' }}</p>
                 </div>
                 <div class="flex items-center gap-4">
-                    <button class="text-sm text-[#2E7D32] font-medium hover:underline transition">
+                    <a href="{{ route('contact') }}" class="text-sm text-[#2E7D32] font-medium hover:underline transition">
                         Hubungi FeedGo
-                    </button>
+                    </a>
                 </div>
 
                 @elseif ($order->status === 'cancelled')
-                <div class="flex items-center gap-2">
-                    <span class="text-yellow-500"><x-svg.pin-icon /></span>
-                    <p class="text-sm text-gray-700">Pesanan dibatalkan</p>
-                </div>
-                <div class="flex items-center gap-4">
-                    <button class="text-sm text-[#2E7D32] font-medium hover:underline transition">
-                        Hubungi FeedGo
-                    </button>
+                <div class="items-center gap-2 text-black text-md font-semibold">
+                    <p>Alasan Dibatalkan:</p>
+                    <p>Tidak Melakukan Pembayaran.</p>
+                    <p>Batas waktu pembayaran berakhir.</p>
                 </div>
 
                 @elseif ($order->status === 'processing')
@@ -200,9 +214,9 @@
                     <p class="text-sm text-gray-700">Nomor resi akan dikirim setelah pesanan dikemas</p>
                 </div>
                 <div class="flex items-center gap-4">
-                    <button class="text-sm text-[#2E7D32] font-medium hover:underline transition">
+                    <a href="{{ route('contact') }}" class="text-sm text-[#2E7D32] font-medium hover:underline transition">
                         Hubungi FeedGo
-                    </button>
+                    </a>
                 </div>
                 @endif
             </div>
@@ -219,13 +233,9 @@
                 <div class="flex flex-wrap gap-2">
                     @if($order->status === 'completed')
 
-                        <button class="px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95">
-                            Komplain
-                        </button>
-
-                        <button class="px-5 py-2.5 bg-[#2D5016] hover:bg-[#1B5E20] text-white text-sm font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95">
+                        <a href="{{route('produk')}}" class="px-5 py-2.5 bg-[#2E7D32] hover:bg-[#1B5E20] text-white text-sm font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95">
                             Beli Lagi
-                        </button>
+                        </a>
 
                         <a
                             href="{{ route('user.order-detail', $order->invoice_number) }}"
@@ -242,13 +252,6 @@
                         </a>
 
                     @elseif($order->status === 'delivered')
-
-                        <button
-                            wire:click="confirmOrder({{ $order->id }})"
-                            wire:confirm="Konfirmasi pesanan sudah diterima?"
-                            class="px-5 py-2.5 bg-[#2D5016] hover:bg-[#1B5E20] text-white text-sm font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95">
-                            Konfirmasi Diterima
-                        </button>
 
                         <a
                             href="{{ route('user.order-detail', $order->invoice_number) }}"

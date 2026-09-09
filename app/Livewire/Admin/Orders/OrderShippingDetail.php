@@ -9,6 +9,10 @@ class OrderShippingDetail extends Component
 {
     public $invoiceNumber;
 
+    protected $listeners = [
+        'shipping-status-changed' => '$refresh',
+    ];
+
     public function mount($invoiceNumber)
     {
         $this->invoiceNumber = $invoiceNumber;

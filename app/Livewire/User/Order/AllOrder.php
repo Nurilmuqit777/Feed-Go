@@ -20,6 +20,12 @@ class AllOrder extends Component
         $this->resetPage();
     }
 
+    protected $listeners = [
+        'order-cancelled' => '$refresh',
+        'order-confirmed' => '$refresh',
+        'review-submitted' => '$refresh',
+    ];
+
     public function cancelOrder($orderId)
     {
         $order = Order::where('id', $orderId)
@@ -31,7 +37,7 @@ class AllOrder extends Component
         $this->dispatch('order-cancelled');
     }
 
-public function confirmOrder($orderId)
+    public function confirmOrder($orderId)
     {
         $order = Order::where('id', $orderId)
                       ->where('user_id', Auth::id())
@@ -44,7 +50,7 @@ public function confirmOrder($orderId)
 
     public function render()
     {
-        $orders = Order::with(['orderDetails.product', 'orderAddress.shipping', 'payments',])
+        $orders = Order::with(['orderDetails.product.category', 'orderDetails.review', 'orderAddress.shipping', 'payments',])
             ->where('user_id', Auth::id())
             ->when($this->status, function ($query) {
 

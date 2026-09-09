@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 
 class OrderDetail extends Model
@@ -25,6 +26,11 @@ class OrderDetail extends Model
     public function product():BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function review():HasOne
+    {
+        return $this->hasOne(Review::class);
     }
 
     public function getSubtotalAttribute(): float

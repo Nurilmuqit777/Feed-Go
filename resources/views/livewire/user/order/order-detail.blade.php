@@ -269,8 +269,28 @@
                     <div class="grid grid-cols-[160px_20px_1fr]">
                         <span>layanan</span>
                         <span>:</span>
-                        <span>{{$order->orderAddress->shipping->service}}</span>
+                        <span>{{ $order->orderAddress->shipping->service }}</span>
                     </div>
+
+                    @if ($order->status === 'delivered' || $order->status === 'completed')
+                    <div class="grid grid-cols-[160px_20px_1fr]">
+                        <span>No.Resi</span>
+                        <span>:</span>
+                        <span>{{ $order->orderAddress->shipping->tracking_number }}</span>
+                    </div>
+
+                    <div class="grid grid-cols-[160px_20px_1fr]">
+                        <span>Tanggal Kirim</span>
+                        <span>:</span>
+                        <span>{{ !empty($order->orderAddress->shipping->shipped_at) ? $order->orderAddress->shipping->shipped_at->translatedFormat('d F Y') : '-' }}</span>
+                    </div>
+
+                    <div class="grid grid-cols-[160px_20px_1fr]">
+                        <span>Estimasi Tiba</span>
+                        <span>:</span>
+                        <span>{{ !empty($order->orderAddress->shipping->estimate) ? str_replace('day', 'hari', $order->orderAddress->shipping->estimate) : '-' }}</span>
+                    </div>
+                    @endif
 
                     <div class="grid grid-cols-[160px_20px_1fr]">
                         <span>Alamat Lengkap</span>

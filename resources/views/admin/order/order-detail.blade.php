@@ -213,6 +213,20 @@
                         @endforeach
                     </div>
                 </div>
+                @if($order->status === 'processing' || $order->status === 'delivered')
+                <a  href="{{ route('admin.order-shipping', $order->invoice_number) }}" class="flex items-center justify-center bg-[#F4D993] hover:bg-[#EFC965] hover:scale-105 active:scale-95 transition shadow-lg rounded-xl text-black text-sm font-medium px-4 py-2 w-fit border border-[#909090]">
+                    Kelola Pengiriman
+                </a>
+                @elseif ($order->status === 'completed')
+                <div class="flex items-center justify-center text-sm bg-[#E3EDDF] rounded-xl font-medium transition text-black px-4 py-2 border-[#909090] w-fit border-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 21C13.6259 21.0001 15.2214 20.5598 16.6171 19.7259C18.0128 18.8919 19.1566 17.6955 19.9268 16.2636C20.697 14.8318 21.065 13.218 20.9916 11.5938C20.9182 9.96956 20.4062 8.39556 19.51 7.039L12.355 14.989C12.0208 15.3604 11.5597 15.5933 11.0624 15.6418C10.5651 15.6903 10.0677 15.5509 9.668 15.251L6.40001 12.8C6.18783 12.6409 6.04756 12.404 6.01006 12.1414C5.97255 11.8789 6.04087 11.6122 6.2 11.4C6.35913 11.1878 6.59603 11.0476 6.85858 11.0101C7.12113 10.9725 7.38783 11.0409 7.6 11.2L10.868 13.651L18.214 5.49C17.1498 4.47411 15.8528 3.7346 14.4365 3.33622C13.0202 2.93784 11.5279 2.89274 10.0901 3.20487C8.65238 3.517 7.31308 4.17684 6.18948 5.12661C5.06588 6.07639 4.19225 7.28713 3.64508 8.65284C3.09792 10.0185 2.8939 11.4976 3.0509 12.9604C3.2079 14.4233 3.72113 15.8253 4.54564 17.0438C5.37016 18.2623 6.48082 19.2601 7.78038 19.9498C9.07994 20.6395 10.5288 21.0001 12 21Z" fill="#388E3C"/>
+                    </svg>
+                    <p class="text-sm text-[#388E3C] font-semibold text-center">
+                        Pesanan Selesai
+                    </p>
+                </div>
+                @endif
             </div>
         </div>
     </div>

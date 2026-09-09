@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('service');
             $table->unsignedInteger('cost');
             $table->string('tracking_number')->nullable()->unique();
-            $table->enum('status',['submitted', 'picked_up', 'shipped', 'cancelled', 'finished'])->default('submitted');
+            $table->enum('status',['submitted', 'shipped', 'cancelled', 'finished'])->default('submitted');
             $table->string('estimate')->nullable();
             $table->timestamp('shipped_at')->nullable();
             $table->timestamps();

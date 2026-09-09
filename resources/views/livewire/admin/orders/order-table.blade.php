@@ -224,7 +224,7 @@
             </thead>
             <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
                 @forelse ($orders as $index => $order)
-                <tr wire:key="order-{{ $order->id }}" onclick="window.location='{{ route('admin.order-detail', $order->invoice_number) }}'"" class="hover:bg-gray-50 dark:hover:bg-neutral-700/50 hover:scale-101 active:scale-99 transition">
+                <tr wire:key="order-{{ $order->id }}" onclick="window.location='{{ route('admin.order-detail', $order->invoice_number) }}'" class="hover:bg-gray-50 dark:hover:bg-neutral-700/50 hover:scale-101 active:scale-99 transition">
                     <td class="px-6 py-4 whitespace-nowrap text-gray-500 dark:text-gray-400">
                         {{ ($orders->currentPage() - 1) * $orders->perPage() + $index + 1 }}
                     </td>

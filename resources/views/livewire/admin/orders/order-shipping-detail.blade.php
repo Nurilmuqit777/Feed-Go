@@ -1,9 +1,8 @@
 @php
     $statusConfig = match($shipping->status) {
         'submitted' => ['label' => 'Menunggu', 'class' => 'bg-yellow-100 text-yellow-700 border border-yellow-300', ],
-        'picked_up' => ['label' => 'Diproses', 'class' => 'bg-blue-100 text-blue-700 border border-blue-300', ],
-        'delivered' => ['label' => 'Dikirim', 'class' => 'bg-purple-100 text-purple-700 border border-purple-300', ],
-        'completed' => ['label' => 'Selesai', 'class' => 'bg-green-100 text-green-700 border border-green-300', ],
+        'shipped' => ['label' => 'Dikirim', 'class' => 'bg-purple-100 text-purple-700 border border-purple-300', ],
+        'finished' => ['label' => 'Selesai', 'class' => 'bg-green-100 text-green-700 border border-green-300', ],
         'cancelled' => ['label' => 'Dibatalkan', 'class' => 'bg-red-100 text-red-700 border border-red-300', ],
         default => ['label' => ucfirst($shipping->status), 'class' => 'bg-gray-100 text-gray-600 border border-gray-300', ],
     };
@@ -58,7 +57,7 @@
                     ['label' => 'Kurir', 'value' => $shipping->courier],
                     ['label' => 'Layanan', 'value' => $shipping->service],
                     ['label' => 'Nomor Resi', 'value' => $shipping->tracking_number ?? '-'],
-                    ['label' => 'Tanggal Kirim', 'value' => $shipping->updated_at->translatedFormat('d F Y')],
+                    ['label' => 'Tanggal Kirim', 'value' => !empty($shipping->shipped_at) ? $shipping->shipped_at->translatedFormat('d F Y') : '-'],
                     ['label' => 'Estimasi Tiba', 'value' => !empty($shipping->estimate) ? str_replace('day', 'hari', $shipping->estimate) : '-'],
                 ] as $sh)
 
@@ -138,9 +137,40 @@
             </div>
         </div>
 
-        <button onclick="window.dispatchEvent(new CustomEvent('open-change-shipping-status'))" class="flex items-center text-sm bg-[#F4D993] rounded-xl font-medium transition text-black px-4 py-2 hover:bg-[#EFC965] hover:scale-105 active:scale-95 border-[#909090] border-1 ">
-            Ubah Status Pengiriman
-        </button>
+        @if( $shipping->status === 'submitted' && $shipping->orderAddress->order->status === 'processing' )
+            <button
+                wire:click="$dispatch('open-change-shipping-status', { shippingId: {{ $shipping->id }} })"
+                class="flex items-center text-sm bg-[#F4D993] rounded-xl font-medium transition text-black px-4 py-2 hover:bg-[#EFC965] hover:scale-105 active:scale-95 border-[#909090] border"
+            >
+                Ubah Status Pengiriman
+            </button>
+
+        @elseif( $shipping->status === 'shipped' && $shipping->orderAddress->order->status === 'delivered' )
+            <button
+                wire:click="$dispatch('open-change-shipping-status', { shippingId: {{ $shipping->id }} })"
+                class="flex items-center text-sm bg-[#F4D993] rounded-xl font-medium transition text-black px-4 py-2 hover:bg-[#EFC965] hover:scale-105 active:scale-95 border-[#909090] border"
+            >
+                Selesaikan Pengiriman
+            </button>
+
+        @elseif( $shipping->status === 'submitted' && $shipping->orderAddress->order->status === 'pending' )
+            <div class="flex items-center justify-center text-sm bg-[#F4D993] rounded-xl font-medium transition text-black px-4 py-2 border-[#909090] border">
+                <p class="text-sm text-black font-semibold text-center">
+                    Menunggu Pembayaran Selesai
+                </p>
+            </div>
+
+        @elseif($shipping->status === 'finished')
+            <div class="flex items-center justify-center text-sm bg-[#E3EDDF] rounded-xl font-medium text-black px-4 py-2 border-[#909090] border">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12.0005 21C13.6264 21.0001 15.2219 20.5598 16.6176 19.7259C18.0133 18.8919 19.157 17.6955 19.9273 16.2636C20.6975 14.8318 21.0655 13.218 20.9921 11.5938C20.9187 9.96956 20.4067 8.39556 19.5105 7.039L12.3555 14.989C12.0213 15.3604 11.5602 15.5933 11.0629 15.6418C10.5656 15.6903 10.0682 15.5509 9.66849 15.251L6.40049 12.8C6.18832 12.6409 6.04805 12.404 6.01054 12.1414C5.97304 11.8789 6.04136 11.6122 6.20049 11.4C6.35962 11.1878 6.59652 11.0476 6.85907 11.0101C7.12162 10.9725 7.38832 11.0409 7.60049 11.2L10.8685 13.651L18.2145 5.49C17.1503 4.47411 15.8533 3.7346 14.437 3.33622C13.0207 2.93784 11.5284 2.89274 10.0906 3.20487C8.65287 3.517 7.31356 4.17684 6.18996 5.12661C5.06636 6.07639 4.19273 7.28713 3.64557 8.65284C3.09841 10.0185 2.89439 11.4976 3.05139 12.9604C3.20839 14.4233 3.72162 15.8253 4.54613 17.0438C5.37065 18.2623 6.48131 19.2601 7.78087 19.9498C9.08042 20.6395 10.5293 21.0001 12.0005 21Z" fill="#388E3C"/>
+                </svg>
+                <p class="text-sm text-[#388E3C] font-semibold text-center">
+                    Pesanan telah diterima pelanggan.
+                </p>
+            </div>
+        @endif
+
     </div>
 
 </div>

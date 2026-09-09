@@ -41,7 +41,7 @@
                 class="flex items-center gap-2 text-sm bg-green-600 hover:bg-green-700
                        text-white px-4 py-2 rounded-xl font-medium transition">
                 <span class="text-xl leading-none">+</span>
-                <span class="hidden sm:inline">Tambahkan Kategori</span>
+                <span class="hidden sm:inline">Kelola Kategori</span>
             </button>
 
             <button

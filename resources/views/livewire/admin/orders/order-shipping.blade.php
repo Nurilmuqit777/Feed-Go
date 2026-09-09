@@ -159,7 +159,6 @@
                     <span>
                         @switch($filterStatus)
                             @case('submitted') Menunggu @break
-                            @case('picked_up') Diproses @break
                             @case('shipped') Dikirim @break
                             @case('finished') Selesai @break
                             @case('cancelled') Dibatalkan @break
@@ -187,7 +186,6 @@
                         @foreach([
                             '' => ['label' => 'Semua Status', 'dot' => 'bg-gray-400', 'active' => 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20'],
                             'submitted' => ['label' => 'Menunggu', 'dot' => 'bg-yellow-500', 'active' => 'text-yellow-600 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-900/20'],
-                            'picked_up' => ['label' => 'Diproses', 'dot' => 'bg-blue-500', 'active' => 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'],
                             'shipped' => ['label' => 'Dikirim', 'dot' => 'bg-purple-500', 'active' => 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20'],
                             'finished' => ['label' => 'Selesai', 'dot' => 'bg-green-500', 'active' => 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20'],
                             'cancelled' => ['label' => 'Dibatalkan', 'dot' => 'bg-red-500', 'active' => 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20'],
@@ -308,7 +306,6 @@
                         @php
                             $statusConfig = match($shipping->status) {
                                 'submitted' => ['dot' => 'bg-yellow-500', 'badge' => 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'],
-                                'picked_up' => ['dot' => 'bg-blue-500', 'badge' => 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'],
                                 'shipped' => ['dot' => 'bg-purple-500', 'badge' => 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400'],
                                 'finished' => ['dot' => 'bg-green-500', 'badge' => 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'],
                                 'cancelled' => ['dot' => 'bg-red-500', 'badge' => 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'],
@@ -330,7 +327,7 @@
                             <svg class="mx-auto h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
                             </svg>
-                            <p class="text-sm">Belum ada pesanan</p>
+                            <p class="text-sm">Belum ada pengiriman</p>
                         </div>
                     </td>
                 </tr>

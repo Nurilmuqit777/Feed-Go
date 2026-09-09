@@ -124,4 +124,24 @@
         </a>
     </div>
 </div>
+
+<div class="max-w-7xl mx-auto px-5 sm:px-8 md:px-12 lg:px-20 py-6 sm:py-7 bg-[#1B601E] text-white rounded-xl">
+
+    <h1 class="text-lg sm:text-xl md:text-2xl font-semibold">
+        Ingin menerapkan pakan berbasis riset?
+    </h1>
+
+    <p class="mt-1 text-sm sm:text-base text-white/90 max-w-3xl">
+        Temukan produk pakan FeedGo yang diformulasikan sesuai kebutuhan ternak Anda.
+    </p>
+
+    <div class="flex justify-end mt-5">
+        <a href="{{ route('produk') }}" class="w-fit ml-auto mt-5 inline-flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-6 py-2.5 sm:py-3 bg-[#EAAA00] rounded-lg text-sm sm:text-base text-white font-semibold hover:bg-[#D49A00] transition hover:scale-105 active:scale-95">
+            <svg class="" xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34" fill="none">
+                <path d="M10 26.6667C8.16667 26.6667 6.68333 28.1667 6.68333 30C6.68333 31.8333 8.16667 33.3333 10 33.3333C11.8333 33.3333 13.3333 31.8333 13.3333 30C13.3333 28.1667 11.8333 26.6667 10 26.6667ZM0 0V3.33333H3.33333L9.33333 15.9833L7.08333 20.0667C6.81667 20.5333 6.66667 21.0833 6.66667 21.6667C6.66667 23.5 8.16667 25 10 25H30V21.6667H10.7C10.4667 21.6667 10.2833 21.4833 10.2833 21.25L10.3333 21.05L11.8333 18.3333H24.25C25.5 18.3333 26.6 17.65 27.1667 16.6167L33.1333 5.8C33.2667 5.56667 33.3333 5.28333 33.3333 5C33.3333 4.08333 32.5833 3.33333 31.6667 3.33333H7.01667L5.45 0H0ZM26.6667 26.6667C24.8333 26.6667 23.35 28.1667 23.35 30C23.35 31.8333 24.8333 33.3333 26.6667 33.3333C28.5 33.3333 30 31.8333 30 30C30 28.1667 28.5 26.6667 26.6667 26.6667Z" fill="white"/>
+            </svg>
+            <span>Lihat Produk FeedGo</span>
+        </a>
+    </div>
+</div>
 @endsection

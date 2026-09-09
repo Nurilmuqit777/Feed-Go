@@ -68,10 +68,52 @@
                 </span>
             @endif
         </div>
+
+        @php
+            $totalReviews = $product->reviews->count();
+
+            $averageRating = $totalReviews > 0
+                ? round($product->reviews->avg('rating'), 1)
+                : 0;
+        @endphp
+
         <div class="flex items-center gap-2 text-sm text-white/80">
-            <span class="text-yellow-400">★★★★★</span>
-            <span class="text-[#2D5016]">4.5/5</span>
-            <span class="text-[#2D5016]">| 5 customer Reviews</span>
+
+            <div class="flex items-center">
+
+                @for($i = 1; $i <= 5; $i++)
+
+                    @if($averageRating >= $i)
+
+                        <span class="text-yellow-400 text-lg">★</span>
+
+                    @elseif($averageRating >= ($i - 0.5))
+
+                        <span class="text-lg" style=" background: linear-gradient( 90deg,#FACC15 50%,#D1D5DB 50%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; ">
+                            ★
+                        </span>
+
+                    @else
+
+                        <span class="text-gray-300 text-lg">★</span>
+
+                    @endif
+
+                @endfor
+
+            </div>
+
+            <span class="text-[#2D5016] font-medium">
+                {{ number_format($averageRating, 1) }}/5
+            </span>
+
+            <span class="text-[#2D5016]">
+                |
+            </span>
+
+            <span class="text-[#2D5016]">
+                {{ $totalReviews }} ulasan pelanggan
+            </span>
         </div>
 
         <div class="flex items-center gap-4 pt-2">
