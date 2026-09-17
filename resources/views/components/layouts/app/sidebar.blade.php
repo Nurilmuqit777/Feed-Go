@@ -77,7 +77,7 @@
                                 <x-svg.user-icon class="w-5 h-5" />
                             </x-slot:icon>
 
-                            {{ __('Pengguna') }}
+                            {{ __('Data Pelanggan') }}
                         </flux:navlist.item>
 
                         <flux:navlist.item

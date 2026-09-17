@@ -1,4 +1,4 @@
-@section('title', 'pengiriman pesanan')
+@section('title', 'pengiriman pesanan ')
 
 <x-layouts.app :title="__('Pengiriman Pesanan')">
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">

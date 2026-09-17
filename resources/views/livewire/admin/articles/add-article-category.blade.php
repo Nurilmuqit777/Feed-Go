@@ -41,18 +41,19 @@
 
                                         <button
                                             type="button"
-                                            wire:click="cancelDelete"
-                                            class="px-2 py-1 text-xs rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-neutral-600">
-                                            Batal
-                                        </button>
-
-                                        <button
-                                            type="button"
                                             wire:click="deleteCategory"
                                             wire:loading.attr="disabled"
                                             class="px-2 py-1 text-xs rounded-md bg-red-500 hover:bg-red-600 text-white">
                                             Hapus
                                         </button>
+                                        
+                                        <button
+                                            type="button"
+                                            wire:click="cancelDelete"
+                                            class="px-2 py-1 text-xs rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-neutral-600">
+                                            Batal
+                                        </button>
+
 
                                     </div>
 

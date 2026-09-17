@@ -16,7 +16,7 @@
 
         </div>
     </div>
-    <script>
+<script>
 document.addEventListener('trix-change', function (event) {
     Livewire.dispatch('trix-updated-product_description', event.target.value)
 })

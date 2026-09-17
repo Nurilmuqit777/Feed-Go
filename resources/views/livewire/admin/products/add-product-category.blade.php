@@ -56,13 +56,6 @@
 
                                         <button
                                             type="button"
-                                            wire:click="cancelDelete"
-                                            class="px-2 py-1 text-xs rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-neutral-600 transition">
-                                            Batal
-                                        </button>
-
-                                        <button
-                                            type="button"
                                             wire:click="deleteCategory"
                                             wire:loading.attr="disabled"
                                             wire:target="deleteCategory"
@@ -75,6 +68,14 @@
                                                 ...
                                             </span>
                                         </button>
+                                        
+                                        <button
+                                            type="button"
+                                            wire:click="cancelDelete"
+                                            class="px-2 py-1 text-xs rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-neutral-600 transition">
+                                            Batal
+                                        </button>
+
 
                                     </div>
 

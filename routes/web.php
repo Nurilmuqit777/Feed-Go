@@ -36,16 +36,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/sales-data', [AdminController::class, 'getSalesData'])->name('admin.sales-data');
     Route::get('/admin/order/{invoice_number}',[AdminController::class, 'OrderDetail'])->name('admin.order-detail');
     Route::get('/admin/delivery/{invoice_number}',[AdminController::class,'OrderShipping'])->name('admin.order-shipping');
+    Route::get('admin/report/{invoice_number}', [AdminController::class, 'ReportDetail'])->name('admin.report-detail');
+    Route::get('admin/user-profile/{id}', [AdminController::class, 'CustomerDetail'])->name('admin.customer-detail');
 });
 
-Route::middleware(['auth', 'role:user', 'verified'])->group(function(){
+Route::middleware(['auth', 'role:user', 'verified', 'user.active'])->group(function(){
     Route::get('/user/cart',[ProductController::class,'indexCart'])->name('user.cart');
     Route::get('/user/checkout',[ProductController::class,'indexCheckout'])->middleware('cart.not.empty')->name('user.checkout');
     Route::get('/user/order', [OrderController::class, 'index'])->name('user.orders');
     Route::get('/user/order/{invoice_number}', [OrderController::class, 'show'])->name('user.order-detail');
 });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'user.active'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
     Route::get('settings/profile', Profile::class)->name('profile.edit');
