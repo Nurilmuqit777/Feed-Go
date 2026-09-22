@@ -168,6 +168,12 @@ class EditProduct extends Component
         Product::where('id', $this->productId)->update($data);
 
         $this->dispatch('product-updated');
+        $this->dispatch(
+            'show-toast',
+            type: 'success',
+            title: 'Produk Berhasil Diperbarui',
+            message: 'Informasi produk berhasil diperbarui.'
+        );
         $this->close();
     }
 

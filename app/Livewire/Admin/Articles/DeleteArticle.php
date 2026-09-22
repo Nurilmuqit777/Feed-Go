@@ -37,6 +37,12 @@ class DeleteArticle extends Component
         session()->flash('message', 'Artikel berhasil dihapus.');
 
         $this->dispatch('article-updated');
+        $this->dispatch(
+            'show-toast',
+            type: 'success',
+            title: 'Artikel Berhasil Dihapus',
+            message: 'Artikel berhasil dihapus dari daftar artikel.'
+        );
         $this->close();
     }
 

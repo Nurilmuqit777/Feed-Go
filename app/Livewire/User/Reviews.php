@@ -104,6 +104,11 @@ class Reviews extends Component
         $this->close();
 
         $this->dispatch('review-submitted');
+        $this->dispatch('toast',[
+            'type' => 'success',
+            'title' => 'Penilaian Berhasil',
+            'message' => 'Penilaian telah berhasil.',
+        ]);
     }
 
     public function skip()

@@ -9,7 +9,7 @@ use App\Models\ProductCategory;
 use Illuminate\Support\Str;
 
 class AddProduct extends Component
-{   
+{
     use WithFileUploads;
 
     public $open = false;
@@ -25,7 +25,7 @@ class AddProduct extends Component
     public $category_id;
 
     public $product_images = [];
-    public $new_image;   
+    public $new_image;
     public $categories;
 
     protected $listeners = [
@@ -72,13 +72,13 @@ class AddProduct extends Component
     public function updatedNewImage()
     {
         if (!$this->new_image) return;
-    
+
         if (count($this->product_images) >= 4) {
             $this->addError('product_images', 'Maksimal 4 gambar');
             $this->new_image = null;
             return;
         }
-    
+
         $this->product_images[] = $this->new_image;
         $this->new_image = null;
     }
@@ -127,6 +127,13 @@ class AddProduct extends Component
         Product::create($data);
 
         $this->dispatch('product-added');
+        $this->dispatch(
+            'show-toast',
+            type: 'success',
+            title: 'Produk Berhasil Ditambahkan',
+            message: 'Produk berhasil ditambahkan ke daftar produk.'
+        );
+
         $this->resetForm();
         $this->close();
     }
@@ -148,7 +155,7 @@ class AddProduct extends Component
     }
 
     public function open()
-    {   
+    {
         $this->dispatch('close-category-modal')->to('admin.products.add-product-category');
         $this->open = true;
     }

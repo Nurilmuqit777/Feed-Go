@@ -2,16 +2,16 @@
 
 <x-layouts.auth>
 
-    <div class="flex items-center justify-between w-full">
+    <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between w-full">
 
-        <section class="w-1/2 flex flex-col justify-start pl-20 text-white space-y-3 pt-32">
-            <div class="max-w-xl space-y-4">
+        <section class="w-full lg:w-1/2 flex flex-col justify-start px-6 sm:px-10 lg:pl-20 lg:pr-10 pt-10 sm:pt-16 lg:pt-32 text-white">
+            <div class="max-w-xl space-y-3 sm:space-y-4">
 
-                <h1 class="text-4xl font-bold">
+                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight">
                     Verifikasi Email
                 </h1>
 
-                <p class="text-xl leading-relaxed">
+                <p class="text-base sm:text-lg lg:text-xl leading-relaxed">
                     Verifikasi email Anda melalui tautan yang telah
                     dikirimkan ke alamat email yang Anda gunakan saat
                     mendaftar.
@@ -26,18 +26,18 @@
             </div>
         </section>
 
-        <section class="w-1/2 flex items-start justify-end pr-30 pt-32">
+        <section class="w-full lg:w-1/2 flex items-start justify-center lg:justify-end px-6 sm:px-10 lg:pr-30 pt-8 sm:pt-10 lg:pt-32 pb-10 lg:pb-0">
 
             <div class="w-full max-w-[350px] space-y-6">
 
                 <form
                     method="POST"
                     action="{{ route('verification.send') }}"
-                    class="flex flex-col gap-6"
+                    class="flex flex-col gap-5 sm:gap-6"
                 >
                     @csrf
 
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-3 min-w-0">
                         <flux:icon.envelope
                             class="text-white w-5 h-5 shrink-0"
                         />
@@ -46,7 +46,7 @@
                             type="email"
                             value="{{ auth()->user()->email }}"
                             disabled
-                            class="flex-1 dark"
+                            class="w-full dark"
                         />
                     </div>
 

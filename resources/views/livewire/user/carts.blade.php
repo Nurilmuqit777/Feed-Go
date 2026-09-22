@@ -9,38 +9,38 @@
             </a>
         </div>
     @else
-        <h1 class="text-3xl text-[#2E7D32] font-bold mb-6">Pastikan jumlah dan produk sudah sesuai sebelum melanjutkan ke pembayaran</h1>
+        <h1 class="text-2xl sm:text-3xl text-[#2E7D32] font-bold mb-5 sm:mb-6 leading-snug">Pastikan jumlah dan produk sudah sesuai sebelum melanjutkan ke pembayaran</h1>
         <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8">
 
             <div class="space-y-4">
 
                 @foreach ($carts as $cart)
-                <div class="border-2 border-[#CDCDCD] rounded-3xl p-4 md:p-6">
+                <div class="border-2 border-[#CDCDCD] rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6">
                     <div class="flex flex-col sm:flex-row gap-4 md:gap-6">
 
-                        <div class="w-full sm:w-32 h-48 sm:h-32 rounded-2xl bg-[#6C9D50] flex items-center justify-center shrink-0">
+                        <div class="w-full sm:w-32 h-48 sm:h-32 rounded-2xl bg-[#6C9D50] flex items-center justify-center shrink-0 overflow-hidden">
                             <img
                                 src="{{ asset('storage/'.$cart->product->product_image1) }}"
                                 alt="Produk"
-                                class="w-32 sm:w-20 h-auto"
+                                class="w-32 sm:w-20 h-auto object-contain"
                             >
                         </div>
 
-                        <div class="flex-1 flex flex-col sm:flex-row justify-between text-start gap-4">
+                        <div class="flex-1 min-w-0 flex flex-col sm:flex-row justify-between text-start gap-4 sm:gap-6">
                             <div>
-                                <h2 class="text-lg md:text-xl text-[#2D5016] font-medium">
+                                <h2 class="text-base sm:text-lg md:text-xl text-[#2D5016] font-medium break-words">
                                     {{ $cart->product->product_name }}
                                 </h2>
-                                <p class="text-[#2D5016] mt-2 text-sm md:text-base">
+                                <p class="text-[#2D5016] mt-2 text-sm sm:text-base">
                                     Jumlah: {{ $cart->quantity }}
                                 </p>
-                                <div class="flex items-center gap-3 mt-4 md:mt-6">
-                                    <h3 class="text-lg font-semibold text-[#2D5016]">
+                                <div class="flex flex-wrap items-center gap-2 sm:gap-3 mt-4 md:mt-6">
+                                    <h3 class="text-base sm:text-lg font-semibold text-[#2D5016] whitespace-nowrap">
                                         Rp {{ number_format($cart->total_discount_price, 0, ',', '.') }}
                                     </h3>
 
                                     @if($cart->product->has_discount)
-                                        <h3 class="text-base text-[#B0B0B0] line-through">
+                                        <h3 class="text-sm sm:text-base text-[#B0B0B0] line-through whitespace-nowrap">
                                             Rp {{ number_format($cart->total_price, 0, ',', '.') }}
                                         </h3>
 
@@ -52,7 +52,7 @@
 
                             </div>
 
-                            <div class="flex sm:flex-col flex-row-reverse justify-between sm:justify-between sm:items-end items-center">
+                            <div class="flex flex-row-reverse sm:flex-col justify-between sm:justify-between sm:items-end items-center gap-3">
 
                                 <button wire:click="confirmDelete({{ $cart->id }})" class="text-[#EAAA00] hover:text-yellow-700 hover:scale-115 transition p-1">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20" fill="none">
@@ -60,7 +60,7 @@
                                     </svg>
                                 </button>
 
-                                <div class="bg-gray-200 rounded-full px-4 md:px-6 py-2 flex items-center gap-4 md:gap-6">
+                                <div class="bg-gray-200 rounded-full px-4 sm:px-5 md:px-6 py-2 flex items-center gap-3 sm:gap-4 md:gap-6">
                                     <button wire:click="decrease({{ $cart->id }})" @disabled($cart->quantity <= 1) class="text-xl leading-none hover:text-[#2D5016] hover:scale-110 active:scale-95 transition w-6 h-6 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed">
                                         <x-svg.minus-icon/>
                                     </button>
@@ -78,45 +78,43 @@
                 @endforeach
             </div>
 
-            <div class="border-2 border-[#CDCDCD] rounded-3xl p-8 sticky top-5">
-                <h2 class="text-2xl font-semibold text-[#2D5016] mb-12">
+            <div class="border-2 border-[#CDCDCD] rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 sticky top-5">
+                <h2 class="text-xl sm:text-2xl font-semibold text-[#2D5016] mb-6 sm:mb-10 lg:mb-12">
                     Ringkasan Belanja
                 </h2>
-                <div class="space-y-6">
-                    <div class="flex justify-between">
-                        <div class="text-left">
-                            <p class="text-md font-medium">
+                <div class="space-y-5 sm:space-y-6">
+                    <div class="grid grid-cols-[minmax(0,1fr)_auto] gap-4">
+                        <div class="text-left text-black">
+                            <p class="text-sm sm:text-md font-medium">
                                 {{ $totalItem }} produk
                             </p>
-                            <p class="text-md font-medium">
+                            <p class="text-sm sm:text-md font-medium">
                                 Potongan Harga
                             </p>
                         </div>
                         <div class="text-left">
-                            <p class="text-md text-gray-500">
+                            <p class="text-sm sm:text-md text-gray-500 whitespace-nowrap">
                                 Rp. {{ number_format($originalTotal, 0, ',', '.') }}
                             </p>
-                            <p class="text-md text-gray-500 line-through">
+                            <p class="text-sm sm:text-md text-gray-500 line-through whitespace-nowrap">
                                 Rp. {{ number_format($discountAmount, 0, ',', '.') }}
                             </p>
                         </div>
                     </div>
 
-                    <div class="flex justify-between">
-                        <span class="text-md font-medium">
+                    <div class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
+                        <span class="text-sm sm:text-md font-medium">
                             Total Pembayaran
                         </span>
-                        <span class="text-lg font-semibold text-[#6B7280]">
+                        <span class="text-base sm:text-lg font-semibold text-[#6B7280] whitespace-nowrap">
                             Rp {{ number_format($subTotal, 0, ',', '.') }}
                         </span>
                     </div>
                 </div>
-                <a
-                    href="{{ route('user.checkout') }}" class="flex items-center justify-center w-full mt-12 bg-[#EAAA00] hover:bg-yellow-500 hover:scale-105 active:scale-95 text-white py-4 rounded-xl text-xl font-medium transition"
-                >
+                <a href="{{ route('user.checkout') }}" class="flex items-center justify-center w-full mt-8 sm:mt-10 lg:mt-12 bg-[#EAAA00] hover:bg-yellow-500 hover:scale-105 active:scale-95 text-white py-3.5 sm:py-4 rounded-xl text-base sm:text-lg lg:text-xl font-medium transition">
                     Lanjutkan Pembayaran
                 </a>
-                <p class="text-center text-gray-500 text-xs mt-16">
+                <p class="text-center text-gray-500 text-xs mt-8 sm:mt-10 lg:mt-16 leading-relaxed">
                     Pesanan akan diproses setelah pembayaran dikonfirmasi.
                 </p>
             </div>

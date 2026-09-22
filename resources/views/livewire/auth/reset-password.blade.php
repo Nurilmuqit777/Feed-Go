@@ -1,26 +1,25 @@
 @section('title', 'Reset Password')
 
 <x-layouts.auth>
-    <div class="flex justify-between w-full">
-        {{-- <x-auth-header :title="__('Reset password')" :description="__('Please enter your new password below')" /> --}}
+    <div class="flex flex-col lg:flex-row justify-between w-full">
 
-        <!-- Session Status -->
+        {{-- Session Status --}}
         <x-auth-session-status class="text-center" :status="session('status')" />
 
-        <section class="w-1/2 flex flex-col justify-start pl-20 text-white space-y-3 pt-32">
-            <p class="text-4xl font-bold mb-0">
+        <section class="w-full lg:w-1/2 flex flex-col justify-start px-6 sm:px-10 lg:pl-20 lg:pr-10 pt-10 sm:pt-16 lg:pt-32 text-white space-y-3">
+            <p class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-0 leading-tight">
                 Ubah Kata Sandi
             </p>
 
-            <p class="text-2xl font-bold mb-0">
+            <p class="text-lg sm:text-xl lg:text-2xl font-bold mb-0 leading-snug">
                 Mohon masukkan kata sandi baru anda
             </p>
         </section>
 
-        <section class="w-1/2 flex items-start justify-end pr-30 pt-32">
+        <section class="w-full lg:w-1/2 flex items-start justify-center lg:justify-end px-6 sm:px-10 lg:pr-30 pt-8 sm:pt-10 lg:pt-32 pb-10 lg:pb-0">
 
-            <div class="w-[350px] space-y-6">
-                
+            <div class="w-full max-w-[350px] space-y-6">
+
                 @if ($errors->any())
                 <div class="rounded-xl bg-red-500/10 border border-red-400/30 p-3">
                     @foreach ($errors->all() as $error)
@@ -31,14 +30,14 @@
                 </div>
                 @endif
 
-                <form method="POST" action="{{ route('password.update') }}" class="flex flex-col gap-6">
+                <form method="POST" action="{{ route('password.update') }}" class="flex flex-col gap-5 sm:gap-6">
                     @csrf
                     {{-- Token --}}
                     <input type="hidden" name="token" value="{{ request()->route('token') }}">
 
                     {{-- Email Address --}}
                     <div class="flex items-center gap-3 rounded-xl">
-                        <flux:icon.envelope class="text-white w-5 h-5" />
+                        <flux:icon.envelope class="text-white w-5 h-5 shrink-0" />
                         <flux:input
                             name="email"
                             value="{{ request('email') }}"
@@ -47,13 +46,13 @@
                             required
                             autocomplete="email"
                             :placeholder="__('Masukkan email anda')"
-                            class="dark"
+                            class="dark w-full"
                         />
                     </div>
 
                     {{-- Password --}}
                     <div class="flex items-center gap-3 rounded-xl">
-                        <flux:icon.lock-open class="text-white w-5 h-5" />
+                        <flux:icon.lock-open class="text-white w-5 h-5 shrink-0" />
                         <flux:input
                             name="password"
                             {{-- :label="__('Password')" --}}
@@ -62,13 +61,13 @@
                             autocomplete="new-password"
                             :placeholder="__('Masukkan sandi baru anda')"
                             viewable
-                            class="dark"
+                            class="dark w-full"
                         />
                     </div>
 
                     {{-- Confirm Password --}}
                     <div class="flex items-center gap-3 rounded-xl">
-                        <flux:icon.lock-closed class="text-white w-5 h-5" />
+                        <flux:icon.lock-closed class="text-white w-5 h-5 shrink-0" />
                         <flux:input
                             name="password_confirmation"
                             {{-- :label="__('Confirm password')" --}}
@@ -77,7 +76,7 @@
                             autocomplete="new-password"
                             :placeholder="__('Konfirmasi sandi baru anda')"
                             viewable
-                            class="dark"
+                            class="dark w-full"
                         />
                     </div>
 

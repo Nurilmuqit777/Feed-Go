@@ -18,7 +18,7 @@ class CustomerDetail extends Component
     {
         $this->id = $id;
     }
-    
+
     public function openStatusModal(string $action)
     {
         $this->statusAction = $action;
@@ -49,6 +49,13 @@ class CustomerDetail extends Component
         }
 
         $this->closeStatusModal();
+
+        $this->dispatch(
+            'show-toast',
+            type: 'success',
+            title: 'Pelanggan Berhasil Diperbarui',
+            message: 'Pelanggan berhasil diperbarui dari daftar pelanggan.'
+        );
     }
 
     public function render()

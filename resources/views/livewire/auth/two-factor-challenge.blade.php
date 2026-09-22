@@ -2,7 +2,7 @@
 
 <x-layouts.auth>
     <div
-        class="flex justify-between w-full"
+        class="flex flex-col lg:flex-row justify-between w-full"
         x-cloak
         x-data="{
             showRecoveryInput: @js($errors->has('recovery_code')),
@@ -21,28 +21,28 @@
             },
         }"
     >
-        <div class="w-1/2 flex flex-col justify-start pl-20 text-white space-y-3 pt-32" x-show="!showRecoveryInput">
-            <p class="text-4xl font-bold mb-0">
-                Kode Autentikasi
-            </p>
+    <section x-show="!showRecoveryInput" class="w-full lg:w-1/2 flex flex-col justify-start px-6 sm:px-10 lg:pl-20 lg:pr-10 pt-10 sm:pt-16 lg:pt-32 text-white space-y-3">
+        <p class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-0 leading-tight">
+            Kode Autentikasi
+        </p>
 
-            <p class="text-xl mb-0">
-                Masukkan kode autentikasi yang diberikan oleh aplikasi autentikator anda.
-            </p>
-        </div>
+        <p class="text-base sm:text-lg lg:text-xl mb-0 leading-relaxed max-w-xl">
+            Masukkan kode autentikasi yang diberikan oleh aplikasi autentikator anda.
+        </p>
+    </section>
 
-        <div class="w-1/2 flex flex-col justify-start pl-20 text-white space-y-3 pt-32" x-show="showRecoveryInput">
-            <p class="text-4xl font-bold mb-0">
-                Kode Pemulihan
-            </p>
+    <section x-show="showRecoveryInput" class="w-full lg:w-1/2 flex flex-col justify-start px-6 sm:px-10 lg:pl-20 lg:pr-10 pt-10 sm:pt-16 lg:pt-32 text-white space-y-3">
+        <p class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-0 leading-tight">
+            Kode Pemulihan
+        </p>
 
-            <p class="text-xl mb-0">
-                Masukkan salah satu kode pemulihan yang diberikan saat mengaktifkan 2FA.
-            </p>
-        </div>
+        <p class="text-base sm:text-lg lg:text-xl mb-0 leading-relaxed max-w-xl">
+            Masukkan salah satu kode pemulihan yang diberikan saat mengaktifkan 2FA.
+        </p>
+    </section>
 
-        <div class="w-1/2 flex items-start justify-end pr-30 pt-32">
-            <div class="w-[350px] space-y-6">
+        <section class="w-full lg:w-1/2 flex items-start justify-center lg:justify-end px-6 sm:px-10 lg:pr-30 pt-8 sm:pt-10 lg:pt-32 pb-10 lg:pb-0">
+            <div class="w-full max-w-[350px] space-y-6">
 
                 @if ($errors->any())
                 <div class="rounded-xl bg-red-500/10 border border-red-400/30 p-3">
@@ -57,11 +57,13 @@
                 <form method="POST" action="{{ route('two-factor.login.store') }}">
                     @csrf
                     <div class="space-y-5 text-center">
+
                         <div x-show="!showRecoveryInput">
-                            <div class="flex items-center justify-center my-5">
-                                <flux:otp x-model="code" length="6" name="code" class="dark" />
+                            <div class="flex items-center justify-center my-5 overflow-x-auto">
+                                <flux:otp x-model="code" length="6" name="code" class="dark shrink-0" />
                             </div>
                         </div>
+
                         <div x-show="showRecoveryInput">
                             <div class="my-5">
                                 <flux:input
@@ -71,7 +73,7 @@
                                     x-bind:required="showRecoveryInput"
                                     autocomplete="one-time-code"
                                     x-model="recovery_code"
-                                    class="dark"
+                                    class="dark w-full"
                                 />
                             </div>
                             @error('recovery_code')
@@ -80,6 +82,7 @@
                                 </flux:text>
                             @enderror
                         </div>
+
                         <flux:button
                             variant="primary"
                             type="submit"
@@ -97,6 +100,6 @@
                     </div>
                 </form>
             </div>
-        </div>
+        </section>
     </div>
 </x-layouts.auth>

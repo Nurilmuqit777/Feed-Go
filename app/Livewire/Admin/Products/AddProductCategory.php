@@ -51,6 +51,12 @@ class AddProductCategory extends Component
         ]);
 
         $this->dispatch('product-category-added');
+        $this->dispatch(
+            'show-toast',
+            type: 'success',
+            title: 'Kategori Berhasil Ditambahkan',
+            message: 'Kategori berhasil ditambahkan dari daftar produk.'
+        );
 
         $this->reset('category');
 
@@ -83,7 +89,12 @@ class AddProductCategory extends Component
 
         $this->loadCategories();
 
-        $this->dispatch('product-category-added');
+        $this->dispatch(
+            'show-toast',
+            type: 'success',
+            title: 'Kategori Berhasil Dihapus',
+            message: 'Kategori berhasil dihapus dari daftar produk.'
+        );
     }
 
     public function render()

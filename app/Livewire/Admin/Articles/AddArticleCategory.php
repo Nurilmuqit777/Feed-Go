@@ -53,7 +53,12 @@ class AddArticleCategory extends Component
         ]);
 
         $this->dispatch('article-category-added');
-
+        $this->dispatch(
+            'show-toast',
+            type: 'success',
+            title: 'Kategori Berhasil Ditambahkan',
+            message: 'Kategori berhasil ditambahkan dari daftar artikel.'
+        );
         $this->reset('category');
 
         $this->loadCategories();
@@ -82,6 +87,12 @@ class AddArticleCategory extends Component
         }
 
         $this->categoryToDelete = null;
+        $this->dispatch(
+            'show-toast',
+            type: 'success',
+            title: 'Kategori Berhasil Dihapus',
+            message: 'Kategori berhasil dihapus dari daftar artikel.'
+        );
 
         $this->loadCategories();
     }

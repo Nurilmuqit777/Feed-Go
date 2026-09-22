@@ -94,6 +94,12 @@ class AddArticle extends Component
         ]);
 
         $this->dispatch('article-added');
+        $this->dispatch(
+            'show-toast',
+            type: 'success',
+            title: 'Artikel Berhasil Ditambahkan',
+            message: 'Artikel berhasil ditambahkan dari daftar artikel.'
+        );
         $this->close();
         $this->reset([
             'title',

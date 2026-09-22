@@ -213,5 +213,6 @@
         </div>
         @fluxScripts
         @livewireScripts
+        <x-admin-toast />
     </body>
 </html>

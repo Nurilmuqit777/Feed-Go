@@ -130,6 +130,12 @@ class EditArticle extends Component
         ]);
 
         $this->dispatch('article-updated');
+        $this->dispatch(
+            'show-toast',
+            type: 'success',
+            title: 'Artikel Berhasil Diperbarui',
+            message: 'Artikel berhasil diperbarui dari daftar artikel.'
+        );
         $this->close();
     }
 

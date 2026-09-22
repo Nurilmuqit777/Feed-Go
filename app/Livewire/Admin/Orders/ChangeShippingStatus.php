@@ -98,6 +98,13 @@ class ChangeShippingStatus extends Component
         $this->close();
 
         $this->dispatch('shipping-status-changed');
+
+        $this->dispatch(
+            'show-toast',
+            type: 'success',
+            title: 'Pengiriman Berhasil Diperbarui',
+            message: 'Pengiriman berhasil diperbarui dari daftar pesanan.'
+        );
     }
 
     public function render()

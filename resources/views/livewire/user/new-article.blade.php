@@ -1,12 +1,12 @@
 <div class="space-y-3">
 
-    <div class="relative flex items-center justify-center px-5 py-8">
-        <h1 class="text-3xl font-semibold text-[#2D5016] text-center">Artikel Terbaru</h1>
+    <div class="relative flex flex-col sm:flex-row sm:items-center sm:justify-center px-4 sm:px-5 py-6 sm:py-8 gap-4">
+        <h1 class="text-2xl sm:text-3xl font-semibold text-[#2D5016] text-center">Artikel Terbaru</h1>
 
-        <div class="absolute right-5" x-data="{ open: false }">
+        <div class="relative sm:absolute sm:right-5" x-data="{ open: false }">
             <button
                 @click="open = !open"
-                class="flex items-center gap-2 px-6 py-2.5 border border-gray-300 rounded-full bg-white hover:bg-gray-50 transition text-sm font-medium text-[#2D5016]">
+                class="flex items-center justify-center sm:justify-start gap-2 w-full sm:w-auto px-5 sm:px-6 py-2.5 border border-gray-300 rounded-full bg-white hover:bg-gray-50 transition text-sm font-medium text-[#2D5016]">
                 <span>
                     @if($selectedCategory)
                         {{ $categories->find($selectedCategory)->category }}
@@ -67,7 +67,7 @@
         </div>
     </div>
 
-    <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6 px-5 pb-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 px-4 sm:px-5 pb-6">
         @forelse($articles as $article)
         @php
             $badgeColor = match(strtoupper($article->category->category)) {
@@ -78,14 +78,14 @@
             };
         @endphp
         <a href="{{ route('article.show', $article->slug) }}" class="bg-white rounded-xl overflow-hidden border shadow-sm hover:shadow-lg transition transform hover:-translate-y-1 duration-300">
-            <div class="relative h-72">
+            <div class="relative h-60 sm:h-64 md:h-72">
                 <img src="{{ asset('storage/'. $article->thumbnail) }}" class="w-full h-full object-cover" alt="{{ $article->title }}">
                 <span class="absolute top-3 left-3 text-white text-xs px-3 py-1 rounded-full" style="background-color: {{ $badgeColor }}">
                     {{ $article->category->category }}
                 </span>
             </div>
 
-            <div class="p-5">
+            <div class="p-4 sm:p-5">
                 <h3 class="font-semibold text-[#2D5016] text-left mb-2 line-clamp-3 hover:text-[#2D5016] transition">
                     {{ $article->title }}
                 </h3>
@@ -94,19 +94,19 @@
                     {{ $article->short_description }}
                 </p>
 
-                <div class="flex items-center justify-between text-sm text-gray-500">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-sm text-gray-500">
                     <span class="text-[#2D5016]"> <x-svg.calendar-icon class="w-4 h-4 inline mr-1 text-[#2D5016]" /> {{ $article->created_at->format('d M Y') }}</span>
                     <span class="text-[#2D5016] font-medium">Baca Artikel →</span>
                 </div>
             </div>
         </a>
         @empty
-        <div class="col-span-full flex flex-col items-center justify-center py-16">
-            <svg class="w-24 h-24 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="col-span-full flex flex-col items-center justify-center py-12 sm:py-16 px-4">
+            <svg class="w-20 h-20 sm:w-24 sm:h-24 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
             </svg>
-            <h3 class="text-xl font-semibold text-gray-700 mb-2">Tidak Ada Artikel</h3>
-            <p class="text-gray-500 text-center">
+            <h3 class="text-lg sm:text-xl font-semibold text-gray-700 mb-2 text-center">Tidak Ada Artikel</h3>
+            <p class="text-gray-500 text-center text-sm sm:text-base">
                 @if($selectedCategory)
                     Belum ada artikel untuk kategori ini.
                 @else
@@ -116,7 +116,7 @@
         </div>
         @endforelse
     </div>
-    <div class="mt-4 mb-18">
+    <div class="mt-4 mb-18 px-4 sm:px-5 overflow-x-auto">
         {{ $articles->links() }}
     </div>
 </div>
