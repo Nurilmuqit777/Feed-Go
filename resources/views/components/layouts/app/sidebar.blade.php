@@ -103,6 +103,17 @@
 
                             {{ __('Artikel') }}
                         </flux:navlist.item>
+
+                        <flux:navlist.item
+                            class="flux-box {{ request()->routeIs('admin.newsletter') ? 'is-current' : '' }}"
+                            :href="route('admin.newsletter')"
+                            wire:navigate
+                        >
+                            <x-slot:icon>
+                                <x-svg.email-icon class="w-5 h-5" />
+                            </x-slot:icon>
+                            {{ __('Newsletter') }}
+                        </flux:navlist.item>
                     </flux:navlist.group>
                 </flux:navlist>
 

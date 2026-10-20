@@ -228,27 +228,7 @@
                     Dapatkan informasi terbaru seputar pengembangan pakan ternak berbasis riset dan teknologi.
                 </p>
 
-
-                <form class="mx-auto max-w-2xl">
-
-                    <div class="flex flex-col gap-2 rounded-2xl border-2 border-gray-200 p-1 transition focus-within:border-green-500 sm:flex-row sm:items-center sm:rounded-full sm:p-1">
-
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            class="min-w-0 flex-1 rounded-xl bg-transparent px-4 py-3 text-gray-700 outline-none placeholder:text-gray-400 sm:rounded-full"
-                            required
-                        />
-
-                        <button
-                            type="submit"
-                            class="w-full rounded-xl bg-[#1B601E] px-6 py-3 text-sm font-semibold text-white shadow-md transition duration-300 hover:bg-green-600 sm:w-auto sm:rounded-full">
-                            Ikuti FeedGo
-                        </button>
-
-                    </div>
-
-                </form>
+                <livewire:user.email-subscription />
 
             </div>
 

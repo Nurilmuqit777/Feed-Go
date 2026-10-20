@@ -67,35 +67,28 @@ class OrderController extends Controller
             $payment->payment_method = $notification->payment_type;
             switch ($notification->transaction_status) {
                 case 'capture':
-                    if ($notification->fraud_status == 'accept') {
+                    if ($notification->fraud_status === 'accept') {
                         $payment->status = 'paid';
-                        $payment->paid_at = now();
+                        $payment->paid_at ??= now();
+
                         $payment->order->update([
-                            'status' => 'processing'
+                            'status' => 'processing',
                         ]);
-                        foreach ($payment->order->orderDetails as $detail) {
-                            $detail->product->decrement(
-                                'product_stock',
-                                $detail->quantity_ordered
-                            );
-                        }
-                        Cart::where('user_id', $payment->order->user_id)->delete();
+
+                        Cart::where('user_id',$payment->order->user_id)->delete();
                     }
                     break;
+
                 case 'settlement':
-                    if ($payment->status !== 'paid'){
+                    if ($payment->status !== 'paid') {
                         $payment->status = 'paid';
-                        $payment->paid_at = now();
+                        $payment->paid_at ??= now();
+
                         $payment->order->update([
-                            'status' => 'processing'
+                            'status' => 'processing',
                         ]);
-                        foreach ($payment->order->orderDetails as $detail) {
-                            $detail->product->decrement(
-                                'product_stock',
-                                $detail->quantity_ordered
-                            );
-                        }
-                        Cart::where('user_id', $payment->order->user_id)->delete();
+
+                        Cart::where('user_id',$payment->order->user_id)->delete();
                     }
                     break;
                 case 'pending':

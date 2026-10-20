@@ -12,6 +12,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrderController;
+use App\Livewire\Admin\Newsletters;
+use App\Http\Controllers\NewsletterController;
 
 Route::get('/', [HomepageController::class, 'index'])->name('beranda');
 Route::get('/artikel', [BlogController::class, 'index'])->name('artikel');
@@ -38,6 +40,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/delivery/{invoice_number}',[AdminController::class,'OrderShipping'])->name('admin.order-shipping');
     Route::get('admin/report/{invoice_number}', [AdminController::class, 'ReportDetail'])->name('admin.report-detail');
     Route::get('admin/user-profile/{id}', [AdminController::class, 'CustomerDetail'])->name('admin.customer-detail');
+    Route::get('admin/newsletter', Newsletters::class)->name('admin.newsletter');
 });
 
 Route::middleware(['auth', 'role:user', 'verified', 'user.active'])->group(function(){
@@ -63,3 +66,5 @@ Route::middleware(['auth', 'user.active'])->group(function () {
         )
         ->name('two-factor.show');
 });
+
+Route::get('/newsletter/unsubscribe/{email}', [ NewsletterController::class, 'unsubscribe' ])->name('newsletter.unsubscribe')->middleware('signed');

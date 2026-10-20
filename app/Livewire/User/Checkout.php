@@ -15,6 +15,8 @@ use App\Models\Shipping;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Cache;
+use App\Models\Product;
+use App\Models\User;
 
 class Checkout extends Component
 {
@@ -316,6 +318,20 @@ class Checkout extends Component
 
     public function checkout()
     {
+        $userId = auth()->guard('web')->id();
+
+        $lock = Cache::lock('checkout:user:' . $userId, 30);
+
+        if (! $lock->get()) {
+            $this->dispatch('toast', [
+                'type' => 'error',
+                'title' => 'Checkout Sedang Diproses',
+                'message' => 'Pesanan Anda sedang diproses. Silakan tunggu.',
+            ]);
+
+            return;
+        }
+
         try {
 
             $this->validate();
@@ -332,11 +348,8 @@ class Checkout extends Component
                     return $item['code'] . '|' . $item['service'] === $this->selectedShipping;
                 });
 
-            if (!$shipping) {
-                session()->flash(
-                    'error',
-                    'Metode pengiriman tidak valid. Silakan pilih kembali.'
-                );
+            if (! $shipping) {
+                session()->flash( 'error', 'Metode pengiriman tidak valid. Silakan pilih kembali.' );
 
                 return;
             }
@@ -344,45 +357,73 @@ class Checkout extends Component
             $shippingCost = (int) $shipping['cost'];
 
             $carts = Cart::with('product')
-                ->where('user_id', auth()->guard('web')->id())
+                ->where('user_id', $userId)
                 ->get();
 
             if ($carts->isEmpty()) {
-                session()->flash('error', 'Keranjang belanja kosong.');
+                session()->flash('error','Keranjang belanja kosong.');
+
                 return;
             }
 
-            foreach ($carts as $cart) {
+            $result = DB::transaction(function () use ( $userId, $regions, $shipping, $shippingCost )
+            {
 
-                if (! $cart->product || $cart->product->product_status !== 'available') {
-                    session()->flash(
-                        'error',
-                        "{$cart->product->product_name} sedang tidak tersedia."
-                    );
-                    return;
+                User::whereKey($userId)
+                    ->lockForUpdate()
+                    ->firstOrFail();
+
+                $cartItems = Cart::where('user_id', $userId)
+                    ->get();
+
+                if ($cartItems->isEmpty()) {
+                    throw ValidationException::withMessages([
+                        'checkout' => 'Keranjang belanja kosong.',
+                    ]);
                 }
 
-                if ($cart->quantity > $cart->product->product_stock) {
-                    session()->flash(
-                        'error',
-                        "Stok {$cart->product->product_name} tidak mencukupi."
-                    );
-                    return;
+                $products = [];
+
+                foreach ($cartItems as $cart) {
+
+                    $product = Product::lockForUpdate()
+                        ->find($cart->product_id);
+
+                    if (! $product) {
+                        throw ValidationException::withMessages([
+                            'checkout' => 'Produk tidak ditemukan.',
+                        ]);
+                    }
+
+                    if ($product->product_status !== 'available') {
+                        throw ValidationException::withMessages([
+                            'checkout' => "{$product->product_name} sedang tidak tersedia.",
+                        ]);
+                    }
+
+                    if ($cart->quantity > $product->product_stock) {
+                        throw ValidationException::withMessages([
+                            'checkout' => "Stok {$product->product_name} tidak mencukupi.",
+                        ]);
+                    }
+
+                    $products[$product->id] = $product;
                 }
-            }
 
-            $subTotal = $carts->sum(
-                fn ($cart) => $cart->total_discount_price
-            );
+                $subTotal = 0;
 
-            $total = $subTotal + $shippingCost;
+                foreach ($cartItems as $cart) {
+                    $product = $products[$cart->product_id];
+                    $price = $product->product_discount_price ?? $product->product_price;
+                    $subTotal += $price * $cart->quantity;
+                }
 
-            $result = DB::transaction(function () use ($carts, $regions, $shipping, $shippingCost, $total) {
+                $total = $subTotal + $shippingCost;
 
                 $invoice = 'FG-' . now()->format('YmdHisv');
 
                 $order = Order::create([
-                    'user_id' => auth()->guard('web')->id(),
+                    'user_id' => $userId,
                     'invoice_number' => $invoice,
                     'status' => 'pending',
                     'total_price' => $total,
@@ -403,16 +444,27 @@ class Checkout extends Component
                     'postal_code' => $this->postal_code ?: $regions['postal_code'],
                 ]);
 
-                foreach ($carts as $cart) {
+                foreach ($cartItems as $cart) {
+
+                    $product = $products[$cart->product_id];
+
+                    $price = $product->product_discount_price ?? $product->product_price;
+
+                    $subtotal = $price * $cart->quantity;
 
                     OrderDetail::create([
                         'order_id' => $order->id,
-                        'product_id' => $cart->product_id,
+                        'product_id' => $product->id,
                         'quantity_ordered' => $cart->quantity,
-                        'price_at_purchase' => $cart->product->product_price,
-                        'discount_price_at_purchase' => $cart->product->product_discount_price,
-                        'sub_total' => $cart->total_discount_price,
+                        'price_at_purchase' => $product->product_price,
+                        'discount_price_at_purchase' => $product->product_discount_price,
+                        'sub_total' => $subtotal,
                     ]);
+
+                    $product->decrement(
+                        'product_stock',
+                        $cart->quantity
+                    );
                 }
 
                 Shipping::create([
@@ -430,23 +482,29 @@ class Checkout extends Component
                     'status' => 'pending',
                 ]);
 
+                Cart::where('user_id', $userId)->delete();
+
                 return [
                     'order' => $order,
                     'payment' => $payment,
                     'total' => $total,
                     'invoice' => $invoice,
+                    'cart_items' => $cartItems,
                 ];
-
             });
 
             $itemDetails = [];
 
-            foreach ($carts as $cart) {
+            foreach ($result['order']->orderDetails()->with('product')->get() as $detail) {
+
+                $price = $detail->discount_price_at_purchase
+                    ?? $detail->price_at_purchase;
+
                 $itemDetails[] = [
-                    'id' => (string) $cart->product_id,
-                    'price' => (int) $cart->total_discount_price,
-                    'quantity' => 1,
-                    'name' => $cart->product->product_name . ' (' . $cart->quantity . ' pcs)',
+                    'id' => (string) $detail->product_id,
+                    'price' => (int) $price,
+                    'quantity' => $detail->quantity_ordered,
+                    'name' => $detail->product->product_name,
                 ];
             }
 
@@ -454,7 +512,11 @@ class Checkout extends Component
                 'id' => 'SHIPPING',
                 'price' => $shippingCost,
                 'quantity' => 1,
-                'name' => 'Ongkos Kirim - ' . strtoupper($shipping['code']) . ' ' . $shipping['service'],
+                'name' =>
+                    'Ongkos Kirim - '
+                    . strtoupper($shipping['code'])
+                    . ' '
+                    . $shipping['service'],
             ];
 
             $params = [
@@ -462,7 +524,9 @@ class Checkout extends Component
                     'order_id' => $result['invoice'],
                     'gross_amount' => $result['total'],
                 ],
+
                 'item_details' => $itemDetails,
+
                 'customer_details' => [
                     'first_name' => $this->recipient_name,
                     'email' => $this->email,
@@ -476,19 +540,13 @@ class Checkout extends Component
                 'snap_token' => $snapToken,
             ]);
 
-            Cart::where('user_id', auth()->guard('web')->id())->delete();
-
-            if (! $result) {
-                session()->flash('error', 'Terjadi kesalahan saat membuat pesanan.');
-                return;
-            }
-
             return redirect()->route(
                 'user.order-detail',
                 $result['order']->invoice_number
             );
 
         } catch (ValidationException $e) {
+
             $this->setErrorBag($e->validator->errors());
 
             $this->dispatch('toast', [
@@ -499,17 +557,53 @@ class Checkout extends Component
 
             return;
 
-        }
-        catch(\Exception $e){
+        } catch (\Exception $e) {
+
+            try {
+
+                if (isset($result['order'])) {
+
+                    DB::transaction(function () use ($result) {
+
+                        $order = Order::with('orderDetails')
+                            ->lockForUpdate()
+                            ->find($result['order']->id);
+
+                        if ( $order && $order->status === 'pending')
+                        {
+
+                            foreach ($order->orderDetails as $detail) {
+
+                                $product = Product::lockForUpdate()->find($detail->product_id);
+
+                                if ($product) {$product->increment('product_stock', $detail->quantity_ordered);}
+                            }
+
+                            $order->update([
+                                'status' => 'cancelled',
+                            ]);
+                        }
+                    });
+                }
+
+            } catch (\Exception $rollbackException) {
+                report($rollbackException);
+            }
+
             $this->dispatch('toast', [
                 'type' => 'error',
                 'title' => 'Checkout Gagal',
                 'message' => 'Terjadi kesalahan saat memproses checkout.',
             ]);
 
-            return;
-        }
+            report($e);
 
+            return;
+
+        } finally {
+
+            optional($lock)->release();
+        }
     }
 
     public function render()
